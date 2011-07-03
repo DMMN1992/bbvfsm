@@ -18,32 +18,39 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl.internal.events;
 
+import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.events.ContextEventArgs;
 import ch.bbv.fsm.impl.internal.state.StateContext;
 
-public class ContextEventArgsImpl<TState, TEvent> implements ContextEventArgs<TState, TEvent> {
+public class ContextEventArgsImpl<TState extends Enum<?>, TEvent extends Enum<?>>
+		implements ContextEventArgs<TState, TEvent> {
 
-    /**
-     * The context.
-     */
-    private final StateContext<TState, TEvent> stateContext;
+	/**
+	 * The context.
+	 */
+	private final StateContext<TState, TEvent> stateContext;
 
-    /**
-     * Initializes a new instance.
-     * 
-     * @param stateContext
-     *            the state context.
-     */
-    public ContextEventArgsImpl(final StateContext<TState, TEvent> stateContext) {
-        this.stateContext = stateContext;
-    }
+	/**
+	 * Initializes a new instance.
+	 * 
+	 * @param stateContext
+	 *            the state context.
+	 */
+	public ContextEventArgsImpl(final StateContext<TState, TEvent> stateContext) {
+		this.stateContext = stateContext;
+	}
 
-    /**
-     * Returns the state context.
-     * 
-     * @return the state context.
-     */
-    public StateContext<TState, TEvent> getStateContext() {
-        return this.stateContext;
-    }
+	/**
+	 * Returns the state context.
+	 * 
+	 * @return the state context.
+	 */
+	public StateContext<TState, TEvent> getStateContext() {
+		return this.stateContext;
+	}
+
+	@Override
+	public StateMachine<TState, TEvent> getSource() {
+		return this.stateContext.getStateMachine();
+	}
 }

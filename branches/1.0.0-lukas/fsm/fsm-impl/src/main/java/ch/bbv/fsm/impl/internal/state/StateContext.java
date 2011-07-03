@@ -20,6 +20,8 @@ package ch.bbv.fsm.impl.internal.state;
 
 import java.util.List;
 
+import ch.bbv.fsm.StateMachine;
+
 import com.google.common.collect.Lists;
 
 /**
@@ -29,161 +31,166 @@ import com.google.common.collect.Lists;
  * @param <TState>
  * @param <TEvent>
  */
-public class StateContext<TState, TEvent> {
+public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
 
-    /**
-     * A record of a state exit or entry. Used to log the way taken by
-     * transitions and initialization.
-     */
-    public class Record {
-        private TState stateId;
-        private RecordType recordType;
+	/**
+	 * A record of a state exit or entry. Used to log the way taken by
+	 * transitions and initialization.
+	 */
+	public class Record {
+		private TState stateId;
+		private RecordType recordType;
 
-        /**
-         * Creates a new instance.
-         * 
-         * @param stateId
-         *            the state id.
-         * @param recordType
-         *            the record type.
-         */
-        public Record(final TState stateId, final RecordType recordType) {
-            this.stateId = stateId;
-            this.recordType = recordType;
-        }
+		/**
+		 * Creates a new instance.
+		 * 
+		 * @param stateId
+		 *            the state id.
+		 * @param recordType
+		 *            the record type.
+		 */
+		public Record(final TState stateId, final RecordType recordType) {
+			this.stateId = stateId;
+			this.recordType = recordType;
+		}
 
-        /**
-         * Returns the record type.
-         * 
-         * @return the record type.
-         */
-        public RecordType getRecordType() {
-            return this.recordType;
-        }
+		/**
+		 * Returns the record type.
+		 * 
+		 * @return the record type.
+		 */
+		public RecordType getRecordType() {
+			return this.recordType;
+		}
 
-        /**
-         * Returns the state id.
-         * 
-         * @return the state id.
-         */
-        public TState getStateId() {
-            return this.stateId;
-        }
+		/**
+		 * Returns the state id.
+		 * 
+		 * @return the state id.
+		 */
+		public TState getStateId() {
+			return this.stateId;
+		}
 
-        /**
-         * Sets the record type.
-         * 
-         * @param recordType
-         *            the record type.
-         */
-        public void setRecordType(final RecordType recordType) {
-            this.recordType = recordType;
-        }
+		/**
+		 * Sets the record type.
+		 * 
+		 * @param recordType
+		 *            the record type.
+		 */
+		public void setRecordType(final RecordType recordType) {
+			this.recordType = recordType;
+		}
 
-        /**
-         * Sets the state id.
-         * 
-         * @param stateId
-         *            the state id.
-         */
-        public void setStateId(final TState stateId) {
-            this.stateId = stateId;
-        }
+		/**
+		 * Sets the state id.
+		 * 
+		 * @param stateId
+		 *            the state id.
+		 */
+		public void setStateId(final TState stateId) {
+			this.stateId = stateId;
+		}
 
-        /*
-         * (non-Javadoc)
-         * 
-         * @see java.lang.Object#toString()
-         */
-        @Override
-        public String toString() {
-            return this.recordType + " " + this.stateId;
-        }
-    }
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Object#toString()
+		 */
+		@Override
+		public String toString() {
+			return this.recordType + " " + this.stateId;
+		}
+	}
 
-    /**
-     * Specifies the type of the record.
-     */
-    public enum RecordType {
+	/**
+	 * Specifies the type of the record.
+	 */
+	public enum RecordType {
 
-        /**
-         * A state was entered.
-         */
-        Enter,
+		/**
+		 * A state was entered.
+		 */
+		Enter,
 
-        /**
-         * A state was exited.
-         */
-        Exit
-    }
+		/**
+		 * A state was exited.
+		 */
+		Exit
+	}
 
-    private final State<TState, TEvent> sourceState;
+	private final State<TState, TEvent> sourceState;
 
-    /**
-     * The exceptions that occurred during performing an operation.
-     */
-    private final List<Exception> exceptions;
+	/**
+	 * The exceptions that occurred during performing an operation.
+	 */
+	private final List<Exception> exceptions;
 
-    /**
-     * The list of records (state exits, entries)
-     */
-    private final List<Record> records;
+	/**
+	 * The list of records (state exits, entries)
+	 */
+	private final List<Record> records;
 
-    /**
-     * Creates a new instance.
-     * 
-     * @param sourceState
-     *            the source state of the transition.
-     */
-    public StateContext(final State<TState, TEvent> sourceState) {
-        this.sourceState = sourceState;
-        this.exceptions = Lists.newArrayList();
-        this.records = Lists.newArrayList();
-    }
+	/**
+	 * Creates a new instance.
+	 * 
+	 * @param sourceState
+	 *            the source state of the transition.
+	 */
+	public StateContext(final State<TState, TEvent> sourceState) {
+		this.sourceState = sourceState;
+		this.exceptions = Lists.newArrayList();
+		this.records = Lists.newArrayList();
+	}
 
-    /**
-     * Adds a record.
-     * 
-     * @param stateId
-     *            the state id.
-     * @param recordType
-     *            the record type.
-     */
-    public void addRecord(final TState stateId, final RecordType recordType) {
-        this.records.add(new Record(stateId, recordType));
-    }
+	/**
+	 * Adds a record.
+	 * 
+	 * @param stateId
+	 *            the state id.
+	 * @param recordType
+	 *            the record type.
+	 */
+	public void addRecord(final TState stateId, final RecordType recordType) {
+		this.records.add(new Record(stateId, recordType));
+	}
 
-    /**
-     * Returns the occured exceptions during the transition.
-     * 
-     * @return the occured exceptions during the transition.
-     */
-    public List<Exception> getExceptions() {
-        return this.exceptions;
-    }
+	/**
+	 * Returns the occured exceptions during the transition.
+	 * 
+	 * @return the occured exceptions during the transition.
+	 */
+	public List<Exception> getExceptions() {
+		return this.exceptions;
+	}
 
-    /**
-     * Returns all records in string representation.
-     * 
-     * @return all records in string representation.
-     */
-    public String getRecords() {
-        final StringBuilder result = new StringBuilder();
+	/**
+	 * Returns all records in string representation.
+	 * 
+	 * @return all records in string representation.
+	 */
+	public String getRecords() {
+		final StringBuilder result = new StringBuilder();
 
-        for (final Record record : this.records) {
-            result.append(String.format(" -> %s", record));
-        }
+		for (final Record record : this.records) {
+			result.append(String.format(" -> %s", record));
+		}
 
-        return result.toString();
-    }
+		return result.toString();
+	}
 
-    /**
-     * Returns the source state of the transition.
-     * 
-     * @return the source state of the transition.
-     */
-    public State<TState, TEvent> getState() {
-        return this.sourceState;
-    }
+	/**
+	 * Returns the source state of the transition.
+	 * 
+	 * @return the source state of the transition.
+	 */
+	public State<TState, TEvent> getState() {
+		return this.sourceState;
+	}
+
+	public StateMachine<TState, TEvent> getStateMachine() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

@@ -23,7 +23,7 @@ import static ch.bbv.fsm.impl.Tool.*;
 import org.junit.Assert;
 import org.junit.Test;
 
-import ch.bbv.fsm.StateMachine;
+import ch.bbv.fsm.StateMachineDefinition;
 import ch.bbv.fsm.impl.PassiveStateMachine;
 import ch.bbv.fsm.impl.StatesAndEvents.Events;
 import ch.bbv.fsm.impl.StatesAndEvents.States;
@@ -41,7 +41,7 @@ public class NewSyntaxTest {
 
     @Test
     public void transitionTest() {
-        final StateMachine<States, Events> sm = new PassiveStateMachine<States, Events>();
+        final StateMachineDefinition<States, Events> sm = new PassiveStateMachine<States, Events>();
 
         sm.in(States.A).on(Events.B).goTo(States.B).execute(from(this).actionMethod(any(String.class), any(int.class)));
 

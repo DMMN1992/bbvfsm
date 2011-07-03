@@ -21,34 +21,37 @@ package ch.bbv.fsm.impl.internal.events;
 import ch.bbv.fsm.events.ExceptionEventArgs;
 import ch.bbv.fsm.impl.internal.state.StateContext;
 
-public class ExceptionEventArgsImpl<TState, TEvent> extends ContextEventArgsImpl<TState, TEvent> implements
-        ExceptionEventArgs<TState, TEvent> {
+public class ExceptionEventArgsImpl<TState extends Enum<?>, TEvent extends Enum<?>>
+		extends ContextEventArgsImpl<TState, TEvent> implements
+		ExceptionEventArgs<TState, TEvent> {
 
-    /**
-     * The exception.
-     */
-    private final Exception exception;
+	/**
+	 * The exception.
+	 */
+	private final Exception exception;
 
-    /**
-     * Initializes a new instance.
-     * 
-     * @param stateContext
-     *            the state context.
-     * @param exception
-     *            the exception.
-     */
-    public ExceptionEventArgsImpl(final StateContext<TState, TEvent> stateContext, final Exception exception) {
-        super(stateContext);
-        this.exception = exception;
-    }
+	/**
+	 * Initializes a new instance.
+	 * 
+	 * @param stateContext
+	 *            the state context.
+	 * @param exception
+	 *            the exception.
+	 */
+	public ExceptionEventArgsImpl(
+			final StateContext<TState, TEvent> stateContext,
+			final Exception exception) {
+		super(stateContext);
+		this.exception = exception;
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see ch.bbv.asm.IExceptionEventArgs#getException()
-     */
-    @Override
-    public Exception getException() {
-        return this.exception;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ch.bbv.asm.IExceptionEventArgs#getException()
+	 */
+	@Override
+	public Exception getException() {
+		return this.exception;
+	}
 }

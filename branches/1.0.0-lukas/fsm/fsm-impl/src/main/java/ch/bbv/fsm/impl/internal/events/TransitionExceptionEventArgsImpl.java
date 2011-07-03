@@ -21,37 +21,40 @@ package ch.bbv.fsm.impl.internal.events;
 import ch.bbv.fsm.events.TransitionExceptionEventArgs;
 import ch.bbv.fsm.impl.internal.transition.TransitionContext;
 
-public class TransitionExceptionEventArgsImpl<TState, TEvent> extends TransitionEventArgsImpl<TState, TEvent> implements
-        TransitionExceptionEventArgs<TState, TEvent> {
+public class TransitionExceptionEventArgsImpl<TState extends Enum<?>, TEvent extends Enum<?>>
+		extends TransitionEventArgsImpl<TState, TEvent> implements
+		TransitionExceptionEventArgs<TState, TEvent> {
 
-    // / <summary>
-    // / The exception.
-    // / </summary>
-    private final Exception exception;
+	// / <summary>
+	// / The exception.
+	// / </summary>
+	private final Exception exception;
 
-    // / <summary>
-    // / Initializes a new instance of the <see
-    // cref="TransitionExceptionEventArgs&lt;TState, TEvent&gt;"/> class.
-    // / </summary>
-    // / <param name="context">The event context.</param>
-    // / <param name="exception">The exception.</param>
-    public TransitionExceptionEventArgsImpl(final TransitionContext<TState, TEvent> context, final Exception exception) {
-        super(context);
-        this.exception = exception;
-    }
+	// / <summary>
+	// / Initializes a new instance of the <see
+	// cref="TransitionExceptionEventArgs&lt;TState, TEvent&gt;"/> class.
+	// / </summary>
+	// / <param name="context">The event context.</param>
+	// / <param name="exception">The exception.</param>
+	public TransitionExceptionEventArgsImpl(
+			final TransitionContext<TState, TEvent> context,
+			final Exception exception) {
+		super(context);
+		this.exception = exception;
+	}
 
-    // / <summary>
-    // / Gets the exception.
-    // / </summary>
-    // / <value>The exception.</value>
-    /*
-     * (non-Javadoc)
-     * 
-     * @see ch.bbv.asm.impl.ITransitionExceptionEventArgs#getException()
-     */
-    @Override
-    public Exception getException() {
-        return this.exception;
-    }
+	// / <summary>
+	// / Gets the exception.
+	// / </summary>
+	// / <value>The exception.</value>
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ch.bbv.asm.impl.ITransitionExceptionEventArgs#getException()
+	 */
+	@Override
+	public Exception getException() {
+		return this.exception;
+	}
 
 }

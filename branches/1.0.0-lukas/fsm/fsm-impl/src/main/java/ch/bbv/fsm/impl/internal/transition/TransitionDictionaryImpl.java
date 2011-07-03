@@ -35,81 +35,86 @@ import com.google.common.collect.Multimap;
  * @param <TState>
  * @param <TEvent>
  */
-public class TransitionDictionaryImpl<TState, TEvent> implements TransitionDictionary<TState, TEvent> {
+public class TransitionDictionaryImpl<TState extends Enum<?>, TEvent extends Enum<?>>
+		implements TransitionDictionary<TState, TEvent> {
 
-    /**
-     * The state this transitions belong to.
-     */
-    State<TState, TEvent> state;
+	/**
+	 * The state this transitions belong to.
+	 */
+	State<TState, TEvent> state;
 
-    Multimap<TEvent, Transition<TState, TEvent>> transitions;
+	Multimap<TEvent, Transition<TState, TEvent>> transitions;
 
-    /**
-     * Creates a new instance.
-     * 
-     * @param state
-     *            the state this transitions belong to.
-     */
-    public TransitionDictionaryImpl(final StateImpl<TState, TEvent> state) {
-        this.state = state;
-        this.transitions = HashMultimap.create();
-    }
+	/**
+	 * Creates a new instance.
+	 * 
+	 * @param state
+	 *            the state this transitions belong to.
+	 */
+	public TransitionDictionaryImpl(final StateImpl<TState, TEvent> state) {
+		this.state = state;
+		this.transitions = HashMultimap.create();
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * ch.bbv.asm.impl.internal.transition.TransitionDictionary#add(java.lang
-     * .Object, ch.bbv.asm.impl.internal.transition.Transition)
-     */
-    @Override
-    public void add(final TEvent eventId, final Transition<TState, TEvent> transition) {
-        transition.setSource(this.state);
-        this.transitions.put(eventId, transition);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * ch.bbv.asm.impl.internal.transition.TransitionDictionary#add(java.lang
+	 * .Object, ch.bbv.asm.impl.internal.transition.Transition)
+	 */
+	@Override
+	public void add(final TEvent eventId,
+			final Transition<TState, TEvent> transition) {
+		transition.setSource(this.state);
+		this.transitions.put(eventId, transition);
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * ch.bbv.asm.impl.internal.transition.TransitionDictionary#getTransitions()
-     */
-    @Override
-    public List<TransitionInfo<TState, TEvent>> getTransitions() {
-        final List<TransitionInfo<TState, TEvent>> list = Lists.newArrayList();
-        for (final TEvent eventId : this.transitions.keySet()) {
-            this.getTransitionsOfEvent(eventId, list);
-        }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * ch.bbv.asm.impl.internal.transition.TransitionDictionary#getTransitions()
+	 */
+	@Override
+	public List<TransitionInfo<TState, TEvent>> getTransitions() {
+		final List<TransitionInfo<TState, TEvent>> list = Lists.newArrayList();
+		for (final TEvent eventId : this.transitions.keySet()) {
+			this.getTransitionsOfEvent(eventId, list);
+		}
 
-        return list;
-    }
+		return list;
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * ch.bbv.asm.impl.internal.transition.TransitionDictionary#getTransitions
-     * (java.lang.Object)
-     */
-    @Override
-    public List<Transition<TState, TEvent>> getTransitions(final TEvent eventId) {
-        return ImmutableList.copyOf(this.transitions.get(eventId));
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * ch.bbv.asm.impl.internal.transition.TransitionDictionary#getTransitions
+	 * (java.lang.Object)
+	 */
+	@Override
+	public List<Transition<TState, TEvent>> getTransitions(final TEvent eventId) {
+		return ImmutableList.copyOf(this.transitions.get(eventId));
+	}
 
-    /**
-     * Returns all transitions of an event.
-     * 
-     * @param eventId
-     *            the event id
-     * @param list
-     *            the list of transitions
-     */
-    private void getTransitionsOfEvent(final TEvent eventId, final List<TransitionInfo<TState, TEvent>> list) {
-        for (final Transition<TState, TEvent> transition : this.transitions.get(eventId)) {
-            {
-                list.add(new TransitionInfo<TState, TEvent>(eventId, transition.getSource(), transition.getTarget(),
-                        transition.getGuard() != null, transition.getActions().size()));
-            }
-        }
-    }
+	/**
+	 * Returns all transitions of an event.
+	 * 
+	 * @param eventId
+	 *            the event id
+	 * @param list
+	 *            the list of transitions
+	 */
+	private void getTransitionsOfEvent(final TEvent eventId,
+			final List<TransitionInfo<TState, TEvent>> list) {
+		for (final Transition<TState, TEvent> transition : this.transitions
+				.get(eventId)) {
+			{
+				list.add(new TransitionInfo<TState, TEvent>(eventId, transition
+						.getSource(), transition.getTarget(), transition
+						.getGuard() != null, transition.getActions().size()));
+			}
+		}
+	}
 }

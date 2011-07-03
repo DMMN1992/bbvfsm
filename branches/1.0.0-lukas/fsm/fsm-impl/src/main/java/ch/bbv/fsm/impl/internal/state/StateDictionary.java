@@ -35,44 +35,45 @@ import com.google.common.collect.MapMaker;
  * @param <TEvent>
  *            the type of the events
  */
-public class StateDictionary<TState, TEvent> {
+public class StateDictionary<TState extends Enum<?>, TEvent extends Enum<?>> {
 
-    private final ConcurrentMap<TState, State<TState, TEvent>> dictionary;
-    private final Notifier<TState, TEvent> notifier;
+	private final ConcurrentMap<TState, State<TState, TEvent>> dictionary;
+	private final Notifier<TState, TEvent> notifier;
 
-    /**
-     * Creates a new instance of the state dictionary.
-     * 
-     * @param notifier
-     *            the notifier.
-     */
-    public StateDictionary(final Notifier<TState, TEvent> notifier) {
-        this.dictionary = new MapMaker().makeMap();
-        this.notifier = notifier;
-    }
+	/**
+	 * Creates a new instance of the state dictionary.
+	 * 
+	 * @param notifier
+	 *            the notifier.
+	 */
+	public StateDictionary(final Notifier<TState, TEvent> notifier) {
+		this.dictionary = new MapMaker().makeMap();
+		this.notifier = notifier;
+	}
 
-    /**
-     * Returns the state instance by it's id.
-     * 
-     * @param stateId
-     *            the state id.
-     * @return the state instance.
-     */
-    public State<TState, TEvent> getState(final TState stateId) {
-        if (!this.dictionary.containsKey(stateId)) {
-            this.dictionary.putIfAbsent(stateId, new StateImpl<TState, TEvent>(stateId, this.notifier));
-        }
+	/**
+	 * Returns the state instance by it's id.
+	 * 
+	 * @param stateId
+	 *            the state id.
+	 * @return the state instance.
+	 */
+	public State<TState, TEvent> getState(final TState stateId) {
+		if (!this.dictionary.containsKey(stateId)) {
+			this.dictionary.putIfAbsent(stateId, new StateImpl<TState, TEvent>(
+					stateId, this.notifier));
+		}
 
-        return this.dictionary.get(stateId);
-    }
+		return this.dictionary.get(stateId);
+	}
 
-    /**
-     * Returns a list of all defined states.
-     * 
-     * @return a list of all defined states.
-     */
-    public List<State<TState, TEvent>> getStates() {
-        return Lists.newArrayList(this.dictionary.values());
-    }
+	/**
+	 * Returns a list of all defined states.
+	 * 
+	 * @return a list of all defined states.
+	 */
+	public List<State<TState, TEvent>> getStates() {
+		return Lists.newArrayList(this.dictionary.values());
+	}
 
 }

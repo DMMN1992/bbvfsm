@@ -19,230 +19,221 @@
 package ch.bbv.fsm.impl;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import ch.bbv.fsm.Action;
 import ch.bbv.fsm.Function;
+import ch.bbv.fsm.StateMachine;
+import ch.bbv.fsm.StateMachineDefinition;
 import ch.bbv.fsm.events.ExceptionEventArgs;
 import ch.bbv.fsm.events.StateMachineEventAdapter;
+import ch.bbv.fsm.events.StateMachineEventHandler;
 import ch.bbv.fsm.events.TransitionEventArgs;
 import ch.bbv.fsm.events.TransitionExceptionEventArgs;
 import ch.bbv.fsm.impl.StatesAndEvents.Events;
 import ch.bbv.fsm.impl.StatesAndEvents.States;
-import ch.bbv.fsm.impl.internal.StateMachineImpl;
 
 public class ExceptionCasesTest {
-    private class Handler extends StateMachineEventAdapter<States, Events> {
+	private class Handler extends StateMachineEventAdapter<States, Events> {
 
-        @Override
-        public void onExceptionThrown(final ExceptionEventArgs<States, Events> eventArgs) {
-            if (eventArgs != null) {
-                ExceptionCasesTest.this.recordedException = eventArgs.getException();
-            }
+		@Override
+		public void onExceptionThrown(
+				final ExceptionEventArgs<States, Events> eventArgs) {
+			if (eventArgs != null) {
+				ExceptionCasesTest.this.recordedException = eventArgs
+						.getException();
+			}
 
-        }
+		}
 
-        @Override
-        public void onTransitionDeclined(final TransitionEventArgs<States, Events> arg) {
-            ExceptionCasesTest.this.transitionDeclined = true;
+		@Override
+		public void onTransitionDeclined(
+				final TransitionEventArgs<States, Events> arg) {
+			ExceptionCasesTest.this.transitionDeclined = true;
 
-        }
+		}
 
-        @Override
-        public void onTransitionThrowsException(final TransitionExceptionEventArgs<States, Events> eventArgs) {
+		@Override
+		public void onTransitionThrowsException(
+				final TransitionExceptionEventArgs<States, Events> eventArgs) {
 
-            ExceptionCasesTest.this.recordedStateId = eventArgs.getStateId();
-            ExceptionCasesTest.this.recordedEventId = eventArgs.getEventId();
-            ExceptionCasesTest.this.recordedEventArguments = eventArgs.getEventArguments();
-            ExceptionCasesTest.this.recordedException = eventArgs.getException();
+			ExceptionCasesTest.this.recordedStateId = eventArgs.getStateId();
+			ExceptionCasesTest.this.recordedEventId = eventArgs.getEventId();
+			ExceptionCasesTest.this.recordedEventArguments = eventArgs
+					.getEventArguments();
+			ExceptionCasesTest.this.recordedException = eventArgs
+					.getException();
 
-        }
+		}
 
-    }
+	}
 
-    // / <summary>
-    // / Object under test.
-    // / </summary>
-    private StateMachineImpl<States, Events> testee;
+	/**
+	 * The state that was provided in the
+	 * {@link StateMachineEventHandler#onExceptionThrown(ExceptionEventArgs)}
+	 * event.
+	 */
+	private States recordedStateId;
 
-    // / <summary>
-    // / the state that was provided in the <see
-    // cref="StateMachine{TState,TEvent}.ExceptionThrown"/> event.
-    // / </summary>
-    private States recordedStateId;
+	/**
+	 * The event that was provided in the
+	 * {@link StateMachineEventHandler#onExceptionThrown(ExceptionEventArgs)}
+	 * event.
+	 */
+	private Events recordedEventId;
 
-    // / <summary>
-    // / the event that was provided in the <see
-    // cref="StateMachine{TState,TEvent}.ExceptionThrown"/> event.
-    // / </summary>
-    private Events recordedEventId;
+	/**
+	 * The event arguments that was provided in the
+	 * {@link StateMachineEventHandler#onExceptionThrown(ExceptionEventArgs)}
+	 * event.
+	 */
+	private Object[] recordedEventArguments;
 
-    // / <summary>
-    // / the event arguments that was provided in the <see
-    // cref="StateMachine{TState,TEvent}.ExceptionThrown"/> event.
-    // / </summary>
-    private Object[] recordedEventArguments;
+	/**
+	 * The exception that was provided in the
+	 * {@link StateMachineEventHandler#onExceptionThrown(ExceptionEventArgs)}
+	 * event.
+	 */
+	private Exception recordedException;
 
-    // / <summary>
-    // / the exception that was provided in the <see
-    // cref="StateMachine{TState,TEvent}.ExceptionThrown"/> event.
-    // / </summary>
-    private Exception recordedException;
+	public boolean transitionDeclined;
 
-    public boolean transitionDeclined;
+	/**
+	 * Asserts that the correct exception was notified.
+	 */
+	private void assertException(final States expectedStateId,
+			final Events expectedEventId,
+			final Object[] expectedEventArguments,
+			final Exception expectedException) {
+		Assert.assertEquals(expectedStateId, this.recordedStateId);
+		Assert.assertEquals(expectedEventId, this.recordedEventId);
+		Assert.assertArrayEquals(expectedEventArguments,
+				this.recordedEventArguments);
+		Assert.assertEquals(expectedException, this.recordedException);
+	}
 
-    // / <summary>
-    // / Asserts that the correct exception was notified.
-    // / </summary>
-    // / <param name="expectedStateId">The expected state id.</param>
-    // / <param name="expectedEventId">The expected event id.</param>
-    // / <param name="expectedEventArguments">The expected event
-    // arguments.</param>
-    // / <param name="expectedException">The expected exception.</param>
-    private void AssertException(final States expectedStateId, final Events expectedEventId,
-            final Object[] expectedEventArguments, final Exception expectedException) {
-        Assert.assertEquals(expectedStateId, this.recordedStateId);
-        Assert.assertEquals(expectedEventId, this.recordedEventId);
-        Assert.assertArrayEquals(expectedEventArguments, this.recordedEventArguments);
-        Assert.assertEquals(expectedException, this.recordedException);
-    }
+	/**
+	 * When a transition throws an exception then the exception is catched and
+	 * the
+	 * {@link StateMachineEventHandler#onExceptionThrown(ExceptionEventArgs)}
+	 * event is fired. The transition is executed and the state machine is in
+	 * the target state.
+	 */
+	@Test
+	public void exceptionThrowingAction() {
+		final Object[] eventArguments = new Object[] { 1, 2, "test" };
+		final RuntimeException e = new RuntimeException();
 
-    // / <summary>
-    // / When a transition throws an exception then the exception is catched and
-    // the <see cref="StateMachine{TState,TEvent}.ExceptionThrown"/> event is
-    // fired.
-    // / The transition is executed and the state machine is in the target
-    // state.
-    // / </summary>
-    @Test
-    public void ExceptionThrowingAction() {
-        final Object[] eventArguments = new Object[] { 1, 2, "test" };
-        final RuntimeException e = new RuntimeException();
+		final Action throwException = new Action() {
 
-        final Action throwException = new Action() {
+			@Override
+			public void execute(final Object... arguments) {
+				throw e;
+			}
+		};
 
-            @Override
-            public void execute(final Object... arguments) {
-                throw e;
-            }
-        };
+		StateMachineDefinition<States, Events> def = new StateMachineDefinitionImpl<States, Events>();
 
-        this.testee.in(States.A).on(Events.B).goTo(States.B).execute(throwException);
+		def.in(States.A).on(Events.B).goTo(States.B).execute(throwException);
+		def.addEventHandler(new Handler());
+		StateMachine<States, Events> testee = def.createPassiveStateMachine(
+				"testee", States.A);
+		testee.fire(Events.B, eventArguments);
 
-        this.testee.initialize(States.A);
-        this.testee.fire(Events.B, eventArguments);
+		this.assertException(States.A, Events.B, eventArguments, e);
+		Assert.assertEquals(States.B, testee.getCurrentState());
+	}
 
-        this.AssertException(States.A, Events.B, eventArguments, e);
-        Assert.assertEquals(States.B, this.testee.getCurrentStateId());
+	/**
+	 * When an exception is thrown in an entry action then it is notified and
+	 * the state is entered anyway.
+	 */
+	@Test
+	public void exceptionThrowingEntryAction() {
+		final Object[] eventArguments = new Object[] { 1, 2, "test" };
 
-    }
+		final RuntimeException e = new RuntimeException();
 
-    // / <summary>
-    // / When an exception is thrown in an entry action then it is notified and
-    // the state is entered anyway.
-    // / </summary>
-    @Test
-    public void ExceptionThrowingEntryAction() {
-        final Object[] eventArguments = new Object[] { 1, 2, "test" };
+		final Action throwException = new Action() {
 
-        final RuntimeException e = new RuntimeException();
+			@Override
+			public void execute(final Object... arguments) {
+				throw e;
+			}
+		};
 
-        final Action throwException = new Action() {
+		StateMachineDefinition<States, Events> def = new StateMachineDefinitionImpl<States, Events>();
+		def.in(States.A).on(Events.B).goTo(States.B);
 
-            @Override
-            public void execute(final Object... arguments) {
-                throw e;
-            }
-        };
+		def.in(States.B).executeOnEntry(throwException);
 
-        this.testee.in(States.A).on(Events.B).goTo(States.B);
+		StateMachine<States, Events> testee = def.createPassiveStateMachine(
+				"testee", States.A);
+		testee.fire(Events.B, eventArguments);
 
-        this.testee.in(States.B).executeOnEntry(throwException);
+		Assert.assertEquals(e, this.recordedException);
+		Assert.assertEquals(States.B, testee.getCurrentState());
+	}
 
-        this.testee.initialize(States.A);
-        this.testee.fire(Events.B, eventArguments);
+	/**
+	 * When an exception is thrown in an entry action then it is notified and
+	 * the state is entered anyway.
+	 */
+	@Test
+	public void exceptionThrowingExitAction() {
+		final Object[] eventArguments = new Object[] { 1, 2, "test" };
+		final RuntimeException exception = new RuntimeException();
 
-        Assert.assertEquals(e, this.recordedException);
-        Assert.assertEquals(States.B, this.testee.getCurrentStateId());
+		final Action throwException = new Action() {
 
-    }
+			@Override
+			public void execute(final Object... arguments) {
+				throw exception;
+			}
+		};
 
-    // / <summary>
-    // / When an exception is thrown in an entry action then it is notified and
-    // the state is entered anyway.
-    // / </summary>
-    @Test
-    public void ExceptionThrowingExitAction() {
-        final Object[] eventArguments = new Object[] { 1, 2, "test" };
-        final RuntimeException exception = new RuntimeException();
+		StateMachineDefinition<States, Events> def = new StateMachineDefinitionImpl<States, Events>();
+		def.in(States.A).executeOnExit(throwException).on(Events.B)
+				.goTo(States.B);
 
-        final Action throwException = new Action() {
+		StateMachine<States, Events> testee = def.createPassiveStateMachine(
+				"testee", States.A);
+		testee.fire(Events.B, eventArguments);
 
-            @Override
-            public void execute(final Object... arguments) {
-                throw exception;
-            }
-        };
+		Assert.assertEquals(exception, this.recordedException);
+		Assert.assertEquals(States.B, testee.getCurrentState());
+	}
 
-        this.testee.in(States.A).executeOnExit(throwException).on(Events.B).goTo(States.B);
+	/**
+	 * When a guard throws an exception then it is catched and the
+	 * {@link StateMachineEventHandler#onExceptionThrown(ExceptionEventArgs)}
+	 * event is fired. The transition is not executed and if there is no other
+	 * transition then the state machine remains in the same state.
+	 */
+	@Test
+	public void exceptionThrowingGuard() {
+		final Object[] eventArguments = new Object[] { 1, 2, "test" };
+		final RuntimeException e = new RuntimeException();
 
-        this.testee.initialize(States.A);
-        this.testee.fire(Events.B, eventArguments);
+		final Function<Object[], Boolean> f1 = new Function<Object[], Boolean>() {
+			@Override
+			public Boolean execute(final Object[] parameter) {
+				throw e;
+			}
+		};
 
-        Assert.assertEquals(exception, this.recordedException);
-        Assert.assertEquals(States.B, this.testee.getCurrentStateId());
+		StateMachineDefinition<States, Events> def = new StateMachineDefinitionImpl<States, Events>();
+		def.in(States.A).on(Events.B).goTo(States.B).onlyIf(f1);
 
-    }
+		def.addEventHandler(new Handler());
 
-    // / <summary>
-    // / When a guard throws an exception then it is catched and the <see
-    // cref="StateMachine{TState,TEvent}.ExceptionThrown"/> event is fired.
-    // / The transition is not executed and if there is no other transition then
-    // the state machine remains in the same state.
-    // / </summary>
-    @Test
-    public void ExceptionThrowingGuard() {
-        final Object[] eventArguments = new Object[] { 1, 2, "test" };
-        final RuntimeException e = new RuntimeException();
+		StateMachine<States, Events> testee = def.createPassiveStateMachine(
+				"testee", States.A);
+		testee.fire(Events.B, eventArguments);
 
-        final Function<Object[], Boolean> f1 = new Function<Object[], Boolean>() {
+		this.assertException(States.A, Events.B, eventArguments, e);
+		Assert.assertEquals(States.A, testee.getCurrentState());
+		Assert.assertTrue(this.transitionDeclined);
 
-            @Override
-            public Boolean execute(final Object[] parameter) {
-                throw e;
-            }
-        };
-
-        this.testee.in(States.A).on(Events.B).goTo(States.B).onlyIf(f1);
-
-        this.testee.addEventHandler(new Handler());
-
-        this.testee.initialize(States.A);
-        this.testee.fire(Events.B, eventArguments);
-
-        this.AssertException(States.A, Events.B, eventArguments, e);
-        Assert.assertEquals(States.A, this.testee.getCurrentStateId());
-        Assert.assertTrue(this.transitionDeclined);
-
-    }
-
-    // / <summary>
-    // / The state machine has to be initialized before events can be fired.
-    // / </summary>
-    @Test(expected = IllegalStateException.class)
-    public void NotInitialized() {
-        this.testee.fire(Events.B);
-    }
-
-    // / <summary>
-    // / Initializes a test.
-    // / </summary>
-    @Before
-    public void SetUp() {
-
-        this.testee = new StateMachineImpl<States, Events>();
-
-        this.testee.addEventHandler(new Handler());
-    }
+	}
 }

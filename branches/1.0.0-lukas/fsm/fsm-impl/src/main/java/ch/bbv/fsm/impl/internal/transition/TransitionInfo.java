@@ -29,128 +29,130 @@ import ch.bbv.fsm.impl.internal.state.State;
  * @param <TEvent>
  *            the type of the events
  */
-public class TransitionInfo<TState, TEvent> {
-    private TEvent eventId;
-    private State<TState, TEvent> source;
-    private State<TState, TEvent> target;
-    private boolean hasGuard;
-    private int actions;
+public class TransitionInfo<TState extends Enum<?>, TEvent extends Enum<?>> {
+	private TEvent eventId;
+	private State<TState, TEvent> source;
+	private State<TState, TEvent> target;
+	private boolean hasGuard;
+	private int actions;
 
-    /**
-     * Creates a new instance.
-     * 
-     * @param eventId
-     *            the event id.
-     * @param source
-     *            the source state
-     * @param target
-     *            the target state
-     * @param hasGuard
-     *            true if a guard exists
-     * @param actions
-     *            the number of actions
-     */
-    public TransitionInfo(final TEvent eventId, final State<TState, TEvent> source, final State<TState, TEvent> target,
-            final boolean hasGuard, final int actions) {
-        this.eventId = eventId;
-        this.source = source;
-        this.target = target;
-        this.hasGuard = hasGuard;
-        this.actions = actions;
-    }
+	/**
+	 * Creates a new instance.
+	 * 
+	 * @param eventId
+	 *            the event id.
+	 * @param source
+	 *            the source state
+	 * @param target
+	 *            the target state
+	 * @param hasGuard
+	 *            true if a guard exists
+	 * @param actions
+	 *            the number of actions
+	 */
+	public TransitionInfo(final TEvent eventId,
+			final State<TState, TEvent> source,
+			final State<TState, TEvent> target, final boolean hasGuard,
+			final int actions) {
+		this.eventId = eventId;
+		this.source = source;
+		this.target = target;
+		this.hasGuard = hasGuard;
+		this.actions = actions;
+	}
 
-    /**
-     * Returns the number of actions.
-     * 
-     * @return the number of actions.
-     */
-    public int getActions() {
-        return this.actions;
-    }
+	/**
+	 * Returns the number of actions.
+	 * 
+	 * @return the number of actions.
+	 */
+	public int getActions() {
+		return this.actions;
+	}
 
-    /**
-     * Returns the event id.
-     * 
-     * @return the event id.
-     */
-    public TEvent getEventId() {
-        return this.eventId;
-    }
+	/**
+	 * Returns the event id.
+	 * 
+	 * @return the event id.
+	 */
+	public TEvent getEventId() {
+		return this.eventId;
+	}
 
-    /**
-     * Returns the source state.
-     * 
-     * @return the source state.
-     */
-    public State<TState, TEvent> getSource() {
-        return this.source;
-    }
+	/**
+	 * Returns the source state.
+	 * 
+	 * @return the source state.
+	 */
+	public State<TState, TEvent> getSource() {
+		return this.source;
+	}
 
-    /**
-     * Returns the target state.
-     * 
-     * @return the target state.
-     */
-    public State<TState, TEvent> getTarget() {
-        return this.target;
-    }
+	/**
+	 * Returns the target state.
+	 * 
+	 * @return the target state.
+	 */
+	public State<TState, TEvent> getTarget() {
+		return this.target;
+	}
 
-    /**
-     * Returns true if this transition has a guard.
-     * 
-     * @return true if this transition has a guard.
-     */
-    public boolean hasGuard() {
-        return this.hasGuard;
-    }
+	/**
+	 * Returns true if this transition has a guard.
+	 * 
+	 * @return true if this transition has a guard.
+	 */
+	public boolean hasGuard() {
+		return this.hasGuard;
+	}
 
-    /**
-     * Sets the number of actions.
-     * 
-     * @param numberOfActions
-     *            the number of actions.
-     */
-    public void setActions(final int numberOfActions) {
-        this.actions = numberOfActions;
-    }
+	/**
+	 * Sets the number of actions.
+	 * 
+	 * @param numberOfActions
+	 *            the number of actions.
+	 */
+	public void setActions(final int numberOfActions) {
+		this.actions = numberOfActions;
+	}
 
-    /**
-     * Sets the event id.
-     * 
-     * @param eventId
-     *            the event id.
-     */
-    public void setEventId(final TEvent eventId) {
-        this.eventId = eventId;
-    }
+	/**
+	 * Sets the event id.
+	 * 
+	 * @param eventId
+	 *            the event id.
+	 */
+	public void setEventId(final TEvent eventId) {
+		this.eventId = eventId;
+	}
 
-    /**
-     * Sets the guard flag.
-     * 
-     * @param guard
-     */
-    public void setGuard(final boolean guard) {
-        this.hasGuard = guard;
-    }
+	/**
+	 * Sets the guard flag.
+	 * 
+	 * @param guard
+	 */
+	public void setGuard(final boolean guard) {
+		this.hasGuard = guard;
+	}
 
-    /**
-     * Sets the source state.
-     * 
-     * @param source
-     *            the source state.
-     */
-    public void setSource(final State<TState, TEvent> source) {
-        this.source = source;
-    }
+	/**
+	 * Sets the source state.
+	 * 
+	 * @param source
+	 *            the source state.
+	 */
+	public void setSource(final State<TState, TEvent> source) {
+		this.source = source;
+	}
 
-    /**
-     * Sets the target state.
-     * 
-     * @param target
-     *            the target state.
-     */
-    public void setTarget(final State<TState, TEvent> target) {
-        this.target = target;
-    }
+	/**
+	 * Sets the target state.
+	 * 
+	 * @param target
+	 *            the target state.
+	 */
+	public void setTarget(final State<TState, TEvent> target) {
+		this.target = target;
+	}
 
 }

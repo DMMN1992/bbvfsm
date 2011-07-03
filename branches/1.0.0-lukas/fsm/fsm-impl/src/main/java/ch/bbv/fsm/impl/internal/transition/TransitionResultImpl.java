@@ -22,60 +22,65 @@ import java.util.List;
 
 import ch.bbv.fsm.impl.internal.state.State;
 
-public class TransitionResultImpl<TState, TEvent> implements TransitionResult<TState, TEvent> {
+public class TransitionResultImpl<TState extends Enum<?>, TEvent extends Enum<?>>
+		implements TransitionResult<TState, TEvent> {
 
-    /**
-     * This value represents that no transition was fired.
-     */
-    public static final TransitionResult<?, ?> NOT_FIRED = new TransitionResultImpl<Void, Void>(false, null, null);
-    private final boolean fired;
-    private final State<TState, TEvent> newState;
-    private final List<? extends Throwable> exceptions;
+	/**
+	 * This value represents that no transition was fired.
+	 */
+	private final boolean fired;
+	private final State<TState, TEvent> newState;
+	private final List<? extends Throwable> exceptions;
 
-    /**
-     * Initializes a new instance of the TransitionResultImpl class.
-     * 
-     * @param fired
-     *            true the transition was fired.
-     * @param newState
-     *            the new state
-     * @param exceptions
-     *            the exceptions
-     */
-    public TransitionResultImpl(final boolean fired, final State<TState, TEvent> newState,
-            final List<? extends Throwable> exceptions) {
-        this.fired = fired;
-        this.newState = newState;
-        this.exceptions = exceptions;
-    }
+	/**
+	 * Initializes a new instance of the TransitionResultImpl class.
+	 * 
+	 * @param fired
+	 *            true the transition was fired.
+	 * @param newState
+	 *            the new state
+	 * @param exceptions
+	 *            the exceptions
+	 */
+	public TransitionResultImpl(final boolean fired,
+			final State<TState, TEvent> newState,
+			final List<? extends Throwable> exceptions) {
+		this.fired = fired;
+		this.newState = newState;
+		this.exceptions = exceptions;
+	}
 
-    /**
-     * Returns the list of exceptions.
-     * 
-     * @return the list of exceptions.
-     */
-    public List<? extends Throwable> getExceptions() {
-        return this.exceptions;
-    }
+	/**
+	 * Returns the list of exceptions.
+	 * 
+	 * @return the list of exceptions.
+	 */
+	public List<? extends Throwable> getExceptions() {
+		return this.exceptions;
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see ch.bbv.asm.impl.internal.transition.TransitionResult#getNewState()
-     */
-    @Override
-    public State<TState, TEvent> getNewState() {
-        return this.newState;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ch.bbv.asm.impl.internal.transition.TransitionResult#getNewState()
+	 */
+	@Override
+	public State<TState, TEvent> getNewState() {
+		return this.newState;
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see ch.bbv.asm.impl.internal.transition.TransitionResult#isFired()
-     */
-    @Override
-    public boolean isFired() {
-        return this.fired;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ch.bbv.asm.impl.internal.transition.TransitionResult#isFired()
+	 */
+	@Override
+	public boolean isFired() {
+		return this.fired;
+	}
 
+	public static <TState extends Enum<?>, TEvent extends Enum<?>> TransitionResult<TState, TEvent> getNotFired() {
+		return new TransitionResultImpl<TState, TEvent>(false, null, null);
+
+	}
 }

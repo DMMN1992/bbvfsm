@@ -21,38 +21,40 @@ package ch.bbv.fsm.impl.internal.events;
 import ch.bbv.fsm.events.TransitionCompletedEventArgs;
 import ch.bbv.fsm.impl.internal.transition.TransitionContext;
 
-public class TransitionCompletedEventArgsImpl<TState, TEvent> extends TransitionEventArgsImpl<TState, TEvent> implements
-        TransitionCompletedEventArgs<TState, TEvent> {
+public class TransitionCompletedEventArgsImpl<TState extends Enum<?>, TEvent extends Enum<?>>
+		extends TransitionEventArgsImpl<TState, TEvent> implements
+		TransitionCompletedEventArgs<TState, TEvent> {
 
-    // / <summary>
-    // / The new state the state machine is in after the transition.
-    // / </summary>
-    private final TState newStateId;
+	// / <summary>
+	// / The new state the state machine is in after the transition.
+	// / </summary>
+	private final TState newStateId;
 
-    // / <summary>
-    // / Initializes a new instance of the <see
-    // cref="TransitionCompletedEventArgs&lt;TState, TEvent&gt;"/> class.
-    // / </summary>
-    // / <param name="newStateId">The new state id.</param>
-    // / <param name="context">The context.</param>
-    public TransitionCompletedEventArgsImpl(final TState newStateId, final TransitionContext<TState, TEvent> context) {
-        super(context);
-        this.newStateId = newStateId;
-    }
+	// / <summary>
+	// / Initializes a new instance of the <see
+	// cref="TransitionCompletedEventArgs&lt;TState, TEvent&gt;"/> class.
+	// / </summary>
+	// / <param name="newStateId">The new state id.</param>
+	// / <param name="context">The context.</param>
+	public TransitionCompletedEventArgsImpl(final TState newStateId,
+			final TransitionContext<TState, TEvent> context) {
+		super(context);
+		this.newStateId = newStateId;
+	}
 
-    // / <summary>
-    // / Gets the new state id the state machine is in after the transition.
-    // / </summary>
-    // / <value>The new state id the state machine is in after the
-    // transition.</value>
-    /*
-     * (non-Javadoc)
-     * 
-     * @see ch.bbv.asm.impl.ITransitionCompletedEventArgs#getNewStateId()
-     */
-    @Override
-    public TState getNewStateId() {
-        return this.newStateId;
-    }
+	// / <summary>
+	// / Gets the new state id the state machine is in after the transition.
+	// / </summary>
+	// / <value>The new state id the state machine is in after the
+	// transition.</value>
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ch.bbv.asm.impl.ITransitionCompletedEventArgs#getNewStateId()
+	 */
+	@Override
+	public TState getNewStateId() {
+		return this.newStateId;
+	}
 
 }

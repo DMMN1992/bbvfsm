@@ -29,32 +29,32 @@ import java.util.List;
  * @param <TEvent>
  *            the type of the events
  */
-public interface TransitionDictionary<TState, TEvent> {
+public interface TransitionDictionary<TState extends Enum<?>, TEvent extends Enum<?>> {
 
-    /**
-     * Adds a transition to an event.
-     * 
-     * @param eventId
-     *            the event id
-     * @param transition
-     *            the transition
-     */
-    void add(TEvent eventId, Transition<TState, TEvent> transition);
+	/**
+	 * Adds a transition to an event.
+	 * 
+	 * @param eventId
+	 *            the event id
+	 * @param transition
+	 *            the transition
+	 */
+	void add(TEvent eventId, Transition<TState, TEvent> transition);
 
-    /**
-     * Returns all transitions.
-     * 
-     * @return all transitions.
-     */
-    List<TransitionInfo<TState, TEvent>> getTransitions();
+	/**
+	 * Returns all transitions.
+	 * 
+	 * @return all transitions.
+	 */
+	List<TransitionInfo<TState, TEvent>> getTransitions();
 
-    /**
-     * Returns a list of transitions for the given event.
-     * 
-     * @param eventId
-     *            the event id
-     * @return a list of transitions
-     */
-    List<Transition<TState, TEvent>> getTransitions(TEvent eventId);
+	/**
+	 * Returns a list of transitions for the given event.
+	 * 
+	 * @param eventId
+	 *            the event id
+	 * @return a list of transitions
+	 */
+	List<Transition<TState, TEvent>> getTransitions(TEvent eventId);
 
 }

@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>fsm</artifactId>
 		<groupId>ch.bbv</groupId>
-		<version>1.0.0-SNAPSHOT</version>
+		<version>1.0.0.lwe-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>fsm-impl</artifactId>
@@ -17,8 +17,7 @@
 		<dependency>
 			<groupId>ch.bbv</groupId>
 			<artifactId>fsm-api</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
-			<scope>compile</scope>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>

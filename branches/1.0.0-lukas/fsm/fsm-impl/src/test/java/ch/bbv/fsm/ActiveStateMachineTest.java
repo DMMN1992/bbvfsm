@@ -18,22 +18,17 @@
  *******************************************************************************/
 package ch.bbv.fsm;
 
-import org.junit.Before;
-
-import ch.bbv.fsm.impl.ActiveStateMachine;
 import ch.bbv.fsm.impl.StatesAndEvents.Events;
 import ch.bbv.fsm.impl.StatesAndEvents.States;
 
 /**
  * Base for state machine test fixtures.
  */
-public class ActiveStateMachineTest extends BaseStateMachineTest
+public class ActiveStateMachineTest extends BaseStateMachineTest {
 
-{
 	@Override
-	@Before
-	public void setup() {
-		this.testee = new ActiveStateMachine<States, Events>();
-		super.setup();
+	protected StateMachine<States, Events> createTestee(
+			StateMachineDefinition<States, Events> definition) {
+		return definition.createActiveStateMachine("Testee");
 	}
 }

@@ -20,61 +20,66 @@ package ch.bbv.fsm.impl.internal.events;
 
 import ch.bbv.fsm.events.TransitionEventArgs;
 import ch.bbv.fsm.impl.internal.transition.TransitionContext;
-public class TransitionEventArgsImpl<TState, TEvent> extends ContextEventArgsImpl<TState, TEvent> implements TransitionEventArgs<TState, TEvent> {
-    /**
-     * Initializes a new instance.
-     * 
-     * @param transitionContext
-     *            the transition context.
-     */
-    public TransitionEventArgsImpl(final TransitionContext<TState, TEvent> transitionContext) {
-        super(transitionContext);
-    }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see ch.bbv.asm.ITransitionEventArgs#getEventArguments()
-     */
-    @Override
-    public Object[] getEventArguments() {
-        return this.getTransitionContext().getEventArguments();
-    }
+public class TransitionEventArgsImpl<TState extends Enum<?>, TEvent extends Enum<?>>
+		extends ContextEventArgsImpl<TState, TEvent> implements
+		TransitionEventArgs<TState, TEvent> {
+	/**
+	 * Initializes a new instance.
+	 * 
+	 * @param transitionContext
+	 *            the transition context.
+	 */
+	public TransitionEventArgsImpl(
+			final TransitionContext<TState, TEvent> transitionContext) {
+		super(transitionContext);
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see ch.bbv.asm.ITransitionEventArgs#getEventId()
-     */
-    @Override
-    public TEvent getEventId() {
-        return this.getTransitionContext().getEventId();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ch.bbv.asm.ITransitionEventArgs#getEventArguments()
+	 */
+	@Override
+	public Object[] getEventArguments() {
+		return this.getTransitionContext().getEventArguments();
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see ch.bbv.asm.ITransitionEventArgs#getStateId()
-     */
-    @Override
-    public TState getStateId() {
-        return this.getTransitionContext().getState().getId();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ch.bbv.asm.ITransitionEventArgs#getEventId()
+	 */
+	@Override
+	public TEvent getEventId() {
+		return this.getTransitionContext().getEventId();
+	}
 
-    /**
-     * Returns the transition context.
-     * 
-     * @return the transition context.
-     */
-    private TransitionContext<TState, TEvent> getTransitionContext() {
-        return (TransitionContext<TState, TEvent>) this.getStateContext();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ch.bbv.asm.ITransitionEventArgs#getStateId()
+	 */
+	@Override
+	public TState getStateId() {
+		return this.getTransitionContext().getState().getId();
+	}
 
-    /**
-     * Represents the transition as a string.
-     */
-    @Override
-    public String toString() {
-        return String.format("Transition from state %s on event %s.", this.getStateId(), this.getEventId());
-    }
+	/**
+	 * Returns the transition context.
+	 * 
+	 * @return the transition context.
+	 */
+	private TransitionContext<TState, TEvent> getTransitionContext() {
+		return (TransitionContext<TState, TEvent>) this.getStateContext();
+	}
+
+	/**
+	 * Represents the transition as a string.
+	 */
+	@Override
+	public String toString() {
+		return String.format("Transition from state %s on event %s.",
+				this.getStateId(), this.getEventId());
+	}
 }

@@ -32,67 +32,69 @@ import ch.bbv.fsm.impl.internal.state.StateContext;
  * @param <TEvent>
  *            the event type.
  */
-public class StateMachineInitializer<TState, TEvent> {
+public class StateMachineInitializer<TState extends Enum<?>, TEvent extends Enum<?>> {
 
-    private final State<TState, TEvent> initialState;
+	private final State<TState, TEvent> initialState;
 
-    private final StateContext<TState, TEvent> stateContext;
+	private final StateContext<TState, TEvent> stateContext;
 
-    /**
-     * Initializes a new instance.
-     * 
-     * @param initialState
-     *            the initial state.
-     * @param stateContext
-     *            the state context.
-     */
-    public StateMachineInitializer(final State<TState, TEvent> initialState,
-            final StateContext<TState, TEvent> stateContext) {
-        this.initialState = initialState;
-        this.stateContext = stateContext;
-    }
+	/**
+	 * Initializes a new instance.
+	 * 
+	 * @param initialState
+	 *            the initial state.
+	 * @param stateContext
+	 *            the state context.
+	 */
+	public StateMachineInitializer(final State<TState, TEvent> initialState,
+			final StateContext<TState, TEvent> stateContext) {
+		this.initialState = initialState;
+		this.stateContext = stateContext;
+	}
 
-    /**
-     * Enters the initial state by entering all states further up in the
-     * hierarchy.
-     * 
-     * @return The entered state. The initial state or a sub state of the
-     *         initial state.
-     */
-    public State<TState, TEvent> EnterInitialState() {
-        final Stack<State<TState, TEvent>> stack = this.traverseUpTheStateHierarchy();
-        this.traverseDownTheStateHierarchyAndEnterStates(stack);
-        return this.initialState.enterByHistory(this.stateContext);
-    }
+	/**
+	 * Enters the initial state by entering all states further up in the
+	 * hierarchy.
+	 * 
+	 * @return The entered state. The initial state or a sub state of the
+	 *         initial state.
+	 */
+	public State<TState, TEvent> EnterInitialState() {
+		final Stack<State<TState, TEvent>> stack = this
+				.traverseUpTheStateHierarchy();
+		this.traverseDownTheStateHierarchyAndEnterStates(stack);
+		return this.initialState.enterByHistory(this.stateContext);
+	}
 
-    /**
-     * Traverses down the state hierarchy and enter all states along.
-     * 
-     * @param stack
-     *            The stack containing the state hierarchy.
-     */
-    private void traverseDownTheStateHierarchyAndEnterStates(final Stack<State<TState, TEvent>> stack) {
-        State<TState, TEvent> state;
-        while (stack.size() > 0) {
-            state = stack.pop();
-            state.entry(this.stateContext);
-        }
-    }
+	/**
+	 * Traverses down the state hierarchy and enter all states along.
+	 * 
+	 * @param stack
+	 *            The stack containing the state hierarchy.
+	 */
+	private void traverseDownTheStateHierarchyAndEnterStates(
+			final Stack<State<TState, TEvent>> stack) {
+		State<TState, TEvent> state;
+		while (stack.size() > 0) {
+			state = stack.pop();
+			state.entry(this.stateContext);
+		}
+	}
 
-    /**
-     * Traverses up the state hierarchy and build the stack of states.
-     * 
-     * @return The stack containing all states up the state hierarchy.
-     */
-    private Stack<State<TState, TEvent>> traverseUpTheStateHierarchy() {
-        final Stack<State<TState, TEvent>> stack = new Stack<State<TState, TEvent>>();
+	/**
+	 * Traverses up the state hierarchy and build the stack of states.
+	 * 
+	 * @return The stack containing all states up the state hierarchy.
+	 */
+	private Stack<State<TState, TEvent>> traverseUpTheStateHierarchy() {
+		final Stack<State<TState, TEvent>> stack = new Stack<State<TState, TEvent>>();
 
-        State<TState, TEvent> state = this.initialState;
-        while (state != null) {
-            stack.push(state);
-            state = state.getSuperState();
-        }
+		State<TState, TEvent> state = this.initialState;
+		while (state != null) {
+			stack.push(state);
+			state = state.getSuperState();
+		}
 
-        return stack;
-    }
+		return stack;
+	}
 }

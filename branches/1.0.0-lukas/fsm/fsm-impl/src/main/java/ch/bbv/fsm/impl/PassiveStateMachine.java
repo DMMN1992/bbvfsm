@@ -20,12 +20,11 @@ package ch.bbv.fsm.impl;
 
 import java.util.LinkedList;
 
-import ch.bbv.fsm.HistoryType;
 import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.dsl.EntryActionSyntax;
 import ch.bbv.fsm.events.StateMachineEventHandler;
 import ch.bbv.fsm.impl.internal.EventInformation;
 import ch.bbv.fsm.impl.internal.StateMachineImpl;
+import ch.bbv.fsm.impl.internal.state.StateDictionary;
 
 /**
  * A passive state machine. This state machine reacts to events on the current
@@ -37,241 +36,154 @@ import ch.bbv.fsm.impl.internal.StateMachineImpl;
  * @param <TEvent>
  *            the type of the events. (Enum)
  */
-public class PassiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>> implements
-        StateMachine<TState, TEvent> {
+public class PassiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>>
+		implements StateMachine<TState, TEvent> {
 
-    /**
-     * The internal state machine.
-     */
-    private StateMachineImpl<TState, TEvent> stateMachine;
+	/**
+	 * The internal state machine.
+	 */
+	private final StateMachineImpl<TState, TEvent> stateMachine;
 
-    /**
-     * List of all queued events.
-     */
-    private LinkedList<EventInformation<TEvent>> events;
+	/**
+	 * List of all queued events.
+	 */
+	private final LinkedList<EventInformation<TEvent>> events;
 
-    /**
-     * Whether this state machine is executing an event. Allows that events can
-     * be added while executing.
-     */
-    private boolean executing;
+	/**
+	 * Whether this state machine is executing an event. Allows that events can
+	 * be added while executing.
+	 */
+	private boolean executing;
 
-    /**
-     * Indicates if the state machine is running.
-     */
-    private boolean isRunning;
+	/**
+	 * Indicates if the state machine is running.
+	 */
+	private boolean isRunning;
 
-    /**
-     * Initializes the passive state machine.
-     */
-    public PassiveStateMachine() {
-        this(PassiveStateMachine.class.getSimpleName());
-    }
+	/**
+	 * Initializes the state machine.
+	 * 
+	 * @param name
+	 *            the name of the state machine used in the logs.
+	 */
+	public PassiveStateMachine(final String name,
+			StateDictionary<TState, TEvent> states) {
+		this.stateMachine = new StateMachineImpl<TState, TEvent>(name, states);
+		this.events = new LinkedList<EventInformation<TEvent>>();
+	}
 
-    /**
-     * Initializes the state machine.
-     * 
-     * @param name
-     *            the name of the state machine used in the logs.
-     */
-    public PassiveStateMachine(final String name) {
-        this.stateMachine = new StateMachineImpl<TState, TEvent>(name);
-        this.events = new LinkedList<EventInformation<TEvent>>();
-    }
+	@Override
+	public void fire(final TEvent eventId, final Object... eventArguments) {
+		this.events.addLast(new EventInformation<TEvent>(eventId,
+				eventArguments));
+		this.execute();
+	}
 
-    /**
-     * (non-Javadoc)
-     * 
-     * @see ch.bbv.fsm.StateMachine#addEventHandler(ch.bbv.fsm.events.StateMachineEventHandler)
-     */
-    @Override
-    public void addEventHandler(final StateMachineEventHandler<TState, TEvent> handler) {
-        this.stateMachine.addEventHandler(handler);
-    }
+	@Override
+	public void firePriority(final TEvent eventId,
+			final Object... eventArguments) {
+		this.events.addFirst(new EventInformation<TEvent>(eventId,
+				eventArguments));
+		this.execute();
+	}
 
-    /**
-     * (non-Javadoc)
-     * 
-     * @see ch.bbv.fsm.StateMachine#defineHierarchyOn(java.lang.Object,
-     *      java.lang.Object, ch.bbv.fsm.HistoryType, TState[])
-     */
-    @Override
-    public void defineHierarchyOn(final TState superStateId, final TState initialSubStateId,
-            final HistoryType historyType, final TState... subStateIds) {
-        this.stateMachine.defineHierarchyOn(superStateId, initialSubStateId, historyType, subStateIds);
-    }
+	@Override
+	public boolean isExecuting() {
+		return this.executing;
+	}
 
-    /**
-     * Executes all queued events.
-     */
-    private void execute() {
-        if (this.executing || !this.isRunning) {
-            return;
-        }
+	@Override
+	public boolean isRunning() {
+		return this.isRunning;
+	}
 
-        this.executing = true;
-        try {
-            this.processQueuedEvents();
-        } finally {
-            this.executing = false;
-        }
-    }
+	@Override
+	public int numberOfQueuedEvents() {
+		return this.events.size();
+	}
 
-    /**
-     * (non-Javadoc)
-     * 
-     * @see ch.bbv.fsm.StateMachine#fire(java.lang.Object, java.lang.Object[])
-     */
-    @Override
-    public void fire(final TEvent eventId, final Object... eventArguments) {
-        this.events.addLast(new EventInformation<TEvent>(eventId, eventArguments));
-        this.execute();
-    }
+	@Override
+	public void start() {
+		this.isRunning = true;
 
-    /**
-     * Fires the event on the state machine.
-     * 
-     * @param e
-     *            the event to be fired on the state machine.
-     */
-    private void fireEventOnStateMachine(final EventInformation<TEvent> e) {
-        this.stateMachine.fire(e.getEventId(), e.getEventArguments());
-    }
+		this.execute();
+	}
 
-    /**
-     * (non-Javadoc)
-     * 
-     * @see ch.bbv.fsm.StateMachine#firePriority(java.lang.Object,
-     *      java.lang.Object[])
-     */
-    @Override
-    public void firePriority(final TEvent eventId, final Object... eventArguments) {
-        this.events.addFirst(new EventInformation<TEvent>(eventId, eventArguments));
-        this.execute();
-    }
+	@Override
+	public void stop() {
+		this.isRunning = false;
+	}
 
-    /**
-     * Returns the current internal state of the state machine.
-     * 
-     * @return the current internal state of the state machine.
-     */
-    public TState getCurrentState() {
-        return this.stateMachine.getCurrentStateId();
-    }
+	public void initialize(final TState initialState) {
+		this.stateMachine.initialize(initialState);
+	}
 
-    /**
-     * Gets the next event to process for the queue.
-     * 
-     * @return The next queued event.
-     */
-    private EventInformation<TEvent> getNextEventToProcess() {
-        final EventInformation<TEvent> e = this.events.getFirst();
-        this.events.removeFirst();
-        return e;
-    }
+	/**
+	 * Returns the current internal state of the state machine.
+	 * 
+	 * @return the current internal state of the state machine.
+	 */
+	@Override
+	public TState getCurrentState() {
+		return this.stateMachine.getCurrentStateId();
+	}
 
-    /**
-     * (non-Javadoc)
-     * 
-     * @see ch.bbv.fsm.StateMachine#in(java.lang.Object)
-     */
-    @Override
-    public EntryActionSyntax<TState, TEvent> in(final TState state) {
-        return this.stateMachine.in(state);
-    }
+	/**
+	 * Executes all queued events.
+	 */
+	private void execute() {
+		if (this.executing || !this.isRunning) {
+			return;
+		}
 
-    /**
-     * (non-Javadoc)
-     * 
-     * @see ch.bbv.fsm.StateMachine#initialize(java.lang.Object)
-     */
-    @Override
-    public void initialize(final TState initialState) {
-        this.stateMachine.initialize(initialState);
-    }
+		this.executing = true;
+		try {
+			this.processQueuedEvents();
+		} finally {
+			this.executing = false;
+		}
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see ch.bbv.asm.StateMachine#isExecuting()
-     */
-    @Override
-    public boolean isExecuting() {
-        return this.executing;
-    }
+	/**
+	 * Gets the next event to process for the queue.
+	 * 
+	 * @return The next queued event.
+	 */
+	private EventInformation<TEvent> getNextEventToProcess() {
+		final EventInformation<TEvent> e = this.events.getFirst();
+		this.events.removeFirst();
+		return e;
+	}
 
-    /**
-     * (non-Javadoc)
-     * 
-     * @see ch.bbv.fsm.StateMachine#isRunning()
-     */
-    @Override
-    public boolean isRunning() {
-        return this.isRunning;
-    }
+	/**
+	 * Fires the event on the state machine.
+	 * 
+	 * @param e
+	 *            the event to be fired on the state machine.
+	 */
+	private void fireEventOnStateMachine(final EventInformation<TEvent> e) {
+		this.stateMachine.fire(e.getEventId(), e.getEventArguments());
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see ch.bbv.asm.StateMachine#numberOfQueuedEvents()
-     */
-    @Override
-    public int numberOfQueuedEvents() {
-        return this.events.size();
-    }
+	/**
+	 * Processes the queued events.
+	 */
+	private void processQueuedEvents() {
+		while (this.events.size() > 0) {
+			final EventInformation<TEvent> eventToProcess = this
+					.getNextEventToProcess();
+			this.fireEventOnStateMachine(eventToProcess);
+		}
+	}
 
-    /**
-     * Processes the queued events.
-     */
-    private void processQueuedEvents() {
-        while (this.events.size() > 0) {
-            final EventInformation<TEvent> eventToProcess = this.getNextEventToProcess();
-            this.fireEventOnStateMachine(eventToProcess);
-        }
-    }
+	@Override
+	public void addEventHandler(StateMachineEventHandler<TState, TEvent> handler) {
+		stateMachine.addEventHandler(handler);
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @seech.bbv.asm.StateMachine#removeEventHandler(ch.bbv.asm.events.
-     * StateMachineEventHandler)
-     */
-    @Override
-    public void removeEventHandler(final StateMachineEventHandler<TState, TEvent> handler) {
-        this.stateMachine.removeEventHandler(handler);
-
-    }
-
-    /**
-     * (non-Javadoc)
-     * 
-     * @see ch.bbv.fsm.StateMachine#report()
-     */
-    @Override
-    public String report() {
-        return this.stateMachine.report();
-    }
-
-    /**
-     * (non-Javadoc)
-     * 
-     * @see ch.bbv.fsm.StateMachine#start()
-     */
-    @Override
-    public void start() {
-        this.isRunning = true;
-
-        this.execute();
-    }
-
-    /**
-     * (non-Javadoc)
-     * 
-     * @see ch.bbv.fsm.StateMachine#stop()
-     */
-    @Override
-    public void stop() {
-        this.isRunning = false;
-    }
-
+	@Override
+	public void removeEventHandler(
+			StateMachineEventHandler<TState, TEvent> handler) {
+		stateMachine.removeEventHandler(handler);
+	}
 }

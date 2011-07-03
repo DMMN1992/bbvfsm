@@ -20,104 +20,111 @@ package ch.bbv.fsm.example;
 
 import junit.framework.Assert;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import ch.bbv.fsm.HistoryType;
-import ch.bbv.fsm.impl.PassiveStateMachine;
+import ch.bbv.fsm.StateMachine;
+import ch.bbv.fsm.StateMachineDefinition;
+import ch.bbv.fsm.impl.StateMachineDefinitionImpl;
 
 /**
  * Sample showing the usage of state machine.
  */
 public class HierarchyExample {
 
-    public enum Events {
-        toA, toB, toB2, toC, toD, toD2
-    };
+	public enum Events {
+		toA, toB, toB2, toC, toD, toD2
+	};
 
-    public enum States {
-        A, B, B_1, B_2, C, D, D_1, D_2
-    }
+	public enum States {
+		A, B, B_1, B_2, C, D, D_1, D_2
+	}
 
-    private PassiveStateMachine<States, Events> testee;
+	private StateMachineDefinition<States, Events> stateMachineDefinition;
 
-    @Before
-    public void setup() {
-        this.testee = new PassiveStateMachine<States, Events>("SimpleExample");
+	@Before
+	public void setup() {
+		stateMachineDefinition = new StateMachineDefinitionImpl<HierarchyExample.States, HierarchyExample.Events>();
 
-        this.testee.defineHierarchyOn(States.B, States.B_1, HistoryType.NONE, States.B_1, States.B_2);
-        this.testee.defineHierarchyOn(States.D, States.D_1, HistoryType.SHALLOW, States.D_1, States.D_2);
+		stateMachineDefinition.defineHierarchyOn(States.B, States.B_1,
+				HistoryType.NONE, States.B_1, States.B_2);
+		stateMachineDefinition.defineHierarchyOn(States.D, States.D_1,
+				HistoryType.SHALLOW, States.D_1, States.D_2);
 
-        this.testee.in(States.A).on(Events.toB).goTo(States.B);
-        this.testee.in(States.B).on(Events.toB).goTo(States.B);
-        this.testee.in(States.B).on(Events.toC).goTo(States.C);
-        this.testee.in(States.C).on(Events.toD).goTo(States.D);
-        this.testee.in(States.D).on(Events.toA).goTo(States.A);
-        this.testee.in(States.B_1).on(Events.toB2).goTo(States.B_2);
-        this.testee.in(States.D_1).on(Events.toD2).goTo(States.D_2);
-    }
+		stateMachineDefinition.in(States.A).on(Events.toB).goTo(States.B);
+		stateMachineDefinition.in(States.B).on(Events.toB).goTo(States.B);
+		stateMachineDefinition.in(States.B).on(Events.toC).goTo(States.C);
+		stateMachineDefinition.in(States.C).on(Events.toD).goTo(States.D);
+		stateMachineDefinition.in(States.D).on(Events.toA).goTo(States.A);
+		stateMachineDefinition.in(States.B_1).on(Events.toB2).goTo(States.B_2);
+		stateMachineDefinition.in(States.D_1).on(Events.toD2).goTo(States.D_2);
+	}
 
-    @After
-    public void shutdown() {
-        this.testee.stop();
-    }
+	@Test
+	public void testDeep() {
+		StateMachine<States, Events> testee = stateMachineDefinition
+				.createPassiveStateMachine("testDeep", States.A);
 
-    @Test
-    public void testDeep() {
+		testee.start();
+		testee.fire(Events.toB, true);
+		testee.fire(Events.toC);
+		testee.fire(Events.toD);
+		final States stateD1 = testee.getCurrentState();
+		testee.fire(Events.toD2);
+		final States stateD2 = testee.getCurrentState();
+		testee.fire(Events.toA);
+		testee.fire(Events.toB);
+		testee.fire(Events.toC);
+		testee.fire(Events.toD);
+		final States stateD2_2 = testee.getCurrentState();
 
-        this.testee.initialize(States.A);
-        this.testee.start();
-        this.testee.fire(Events.toB, true);
-        this.testee.fire(Events.toC);
-        this.testee.fire(Events.toD);
-        final States stateD1 = this.testee.getCurrentState();
-        this.testee.fire(Events.toD2);
-        final States stateD2 = this.testee.getCurrentState();
-        this.testee.fire(Events.toA);
-        this.testee.fire(Events.toB);
-        this.testee.fire(Events.toC);
-        this.testee.fire(Events.toD);
-        final States stateD2_2 = this.testee.getCurrentState();
+		testee.stop();
 
-        Assert.assertEquals(States.D_1, stateD1);
-        Assert.assertEquals(States.D_2, stateD2);
-        Assert.assertEquals(States.D_2, stateD2_2);
-    }
+		Assert.assertEquals(States.D_1, stateD1);
+		Assert.assertEquals(States.D_2, stateD2);
+		Assert.assertEquals(States.D_2, stateD2_2);
+	}
 
-    @Test
-    public void testGoDownAndEventsInSuperState() {
+	@Test
+	public void testGoDownAndEventsInSuperState() {
+		StateMachine<States, Events> testee = stateMachineDefinition
+				.createPassiveStateMachine("testGoDownAndEventsInSuperState",
+						States.A);
 
-        this.testee.initialize(States.A);
-        this.testee.start();
-        this.testee.fire(Events.toB, true);
-        final States stateB1 = this.testee.getCurrentState();
-        this.testee.fire(Events.toC);
-        final States stateC = this.testee.getCurrentState();
+		testee.start();
+		testee.fire(Events.toB, true);
+		final States stateB1 = testee.getCurrentState();
+		testee.fire(Events.toC);
+		final States stateC = testee.getCurrentState();
 
-        Assert.assertEquals(States.B_1, stateB1);
-        Assert.assertEquals(States.C, stateC);
-    }
+		testee.stop();
 
-    @Test
-    public void testShallow() {
+		Assert.assertEquals(States.B_1, stateB1);
+		Assert.assertEquals(States.C, stateC);
+	}
 
-        this.testee.initialize(States.A);
-        this.testee.start();
-        this.testee.fire(Events.toB, true);
-        final States stateB1 = this.testee.getCurrentState();
-        this.testee.fire(Events.toB2);
-        final States stateB2 = this.testee.getCurrentState();
-        this.testee.fire(Events.toC);
-        final States stateC = this.testee.getCurrentState();
-        this.testee.fire(Events.toD);
-        this.testee.fire(Events.toA);
-        this.testee.fire(Events.toB);
-        final States stateB1_2 = this.testee.getCurrentState();
+	@Test
+	public void testShallow() {
+		StateMachine<States, Events> testee = stateMachineDefinition
+				.createPassiveStateMachine("testShallow", States.A);
 
-        Assert.assertEquals(States.B_1, stateB1);
-        Assert.assertEquals(States.B_2, stateB2);
-        Assert.assertEquals(States.C, stateC);
-        Assert.assertEquals(States.B_1, stateB1_2);
-    }
+		testee.start();
+		testee.fire(Events.toB, true);
+		final States stateB1 = testee.getCurrentState();
+		testee.fire(Events.toB2);
+		final States stateB2 = testee.getCurrentState();
+		testee.fire(Events.toC);
+		final States stateC = testee.getCurrentState();
+		testee.fire(Events.toD);
+		testee.fire(Events.toA);
+		testee.fire(Events.toB);
+		final States stateB1_2 = testee.getCurrentState();
+		testee.stop();
+
+		Assert.assertEquals(States.B_1, stateB1);
+		Assert.assertEquals(States.B_2, stateB2);
+		Assert.assertEquals(States.C, stateC);
+		Assert.assertEquals(States.B_1, stateB1_2);
+	}
 }

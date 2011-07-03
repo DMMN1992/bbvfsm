@@ -27,27 +27,28 @@ package ch.bbv.fsm.events;
  * @param <TEvent>
  *            the type of the events.
  */
-public interface TransitionEventArgs<TState, TEvent> extends ContextEventArgs<TState, TEvent> {
+public interface TransitionEventArgs<TState extends Enum<?>, TEvent extends Enum<?>>
+		extends ContextEventArgs<TState, TEvent> {
 
-    /**
-     * Returns the event arguments.
-     * 
-     * @return the event arguments.
-     */
-    public abstract Object[] getEventArguments();
+	/**
+	 * Returns the event arguments.
+	 * 
+	 * @return the event arguments.
+	 */
+	public abstract Object[] getEventArguments();
 
-    /**
-     * Returns the event id of the transition.
-     * 
-     * @return the event id of the transition.
-     */
-    public abstract TEvent getEventId();
+	/**
+	 * Returns the event id of the transition.
+	 * 
+	 * @return the event id of the transition.
+	 */
+	public abstract TEvent getEventId();
 
-    /**
-     * Returns the id of the source state of the transition.
-     * 
-     * @return the id of the source state of the transition.
-     */
-    public abstract TState getStateId();
+	/**
+	 * Returns the id of the source state of the transition.
+	 * 
+	 * @return the id of the source state of the transition.
+	 */
+	public abstract TState getStateId();
 
 }

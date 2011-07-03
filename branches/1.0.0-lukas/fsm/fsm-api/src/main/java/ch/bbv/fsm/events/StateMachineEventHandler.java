@@ -25,46 +25,48 @@ package ch.bbv.fsm.events;
  * @param <TState>
  * @param <TEvent>
  */
-public interface StateMachineEventHandler<TState, TEvent> {
+public interface StateMachineEventHandler<TState extends Enum<?>, TEvent extends Enum<?>> {
 
-    /**
-     * Occurs when an exception was thrown inside the state machine.
-     * 
-     * @param arg
-     *            the event argument.
-     */
-    public void onExceptionThrown(ExceptionEventArgs<TState, TEvent> arg);
+	/**
+	 * Occurs when an exception was thrown inside the state machine.
+	 * 
+	 * @param arg
+	 *            the event argument.
+	 */
+	public void onExceptionThrown(ExceptionEventArgs<TState, TEvent> arg);
 
-    /**
-     * Occurs when a transition begins.
-     * 
-     * @param args
-     *            the event argument.
-     */
-    public void onTransitionBegin(TransitionEventArgs<TState, TEvent> args);
+	/**
+	 * Occurs when a transition begins.
+	 * 
+	 * @param args
+	 *            the event argument.
+	 */
+	public void onTransitionBegin(TransitionEventArgs<TState, TEvent> args);
 
-    /**
-     * Occurs when a transition completed.
-     * 
-     * @param arg
-     */
-    public void onTransitionCompleted(TransitionCompletedEventArgs<TState, TEvent> arg);
+	/**
+	 * Occurs when a transition completed.
+	 * 
+	 * @param arg
+	 */
+	public void onTransitionCompleted(
+			TransitionCompletedEventArgs<TState, TEvent> arg);
 
-    /**
-     * Occurs when no transition could be executed.
-     * 
-     * @param arg
-     *            the event argument.
-     */
-    public void onTransitionDeclined(TransitionEventArgs<TState, TEvent> arg);
+	/**
+	 * Occurs when no transition could be executed.
+	 * 
+	 * @param arg
+	 *            the event argument.
+	 */
+	public void onTransitionDeclined(TransitionEventArgs<TState, TEvent> arg);
 
-    /**
-     * Occurs when an exception was thrown inside a transition of the state
-     * machine.
-     * 
-     * @param arg
-     *            the event argument.
-     */
-    public void onTransitionThrowsException(TransitionExceptionEventArgs<TState, TEvent> arg);
+	/**
+	 * Occurs when an exception was thrown inside a transition of the state
+	 * machine.
+	 * 
+	 * @param arg
+	 *            the event argument.
+	 */
+	public void onTransitionThrowsException(
+			TransitionExceptionEventArgs<TState, TEvent> arg);
 
 }

@@ -18,15 +18,15 @@
  *******************************************************************************/
 package ch.bbv.fsm.example;
 
-import static ch.bbv.fsm.impl.Tool.*;
+import static ch.bbv.fsm.impl.Tool.from;
 import junit.framework.Assert;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.impl.PassiveStateMachine;
+import ch.bbv.fsm.StateMachineDefinition;
+import ch.bbv.fsm.impl.StateMachineDefinitionImpl;
 
 /**
  * Example: Tennis Scorer.
@@ -36,242 +36,272 @@ import ch.bbv.fsm.impl.PassiveStateMachine;
  */
 public class Tennis {
 
-    public enum Events {
-        A_Scores, B_Scores
-    }
+	public enum Events {
+		A_Scores, B_Scores
+	}
 
-    public enum States {
-        _0_0, _0_15, _0_30, _0_40, _15_15, _15_30, _15_40, _30_30, _30_40, _15_0, _30_0, _30_15, _40_0, _40_15, _40_30, _A_GAME, _B_GAME, _DEUCE, _A_ADV, _B_ADV;
-    }
+	public enum States {
+		_0_0, _0_15, _0_30, _0_40, _15_15, _15_30, _15_40, _30_30, _30_40, _15_0, _30_0, _30_15, _40_0, _40_15, _40_30, _A_GAME, _B_GAME, _DEUCE, _A_ADV, _B_ADV;
+	}
 
-    private StateMachine<States, Events> scorer;
+	private StateMachineDefinition<States, Events> scorer;
 
-    private States currentState;
+	private States currentState;
 
-    public States getCurrentState() {
-        return this.currentState;
-    }
+	@Before
+	public void setup() {
+		this.scorer = new StateMachineDefinitionImpl<States, Events>("Tennis");
 
-    @Test
-    public void scoreWhenIn_0_0_A_And_BScores3TimesSwitchingThen_Deuce() {
-        this.scorer.initialize(States._0_0);
-        this.scorer.start();
+		this.scorer.in(States._0_0).executeOnEntry(
+				from(this).setCurrentState(States._0_0));
+		this.scorer.in(States._0_0).on(Events.A_Scores).goTo(States._15_0);
+		this.scorer.in(States._0_0).on(Events.B_Scores).goTo(States._0_15);
 
-        final States initialState = getCurrentState();
+		this.scorer.in(States._0_15).executeOnEntry(
+				from(this).setCurrentState(States._0_15));
+		this.scorer.in(States._0_15).on(Events.A_Scores).goTo(States._15_15);
+		this.scorer.in(States._0_15).on(Events.B_Scores).goTo(States._0_30);
 
-        this.scorer.fire(Events.A_Scores);
-        final States score1 = getCurrentState();
+		this.scorer.in(States._0_30).executeOnEntry(
+				from(this).setCurrentState(States._0_30));
+		this.scorer.in(States._0_30).on(Events.A_Scores).goTo(States._15_30);
+		this.scorer.in(States._0_30).on(Events.B_Scores).goTo(States._0_40);
 
-        this.scorer.fire(Events.B_Scores);
-        final States score2 = getCurrentState();
+		this.scorer.in(States._0_40).executeOnEntry(
+				from(this).setCurrentState(States._0_40));
+		this.scorer.in(States._0_40).on(Events.A_Scores).goTo(States._15_40);
+		this.scorer.in(States._0_40).on(Events.B_Scores).goTo(States._B_GAME);
 
-        this.scorer.fire(Events.A_Scores);
-        final States score3 = getCurrentState();
+		this.scorer.in(States._15_0).executeOnEntry(
+				from(this).setCurrentState(States._15_0));
+		this.scorer.in(States._15_0).on(Events.A_Scores).goTo(States._30_0);
+		this.scorer.in(States._15_0).on(Events.B_Scores).goTo(States._15_15);
 
-        this.scorer.fire(Events.B_Scores);
-        final States score4 = getCurrentState();
+		this.scorer.in(States._15_15).executeOnEntry(
+				from(this).setCurrentState(States._15_15));
+		this.scorer.in(States._15_15).on(Events.A_Scores).goTo(States._30_15);
+		this.scorer.in(States._15_15).on(Events.B_Scores).goTo(States._15_30);
 
-        this.scorer.fire(Events.A_Scores);
-        final States score5 = getCurrentState();
+		this.scorer.in(States._15_30).executeOnEntry(
+				from(this).setCurrentState(States._15_30));
+		this.scorer.in(States._15_30).on(Events.A_Scores).goTo(States._30_30);
+		this.scorer.in(States._15_30).on(Events.B_Scores).goTo(States._15_40);
 
-        this.scorer.fire(Events.B_Scores);
-        final States score6 = getCurrentState();
+		this.scorer.in(States._15_40).executeOnEntry(
+				from(this).setCurrentState(States._15_40));
+		this.scorer.in(States._15_40).on(Events.A_Scores).goTo(States._30_40);
+		this.scorer.in(States._15_40).on(Events.B_Scores).goTo(States._B_GAME);
 
-        Assert.assertEquals(States._0_0, initialState);
-        Assert.assertEquals(States._15_0, score1);
-        Assert.assertEquals(States._15_15, score2);
-        Assert.assertEquals(States._30_15, score3);
-        Assert.assertEquals(States._30_30, score4);
-        Assert.assertEquals(States._40_30, score5);
-        Assert.assertEquals(States._DEUCE, score6);
-    }
+		this.scorer.in(States._30_0).executeOnEntry(
+				from(this).setCurrentState(States._30_0));
+		this.scorer.in(States._30_0).on(Events.A_Scores).goTo(States._40_0);
+		this.scorer.in(States._30_0).on(Events.B_Scores).goTo(States._30_15);
 
-    @Test
-    public void scoreWhenIn_0_0_AScoresrTimesThen_A_Wins() {
-        this.scorer.initialize(States._0_0);
-        this.scorer.start();
+		this.scorer.in(States._30_15).executeOnEntry(
+				from(this).setCurrentState(States._30_15));
+		this.scorer.in(States._30_15).on(Events.A_Scores).goTo(States._40_15);
+		this.scorer.in(States._30_15).on(Events.B_Scores).goTo(States._30_30);
 
-        final States initialState = getCurrentState();
+		this.scorer.in(States._30_30).executeOnEntry(
+				from(this).setCurrentState(States._30_30));
+		this.scorer.in(States._30_30).on(Events.A_Scores).goTo(States._40_30);
+		this.scorer.in(States._30_30).on(Events.B_Scores).goTo(States._30_40);
 
-        this.scorer.fire(Events.A_Scores);
-        final States score1 = getCurrentState();
+		this.scorer.in(States._30_40).executeOnEntry(
+				from(this).setCurrentState(States._30_40));
+		this.scorer.in(States._30_40).on(Events.A_Scores).goTo(States._DEUCE);
+		this.scorer.in(States._30_40).on(Events.B_Scores).goTo(States._B_GAME);
 
-        this.scorer.fire(Events.A_Scores);
-        final States score2 = getCurrentState();
+		this.scorer.in(States._40_0).executeOnEntry(
+				from(this).setCurrentState(States._40_0));
+		this.scorer.in(States._40_0).on(Events.A_Scores).goTo(States._A_GAME);
+		this.scorer.in(States._40_0).on(Events.B_Scores).goTo(States._40_15);
 
-        this.scorer.fire(Events.A_Scores);
-        final States score3 = getCurrentState();
+		this.scorer.in(States._40_15).executeOnEntry(
+				from(this).setCurrentState(States._40_15));
+		this.scorer.in(States._40_15).on(Events.A_Scores).goTo(States._A_GAME);
+		this.scorer.in(States._40_15).on(Events.B_Scores).goTo(States._40_30);
 
-        this.scorer.fire(Events.A_Scores);
-        final States score4 = getCurrentState();
+		this.scorer.in(States._40_30).executeOnEntry(
+				from(this).setCurrentState(States._40_30));
+		this.scorer.in(States._40_30).on(Events.A_Scores).goTo(States._A_GAME);
+		this.scorer.in(States._40_30).on(Events.B_Scores).goTo(States._DEUCE);
 
-        Assert.assertEquals(States._0_0, initialState);
-        Assert.assertEquals(States._15_0, score1);
-        Assert.assertEquals(States._30_0, score2);
-        Assert.assertEquals(States._40_0, score3);
-        Assert.assertEquals(States._A_GAME, score4);
-    }
+		this.scorer.in(States._DEUCE).executeOnEntry(
+				from(this).setCurrentState(States._DEUCE));
+		this.scorer.in(States._DEUCE).on(Events.A_Scores).goTo(States._A_ADV);
+		this.scorer.in(States._DEUCE).on(Events.B_Scores).goTo(States._B_ADV);
 
-    @Test
-    public void scoreWhenIn_0_0_BScoresrTimesThen_B_Wins() {
-        this.scorer.initialize(States._0_0);
-        this.scorer.start();
+		this.scorer.in(States._A_ADV).executeOnEntry(
+				from(this).setCurrentState(States._A_ADV));
+		this.scorer.in(States._A_ADV).on(Events.A_Scores).goTo(States._A_GAME);
+		this.scorer.in(States._A_ADV).on(Events.B_Scores).goTo(States._DEUCE);
 
-        final States initialState = getCurrentState();
+		this.scorer.in(States._B_ADV).executeOnEntry(
+				from(this).setCurrentState(States._B_ADV));
+		this.scorer.in(States._B_ADV).on(Events.A_Scores).goTo(States._DEUCE);
+		this.scorer.in(States._B_ADV).on(Events.B_Scores).goTo(States._B_GAME);
 
-        this.scorer.fire(Events.B_Scores);
-        final States score1 = getCurrentState();
+		this.scorer.in(States._A_GAME).executeOnEntry(
+				from(this).setCurrentState(States._A_GAME));
+		this.scorer.in(States._B_GAME).executeOnEntry(
+				from(this).setCurrentState(States._B_GAME));
+	}
 
-        this.scorer.fire(Events.B_Scores);
-        final States score2 = getCurrentState();
+	public Void setCurrentState(final States state) {
+		this.currentState = state;
+		return null;
+	}
 
-        this.scorer.fire(Events.B_Scores);
-        final States score3 = getCurrentState();
+	public States getCurrentState() {
+		return this.currentState;
+	}
 
-        this.scorer.fire(Events.B_Scores);
-        final States score4 = getCurrentState();
+	@Test
+	public void scoreWhenIn_0_0_A_And_BScores3TimesSwitchingThen_Deuce() {
+		StateMachine<States, Events> testee = scorer.createPassiveStateMachine(
+				"Tennis-0", States._0_0);
+		testee.start();
 
-        Assert.assertEquals(States._0_0, initialState);
-        Assert.assertEquals(States._0_15, score1);
-        Assert.assertEquals(States._0_30, score2);
-        Assert.assertEquals(States._0_40, score3);
-        Assert.assertEquals(States._B_GAME, score4);
-    }
+		final States initialState = getCurrentState();
 
-    public Void setCurrentState(final States state) {
-        this.currentState = state;
-        return null;
-    }
+		testee.fire(Events.A_Scores);
+		final States score1 = getCurrentState();
 
-    @Before
-    public void setup() {
-        this.scorer = new PassiveStateMachine<States, Events>();
+		testee.fire(Events.B_Scores);
+		final States score2 = getCurrentState();
 
-        this.scorer.in(States._0_0).executeOnEntry(from(this).setCurrentState(States._0_0));
-        this.scorer.in(States._0_0).on(Events.A_Scores).goTo(States._15_0);
-        this.scorer.in(States._0_0).on(Events.B_Scores).goTo(States._0_15);
+		testee.fire(Events.A_Scores);
+		final States score3 = getCurrentState();
 
-        this.scorer.in(States._0_15).executeOnEntry(from(this).setCurrentState(States._0_15));
-        this.scorer.in(States._0_15).on(Events.A_Scores).goTo(States._15_15);
-        this.scorer.in(States._0_15).on(Events.B_Scores).goTo(States._0_30);
+		testee.fire(Events.B_Scores);
+		final States score4 = getCurrentState();
 
-        this.scorer.in(States._0_30).executeOnEntry(from(this).setCurrentState(States._0_30));
-        this.scorer.in(States._0_30).on(Events.A_Scores).goTo(States._15_30);
-        this.scorer.in(States._0_30).on(Events.B_Scores).goTo(States._0_40);
+		testee.fire(Events.A_Scores);
+		final States score5 = getCurrentState();
 
-        this.scorer.in(States._0_40).executeOnEntry(from(this).setCurrentState(States._0_40));
-        this.scorer.in(States._0_40).on(Events.A_Scores).goTo(States._15_40);
-        this.scorer.in(States._0_40).on(Events.B_Scores).goTo(States._B_GAME);
+		testee.fire(Events.B_Scores);
+		final States score6 = getCurrentState();
 
-        this.scorer.in(States._15_0).executeOnEntry(from(this).setCurrentState(States._15_0));
-        this.scorer.in(States._15_0).on(Events.A_Scores).goTo(States._30_0);
-        this.scorer.in(States._15_0).on(Events.B_Scores).goTo(States._15_15);
+		testee.stop();
 
-        this.scorer.in(States._15_15).executeOnEntry(from(this).setCurrentState(States._15_15));
-        this.scorer.in(States._15_15).on(Events.A_Scores).goTo(States._30_15);
-        this.scorer.in(States._15_15).on(Events.B_Scores).goTo(States._15_30);
+		Assert.assertEquals(States._0_0, initialState);
+		Assert.assertEquals(States._15_0, score1);
+		Assert.assertEquals(States._15_15, score2);
+		Assert.assertEquals(States._30_15, score3);
+		Assert.assertEquals(States._30_30, score4);
+		Assert.assertEquals(States._40_30, score5);
+		Assert.assertEquals(States._DEUCE, score6);
+	}
 
-        this.scorer.in(States._15_30).executeOnEntry(from(this).setCurrentState(States._15_30));
-        this.scorer.in(States._15_30).on(Events.A_Scores).goTo(States._30_30);
-        this.scorer.in(States._15_30).on(Events.B_Scores).goTo(States._15_40);
+	@Test
+	public void scoreWhenIn_0_0_AScoresrTimesThen_A_Wins() {
+		StateMachine<States, Events> testee = scorer.createPassiveStateMachine(
+				"Tennis-1", States._0_0);
+		testee.start();
 
-        this.scorer.in(States._15_40).executeOnEntry(from(this).setCurrentState(States._15_40));
-        this.scorer.in(States._15_40).on(Events.A_Scores).goTo(States._30_40);
-        this.scorer.in(States._15_40).on(Events.B_Scores).goTo(States._B_GAME);
+		final States initialState = getCurrentState();
 
-        this.scorer.in(States._30_0).executeOnEntry(from(this).setCurrentState(States._30_0));
-        this.scorer.in(States._30_0).on(Events.A_Scores).goTo(States._40_0);
-        this.scorer.in(States._30_0).on(Events.B_Scores).goTo(States._30_15);
+		testee.fire(Events.A_Scores);
+		final States score1 = getCurrentState();
 
-        this.scorer.in(States._30_15).executeOnEntry(from(this).setCurrentState(States._30_15));
-        this.scorer.in(States._30_15).on(Events.A_Scores).goTo(States._40_15);
-        this.scorer.in(States._30_15).on(Events.B_Scores).goTo(States._30_30);
+		testee.fire(Events.A_Scores);
+		final States score2 = getCurrentState();
 
-        this.scorer.in(States._30_30).executeOnEntry(from(this).setCurrentState(States._30_30));
-        this.scorer.in(States._30_30).on(Events.A_Scores).goTo(States._40_30);
-        this.scorer.in(States._30_30).on(Events.B_Scores).goTo(States._30_40);
+		testee.fire(Events.A_Scores);
+		final States score3 = getCurrentState();
 
-        this.scorer.in(States._30_40).executeOnEntry(from(this).setCurrentState(States._30_40));
-        this.scorer.in(States._30_40).on(Events.A_Scores).goTo(States._DEUCE);
-        this.scorer.in(States._30_40).on(Events.B_Scores).goTo(States._B_GAME);
+		testee.fire(Events.A_Scores);
+		final States score4 = getCurrentState();
 
-        this.scorer.in(States._40_0).executeOnEntry(from(this).setCurrentState(States._40_0));
-        this.scorer.in(States._40_0).on(Events.A_Scores).goTo(States._A_GAME);
-        this.scorer.in(States._40_0).on(Events.B_Scores).goTo(States._40_15);
+		testee.stop();
 
-        this.scorer.in(States._40_15).executeOnEntry(from(this).setCurrentState(States._40_15));
-        this.scorer.in(States._40_15).on(Events.A_Scores).goTo(States._A_GAME);
-        this.scorer.in(States._40_15).on(Events.B_Scores).goTo(States._40_30);
+		Assert.assertEquals(States._0_0, initialState);
+		Assert.assertEquals(States._15_0, score1);
+		Assert.assertEquals(States._30_0, score2);
+		Assert.assertEquals(States._40_0, score3);
+		Assert.assertEquals(States._A_GAME, score4);
+	}
 
-        this.scorer.in(States._40_30).executeOnEntry(from(this).setCurrentState(States._40_30));
-        this.scorer.in(States._40_30).on(Events.A_Scores).goTo(States._A_GAME);
-        this.scorer.in(States._40_30).on(Events.B_Scores).goTo(States._DEUCE);
+	@Test
+	public void scoreWhenIn_0_0_BScoresrTimesThen_B_Wins() {
+		StateMachine<States, Events> testee = scorer.createPassiveStateMachine(
+				"Tennis-1", States._0_0);
+		testee.start();
 
-        this.scorer.in(States._DEUCE).executeOnEntry(from(this).setCurrentState(States._DEUCE));
-        this.scorer.in(States._DEUCE).on(Events.A_Scores).goTo(States._A_ADV);
-        this.scorer.in(States._DEUCE).on(Events.B_Scores).goTo(States._B_ADV);
+		final States initialState = getCurrentState();
 
-        this.scorer.in(States._A_ADV).executeOnEntry(from(this).setCurrentState(States._A_ADV));
-        this.scorer.in(States._A_ADV).on(Events.A_Scores).goTo(States._A_GAME);
-        this.scorer.in(States._A_ADV).on(Events.B_Scores).goTo(States._DEUCE);
+		testee.fire(Events.B_Scores);
+		final States score1 = getCurrentState();
 
-        this.scorer.in(States._B_ADV).executeOnEntry(from(this).setCurrentState(States._B_ADV));
-        this.scorer.in(States._B_ADV).on(Events.A_Scores).goTo(States._DEUCE);
-        this.scorer.in(States._B_ADV).on(Events.B_Scores).goTo(States._B_GAME);
+		testee.fire(Events.B_Scores);
+		final States score2 = getCurrentState();
 
-        this.scorer.in(States._A_GAME).executeOnEntry(from(this).setCurrentState(States._A_GAME));
-        this.scorer.in(States._B_GAME).executeOnEntry(from(this).setCurrentState(States._B_GAME));
-    }
+		testee.fire(Events.B_Scores);
+		final States score3 = getCurrentState();
 
-    @After
-    public void shutdown() {
-        this.scorer.stop();
-    }
+		testee.fire(Events.B_Scores);
+		final States score4 = getCurrentState();
 
-    @Test
-    public void testScorerWhenDeuceAndAScores2TimesThenAWins() {
-        this.scorer.initialize(States._DEUCE);
-        this.scorer.start();
+		Assert.assertEquals(States._0_0, initialState);
+		Assert.assertEquals(States._0_15, score1);
+		Assert.assertEquals(States._0_30, score2);
+		Assert.assertEquals(States._0_40, score3);
+		Assert.assertEquals(States._B_GAME, score4);
+	}
 
-        this.scorer.fire(Events.A_Scores);
-        final States score1 = getCurrentState();
+	@Test
+	public void testScorerWhenDeuceAndAScores2TimesThenAWins() {
+		StateMachine<States, Events> testee = scorer.createPassiveStateMachine(
+				"Tennis-1", States._DEUCE);
+		testee.start();
 
-        this.scorer.fire(Events.A_Scores);
-        final States score2 = getCurrentState();
+		testee.fire(Events.A_Scores);
+		final States score1 = getCurrentState();
 
-        Assert.assertEquals(States._A_ADV, score1);
-        Assert.assertEquals(States._A_GAME, score2);
-    }
+		testee.fire(Events.A_Scores);
+		final States score2 = getCurrentState();
 
-    @Test
-    public void testScorerWhenDeuceAndB_AScoresThenDeuce() {
-        this.scorer.initialize(States._DEUCE);
-        this.scorer.start();
+		testee.stop();
 
-        this.scorer.fire(Events.A_Scores);
-        final States score1 = getCurrentState();
+		Assert.assertEquals(States._A_ADV, score1);
+		Assert.assertEquals(States._A_GAME, score2);
+	}
 
-        this.scorer.fire(Events.B_Scores);
-        final States score2 = getCurrentState();
-        ;
+	@Test
+	public void testScorerWhenDeuceAndB_AScoresThenDeuce() {
+		StateMachine<States, Events> testee = scorer.createPassiveStateMachine(
+				"Tennis-1", States._DEUCE);
+		testee.start();
 
-        Assert.assertEquals(States._A_ADV, score1);
-        Assert.assertEquals(States._DEUCE, score2);
-    }
+		testee.fire(Events.A_Scores);
+		final States score1 = getCurrentState();
 
-    @Test
-    public void testScorerWhenDeuceAndBScores2TimesThenBWins() {
-        this.scorer.initialize(States._DEUCE);
-        this.scorer.start();
+		testee.fire(Events.B_Scores);
+		final States score2 = getCurrentState();
 
-        this.scorer.fire(Events.B_Scores);
-        final States score1 = getCurrentState();
+		testee.stop();
 
-        this.scorer.fire(Events.B_Scores);
-        final States score2 = getCurrentState();
+		Assert.assertEquals(States._A_ADV, score1);
+		Assert.assertEquals(States._DEUCE, score2);
+	}
 
-        Assert.assertEquals(States._B_ADV, score1);
-        Assert.assertEquals(States._B_GAME, score2);
-    }
+	@Test
+	public void testScorerWhenDeuceAndBScores2TimesThenBWins() {
+		StateMachine<States, Events> testee = scorer.createPassiveStateMachine(
+				"Tennis-1", States._DEUCE);
+		testee.start();
+
+		testee.fire(Events.B_Scores);
+		final States score1 = getCurrentState();
+
+		testee.fire(Events.B_Scores);
+		final States score2 = getCurrentState();
+
+		testee.stop();
+
+		Assert.assertEquals(States._B_ADV, score1);
+		Assert.assertEquals(States._B_GAME, score2);
+	}
 
 }

@@ -28,10 +28,10 @@ import ch.bbv.fsm.events.ExceptionEventArgs;
 import ch.bbv.fsm.events.StateMachineEventAdapter;
 import ch.bbv.fsm.events.TransitionCompletedEventArgs;
 import ch.bbv.fsm.events.TransitionEventArgs;
+import ch.bbv.fsm.impl.StateMachineDefinitionImpl;
+import ch.bbv.fsm.impl.StatesAndEvents;
 import ch.bbv.fsm.impl.StatesAndEvents.Events;
 import ch.bbv.fsm.impl.StatesAndEvents.States;
-
-import com.google.common.collect.Lists;
 
 /**
  * Base for state machine test fixtures.
@@ -72,9 +72,9 @@ public abstract class BaseStateMachineTest
 	}
 
 	/**
-	 * Object under test.
+	 * The state machine under test.
 	 */
-	protected StateMachine<States, Events> testee;
+	private StateMachine<States, Events> testee;
 
 	/**
 	 * Gets the exceptions that were notified.
@@ -147,31 +147,60 @@ public abstract class BaseStateMachineTest
 				.getNewStateId());
 	}
 
+	protected abstract StateMachine<States, Events> createTestee(
+			StateMachineDefinition<States, Events> definition);
+
+	protected void initTestee(StateMachineDefinition<States, Events> definition) {
+
+	}
+
+	//
+	// /**
+	// * Initializes a test.
+	// */
+	// public void setup() {
+	//
+	// this.exceptions = Lists.newArrayList();
+	// this.transitionBeginMessages = Lists.newArrayList();
+	// this.transitionCompletedMessages = Lists.newArrayList();
+	// this.transitionDeclinedMessages = Lists.newArrayList();
+	//
+	// this.testee.addEventHandler(new Handler());
+	//
+	// Assert.assertFalse(this.testee.isRunning());
+	//
+	// this.testee.initialize(States.A);
+	// this.testee.start();
+	//
+	// Assert.assertTrue(this.testee.isRunning());
+	// }
+
 	/**
 	 * An event can be fired onto the state machine and all notifications are
 	 * signaled.
 	 */
 	@Test
 	public void fireEvent() {
-		// AutoResetEvent allTransitionsCompleted =
-		// this.SetUpWaitForAllTransitions(1);
+		StateMachineDefinition<States, Events> definition = new StateMachineDefinitionImpl<StatesAndEvents.States, StatesAndEvents.Events>();
 
-		this.testee.defineHierarchyOn(States.B, States.B1, HistoryType.NONE,
+		definition.defineHierarchyOn(States.B, States.B1, HistoryType.NONE,
 				States.B1, States.B2);
-		this.testee.defineHierarchyOn(States.C, States.C2, HistoryType.SHALLOW,
+		definition.defineHierarchyOn(States.C, States.C2, HistoryType.SHALLOW,
 				States.C1, States.C2);
-		this.testee.defineHierarchyOn(States.C1, States.C1a,
+		definition.defineHierarchyOn(States.C1, States.C1a,
 				HistoryType.SHALLOW, States.C1a, States.C1b);
-		this.testee.defineHierarchyOn(States.D, States.D1, HistoryType.DEEP,
+		definition.defineHierarchyOn(States.D, States.D1, HistoryType.DEEP,
 				States.D1, States.D2);
-		this.testee.defineHierarchyOn(States.D1, States.D1a, HistoryType.DEEP,
+		definition.defineHierarchyOn(States.D1, States.D1a, HistoryType.DEEP,
 				States.D1a, States.D1b);
 
-		this.testee.in(States.A).on(Events.B).goTo(States.B);
+		definition.in(States.A).on(Events.B).goTo(States.B);
 
 		final Object[] eventArguments = new Object[] { 1, 2, "test" };
 
-		this.testee.fire(Events.B, eventArguments[0], eventArguments[1],
+		initTestee(definition);
+
+		testee.fire(Events.B, eventArguments[0], eventArguments[1],
 				eventArguments[2]);
 
 		waitUntilAllEventsAreProcessed();
@@ -197,20 +226,24 @@ public abstract class BaseStateMachineTest
 
 			@Override
 			public void execute(final Object... arguments) {
-				BaseStateMachineTest.this.testee.fire(Events.D);
-				BaseStateMachineTest.this.testee.firePriority(Events.C);
+				// BaseStateMachineTest.this.testee.fire(Events.D);
+				// BaseStateMachineTest.this.testee.firePriority(Events.C);
 
 			}
 
 		};
 
-		this.testee.in(States.A).on(Events.B).goTo(States.B).execute(a);
+		StateMachineDefinition<States, Events> definition = new StateMachineDefinitionImpl<StatesAndEvents.States, StatesAndEvents.Events>();
 
-		this.testee.in(States.B).on(Events.C).goTo(States.C);
+		definition.in(States.A).on(Events.B).goTo(States.B).execute(a);
 
-		this.testee.in(States.C).on(Events.D).goTo(States.D);
+		definition.in(States.B).on(Events.C).goTo(States.C);
 
-		this.testee.fire(Events.B);
+		definition.in(States.C).on(Events.D).goTo(States.D);
+
+		initTestee(definition);
+
+		testee.fire(Events.B);
 
 		waitUntilAllEventsAreProcessed();
 
@@ -218,26 +251,6 @@ public abstract class BaseStateMachineTest
 				this.transitionCompletedMessages.size());
 		this.checkNoDeclinedTransitionMessage();
 		this.checkNoExceptionMessage();
-	}
-
-	/**
-	 * Initializes a test.
-	 */
-	public void setup() {
-
-		this.exceptions = Lists.newArrayList();
-		this.transitionBeginMessages = Lists.newArrayList();
-		this.transitionCompletedMessages = Lists.newArrayList();
-		this.transitionDeclinedMessages = Lists.newArrayList();
-
-		this.testee.addEventHandler(new Handler());
-
-		Assert.assertFalse(this.testee.isRunning());
-
-		this.testee.initialize(States.A);
-		this.testee.start();
-
-		Assert.assertTrue(this.testee.isRunning());
 	}
 
 	@Test
@@ -251,13 +264,13 @@ public abstract class BaseStateMachineTest
 	 */
 	@Test
 	public void stopAndStart() {
-		final int Transitions = 2;
-		// AutoResetEvent allTransitionsCompleted =
-		// this.SetUpWaitForAllTransitions(Transitions);
+		final int transitions = 2;
 
-		this.testee.in(States.A).on(Events.B).goTo(States.B);
+		StateMachineDefinition<States, Events> stateMachineDefinition = new StateMachineDefinitionImpl<StatesAndEvents.States, StatesAndEvents.Events>();
 
-		this.testee.in(States.B).on(Events.C).goTo(States.C);
+		stateMachineDefinition.in(States.A).on(Events.B).goTo(States.B);
+
+		stateMachineDefinition.in(States.B).on(Events.C).goTo(States.C);
 
 		this.testee.stop();
 
@@ -272,7 +285,7 @@ public abstract class BaseStateMachineTest
 
 		waitUntilAllEventsAreProcessed();
 
-		Assert.assertEquals(Transitions,
+		Assert.assertEquals(transitions,
 				this.transitionCompletedMessages.size());
 	}
 

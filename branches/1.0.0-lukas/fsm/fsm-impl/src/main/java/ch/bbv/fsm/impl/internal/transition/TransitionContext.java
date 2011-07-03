@@ -21,50 +21,52 @@ package ch.bbv.fsm.impl.internal.transition;
 import ch.bbv.fsm.impl.internal.state.State;
 import ch.bbv.fsm.impl.internal.state.StateContext;
 
-public class TransitionContext<TState, TEvent> extends StateContext<TState, TEvent> {
+public class TransitionContext<TState extends Enum<?>, TEvent extends Enum<?>>
+		extends StateContext<TState, TEvent> {
 
-    /**
-     * The event that causes the transition.
-     */
-    private final TEvent eventId;
+	/**
+	 * The event that causes the transition.
+	 */
+	private final TEvent eventId;
 
-    /**
-     * The event arguments.
-     */
-    private final Object[] eventArguments;
+	/**
+	 * The event arguments.
+	 */
+	private final Object[] eventArguments;
 
-    /**
-     * Creates a new instance.
-     * 
-     * @param state
-     *            the source state
-     * @param eventId
-     *            the event id
-     * @param eventArguments
-     *            the event arguments
-     */
-    public TransitionContext(final State<TState, TEvent> state, final TEvent eventId, final Object[] eventArguments) {
-        super(state);
-        this.eventId = eventId;
-        this.eventArguments = eventArguments;
-    }
+	/**
+	 * Creates a new instance.
+	 * 
+	 * @param state
+	 *            the source state
+	 * @param eventId
+	 *            the event id
+	 * @param eventArguments
+	 *            the event arguments
+	 */
+	public TransitionContext(final State<TState, TEvent> state,
+			final TEvent eventId, final Object[] eventArguments) {
+		super(state);
+		this.eventId = eventId;
+		this.eventArguments = eventArguments;
+	}
 
-    /**
-     * Returns the event arguments.
-     * 
-     * @return the event arguments.
-     */
-    public Object[] getEventArguments() {
-        return this.eventArguments;
-    }
+	/**
+	 * Returns the event arguments.
+	 * 
+	 * @return the event arguments.
+	 */
+	public Object[] getEventArguments() {
+		return this.eventArguments;
+	}
 
-    /**
-     * Returns the event id.
-     * 
-     * @return the event id.
-     */
-    public TEvent getEventId() {
-        return this.eventId;
-    }
+	/**
+	 * Returns the event id.
+	 * 
+	 * @return the event id.
+	 */
+	public TEvent getEventId() {
+		return this.eventId;
+	}
 
 }

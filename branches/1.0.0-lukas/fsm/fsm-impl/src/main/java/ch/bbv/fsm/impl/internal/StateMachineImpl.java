@@ -23,8 +23,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ch.bbv.fsm.HistoryType;
-import ch.bbv.fsm.dsl.EntryActionSyntax;
 import ch.bbv.fsm.events.StateMachineEventHandler;
 import ch.bbv.fsm.impl.internal.events.ExceptionEventArgsImpl;
 import ch.bbv.fsm.impl.internal.events.TransitionCompletedEventArgsImpl;
@@ -47,357 +45,311 @@ import com.google.common.collect.Lists;
  * @param <TEvent>
  *            the type of the events.
  */
-public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>> implements Notifier<TState, TEvent> {
+public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>>
+		implements Notifier<TState, TEvent> {
 
-    private static Logger LOG = LoggerFactory.getLogger(StateMachineImpl.class);
+	private static Logger LOG = LoggerFactory.getLogger(StateMachineImpl.class);
 
-    /**
-     * The dictionary of all states.
-     */
-    private StateDictionary<TState, TEvent> states;
+	/**
+	 * Name of this state machine used in log messages.
+	 */
+	private final String name;
 
-    /**
-     * Name of this state machine used in log messages.
-     */
-    private String name;
+	/**
+	 * The current state.
+	 */
+	private State<TState, TEvent> currentState;
 
-    /**
-     * The current state.
-     */
-    private State<TState, TEvent> currentState;
+	/**
+	 * Whether this state machine was initialized.
+	 */
+	private boolean initialized;
 
-    /**
-     * Whether this state machine was initialized.
-     */
-    private boolean initialized;
+	/**
+	 * The initial state of the state machine.
+	 */
+	private TState initialStateId;
 
-    /**
-     * The initial state of the state machine.
-     */
-    private TState initialStateId;
+	/**
+	 * The dictionary of all states.
+	 */
+	private final StateDictionary<TState, TEvent> states;
 
-    private List<StateMachineEventHandler<TState, TEvent>> eventHandler;
+	/**
+	 * List of Listeners informed by the {link
+	 */
+	private final List<StateMachineEventHandler<TState, TEvent>> eventHandler;
 
-    /**
-     * Initializes a new instance of the StateMachineImpl<TState,TEvent> class.
-     */
-    public StateMachineImpl() {
-        this("StateMachine");
-    }
+	/**
+	 * Initializes a new instance of the StateMachineImpl<TState,TEvent> class.
+	 * 
+	 * @param name
+	 *            The name of this state machine used in log messages.
+	 */
+	public StateMachineImpl(final String name,
+			StateDictionary<TState, TEvent> states) {
+		this.name = name;
+		this.states = states;
+		this.eventHandler = Lists.newArrayList();
+	}
 
-    /**
-     * Initializes a new instance of the StateMachineImpl<TState,TEvent> class.
-     * 
-     * @param name
-     *            The name of this state machine used in log messages.
-     */
-    public StateMachineImpl(final String name) {
-        this.name = name;
-        this.eventHandler = Lists.newArrayList();
-        this.states = new StateDictionary<TState, TEvent>(this);
-    }
+	/**
+	 * Checks if the state machine is initialized.
+	 */
+	private void checkStateMachineIsInitialized() {
+		if (!this.initialized) {
+			throw new IllegalStateException("State machine is not initialized.");
+		}
+	}
 
-    /**
-     * Adds an event handler.
-     * 
-     * @param handler
-     *            the event handler.
-     */
-    public void addEventHandler(final StateMachineEventHandler<TState, TEvent> handler) {
-        this.eventHandler.add(handler);
-    }
+	/**
+	 * Fires the specified event.
+	 * 
+	 * @param eventId
+	 *            the event id.
+	 */
+	public void fire(final TEvent eventId) {
+		this.fire(eventId, null);
+	}
 
-    /**
-     * Checks if the state machine is initialized.
-     */
-    private void checkStateMachineIsInitialized() {
-        if (!this.initialized) {
-            throw new IllegalStateException("State machine is not initialized.");
-        }
-    }
+	/**
+	 * Fires the specified event.
+	 * 
+	 * @param eventId
+	 *            the event id.
+	 * @param eventArguments
+	 *            the event arguments.
+	 */
+	public void fire(final TEvent eventId, final Object[] eventArguments) {
+		if (LOG.isDebugEnabled()) {
+			LOG.info(
+					"Fire event {} on state machine {} with current state {} and event arguments {}.",
+					new Object[] { eventId, this.getName(),
+							this.getCurrentStateId(), eventArguments });
+		}
 
-    /**
-     * Defines a state hierarchy.
-     * 
-     * @param superStateId
-     *            the id of the super state.
-     * @param initialSubStateId
-     *            the id of the initial sub state.
-     * @param historyType
-     *            the history type.
-     * @param subStateIds
-     *            the sub state id's.
-     */
-    public void defineHierarchyOn(final TState superStateId, final TState initialSubStateId,
-            final HistoryType historyType, final TState... subStateIds) {
-        final State<TState, TEvent> superState = this.states.getState(superStateId);
-        superState.setHistoryType(historyType);
+		final TransitionContext<TState, TEvent> context = new TransitionContext<TState, TEvent>(
+				getCurrentState(), eventId, eventArguments);
+		final TransitionResult<TState, TEvent> result = this.currentState
+				.fire(context);
 
-        for (final TState subStateId : subStateIds) {
-            final State<TState, TEvent> subState = this.states.getState(subStateId);
-            subState.setSuperState(superState);
-            superState.addSubState(subState);
-        }
+		if (!result.isFired()) {
+			LOG.info("No transition possible.");
+			this.onTransitionDeclined(context);
+			return;
+		}
 
-        superState.setInitialState(this.states.getState(initialSubStateId));
-    }
+		this.setCurrentState(result.getNewState());
 
-    /**
-     * Fires the specified event.
-     * 
-     * @param eventId
-     *            the event id.
-     */
-    public void fire(final TEvent eventId) {
-        this.fire(eventId, null);
-    }
+		LOG.debug("State machine {} performed {}.", this, context.getRecords());
 
-    /**
-     * Fires the specified event.
-     * 
-     * @param eventId
-     *            the event id.
-     * @param eventArguments
-     *            the event arguments.
-     */
-    public void fire(final TEvent eventId, final Object[] eventArguments) {
-        if (LOG.isDebugEnabled()) {
-            LOG.info("Fire event {} on state machine {} with current state {} and event arguments {}.", new Object[] {
-                    eventId, this.getName(), this.getCurrentStateId(), eventArguments });
-        }
+		this.onTransitionCompleted(context);
+	}
 
-        final TransitionContext<TState, TEvent> context = new TransitionContext<TState, TEvent>(getCurrentState(),
-                eventId, eventArguments);
-        final TransitionResult<TState, TEvent> result = this.currentState.fire(context);
+	/**
+	 * Returns the current state.
+	 * 
+	 * @return the current state.
+	 */
+	private State<TState, TEvent> getCurrentState() {
+		this.checkStateMachineIsInitialized();
+		return this.currentState;
+	}
 
-        if (!result.isFired()) {
-            LOG.info("No transition possible.");
-            this.onTransitionDeclined(context);
-            return;
-        }
+	/**
+	 * Gets the id of the current state.
+	 * 
+	 * @return The id of the current state.
+	 */
+	public TState getCurrentStateId() {
+		if (this.getCurrentState() != null) {
+			return this.getCurrentState().getId();
+		} else {
+			return null;
+		}
+	}
 
-        this.setCurrentState(result.getNewState());
+	/**
+	 * Gets the name of this instance.
+	 * 
+	 * @return The name of this instance.
+	 */
+	public String getName() {
+		return this.name;
+	}
 
-        LOG.debug("State machine {} performed {}.", this, context.getRecords());
+	/**
+	 * Initializes the state machine by setting the specified initial state.
+	 * 
+	 * @param initialState
+	 *            the initial state
+	 * @param stateContext
+	 *            the state context
+	 */
+	private void initialize(final State<TState, TEvent> initialState,
+			final StateContext<TState, TEvent> stateContext) {
+		if (initialState == null) {
+			throw new IllegalArgumentException(
+					"initialState; The initial state must not be null.");
+		}
 
-        this.onTransitionCompleted(context);
-    }
+		if (this.initialized) {
+			throw new IllegalStateException(
+					"State machine is already initialized.");
+		}
 
-    /**
-     * Returns the current state.
-     * 
-     * @return the current state.
-     */
-    private State<TState, TEvent> getCurrentState() {
-        this.checkStateMachineIsInitialized();
-        return this.currentState;
-    }
+		this.initialized = true;
+		this.initialStateId = initialState.getId();
 
-    /**
-     * Gets the id of the current state.
-     * 
-     * @return The id of the current state.
-     */
-    public TState getCurrentStateId() {
-        if (this.getCurrentState() != null) {
-            return this.getCurrentState().getId();
-        } else {
-            return null;
-        }
-    }
+		final StateMachineInitializer<TState, TEvent> initializer = new StateMachineInitializer<TState, TEvent>(
+				initialState, stateContext);
+		this.setCurrentState(initializer.EnterInitialState());
+	}
 
-    /**
-     * Gets the name of this instance.
-     * 
-     * @return The name of this instance.
-     */
-    public String getName() {
-        return this.name;
-    }
+	/**
+	 * Initializes the state machine by setting the specified initial state.
+	 * 
+	 * @param initialState
+	 *            the initial state.
+	 */
+	public void initialize(final TState initialState) {
+		LOG.info("State machine {} initializes to state {}.", this,
+				initialState);
 
-    /**
-     * Defines the behavior of a state.
-     * 
-     * @param state
-     *            the state.
-     * @return Entry Action Syntax.
-     */
-    public EntryActionSyntax<TState, TEvent> in(final TState state) {
-        final State<TState, TEvent> newState = this.states.getState(state);
-        return new StateBuilder<TState, TEvent>(newState, this.states, this);
-    }
+		final StateContext<TState, TEvent> stateContext = new StateContext<TState, TEvent>(
+				null);
+		this.initialize(this.states.getState(initialState), stateContext);
 
-    /**
-     * Initializes the state machine by setting the specified initial state.
-     * 
-     * @param initialState
-     *            the initial state
-     * @param stateContext
-     *            the state context
-     */
-    private void initialize(final State<TState, TEvent> initialState, final StateContext<TState, TEvent> stateContext) {
-        if (initialState == null) {
-            throw new IllegalArgumentException("initialState; The initial state must not be null.");
-        }
+		LOG.info("State machine {} performed {}.", this,
+				stateContext.getRecords());
+	}
 
-        if (this.initialized) {
-            throw new IllegalStateException("State machine is already initialized.");
-        }
+	/**
+	 * Adds an event handler.
+	 * 
+	 * @param handler
+	 *            the event handler.
+	 */
+	public void addEventHandler(
+			final StateMachineEventHandler<TState, TEvent> handler) {
+		this.eventHandler.add(handler);
+	}
 
-        this.initialized = true;
-        this.initialStateId = initialState.getId();
+	/**
+	 * Removes an event handler.
+	 * 
+	 * @param handler
+	 *            the event handle to be removed.
+	 */
+	public void removeEventHandler(
+			final StateMachineEventHandler<TState, TEvent> handler) {
+		this.eventHandler.remove(handler);
+	}
 
-        final StateMachineInitializer<TState, TEvent> initializer = new StateMachineInitializer<TState, TEvent>(
-                initialState, stateContext);
-        this.setCurrentState(initializer.EnterInitialState());
-    }
+	@Override
+	public void onExceptionThrown(
+			final StateContext<TState, TEvent> stateContext,
+			final Exception exception) {
+		for (final StateMachineEventHandler<TState, TEvent> handler : this.eventHandler) {
+			handler.onExceptionThrown(new ExceptionEventArgsImpl<TState, TEvent>(
+					stateContext, exception));
+		}
+	}
 
-    /**
-     * Initializes the state machine by setting the specified initial state.
-     * 
-     * @param initialState
-     *            the initial state.
-     */
-    public void initialize(final TState initialState) {
-        LOG.info("State machine {} initializes to state {}.", this, initialState);
+	@Override
+	public void onExceptionThrown(
+			final TransitionContext<TState, TEvent> transitionContext,
+			final Exception exception) {
+		for (final StateMachineEventHandler<TState, TEvent> handler : this.eventHandler) {
+			handler.onTransitionThrowsException(new TransitionExceptionEventArgsImpl<TState, TEvent>(
+					transitionContext, exception));
+		}
+	}
 
-        final StateContext<TState, TEvent> stateContext = new StateContext<TState, TEvent>(null);
-        this.initialize(this.states.getState(initialState), stateContext);
+	@Override
+	public void onTransitionBegin(
+			final TransitionContext<TState, TEvent> transitionContext) {
+		try {
+			for (final StateMachineEventHandler<TState, TEvent> handler : this.eventHandler) {
+				handler.onTransitionBegin(new TransitionEventArgsImpl<TState, TEvent>(
+						transitionContext));
+			}
+		} catch (final Exception e) {
+			onExceptionThrown(transitionContext, e);
+		}
+	}
 
-        LOG.info("State machine {} performed {}.", this, stateContext.getRecords());
-    }
+	/**
+	 * Fires a transition completed event.
+	 * 
+	 * @param transitionContext
+	 *            the transition context
+	 */
+	protected void onTransitionCompleted(
+			final TransitionContext<TState, TEvent> transitionContext) {
+		try {
+			for (final StateMachineEventHandler<TState, TEvent> handler : this.eventHandler) {
+				handler.onTransitionCompleted(new TransitionCompletedEventArgsImpl<TState, TEvent>(
+						this.getCurrentStateId(), transitionContext));
+			}
+		} catch (final Exception e) {
+			onExceptionThrown(transitionContext, e);
+		}
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * ch.bbv.asm.impl.internal.Notifier#onExceptionThrown(ch.bbv.asm.impl.internal
-     * .state.StateContext, java.lang.Exception)
-     */
-    @Override
-    public void onExceptionThrown(final StateContext<TState, TEvent> stateContext, final Exception exception) {
-        try {
-            for (final StateMachineEventHandler<TState, TEvent> handler : this.eventHandler) {
-                handler.onExceptionThrown(new ExceptionEventArgsImpl<TState, TEvent>(stateContext, exception));
-            }
-        } catch (final Exception e) {
-            ((Notifier<TState, TEvent>) this).onExceptionThrown(stateContext, e);
-        }
+	/**
+	 * Fires the transaction declined event.
+	 * 
+	 * @param transitionContext
+	 *            the transition context.
+	 */
+	protected void onTransitionDeclined(
+			final TransitionContext<TState, TEvent> transitionContext) {
+		try {
+			for (final StateMachineEventHandler<TState, TEvent> handler : this.eventHandler) {
+				handler.onTransitionDeclined(new TransitionEventArgsImpl<TState, TEvent>(
+						transitionContext));
+			}
+		} catch (final Exception e) {
+			onExceptionThrown(transitionContext, e);
+		}
 
-    }
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * ch.bbv.asm.impl.internal.Notifier#onExceptionThrown(ch.bbv.asm.impl.internal
-     * .transition.TransitionContext, java.lang.Exception)
-     */
-    @Override
-    public void onExceptionThrown(final TransitionContext<TState, TEvent> transitionContext, final Exception exception) {
-        try {
-            for (final StateMachineEventHandler<TState, TEvent> handler : this.eventHandler) {
-                handler.onTransitionThrowsException(new TransitionExceptionEventArgsImpl<TState, TEvent>(
-                        transitionContext, exception));
-            }
-        } catch (final Exception e) {
-            ((Notifier<TState, TEvent>) this).onExceptionThrown(transitionContext, e);
-        }
+	/**
+	 * Returns the report of the execution.
+	 * 
+	 * @return
+	 */
+	public String report() {
+		// final StateMachineReport<TState, TEvent> report = new
+		// StateMachineReport<TState, TEvent>();
+		// return report.report(this.toString(), this.states.getStates(),
+		// this.initialStateId);
+		// TODO Implement
+		return "";
+	}
 
-    }
+	/**
+	 * Sets the current state.
+	 * 
+	 * @param state
+	 *            the current state.
+	 */
+	private void setCurrentState(final State<TState, TEvent> state) {
+		LOG.info("State machine {} switched to state {}.", this.getName(),
+				state.getId());
+		this.currentState = state;
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * ch.bbv.asm.impl.internal.Notifier#onTransitionBegin(ch.bbv.asm.impl.internal
-     * .transition.TransitionContext)
-     */
-    @Override
-    public void onTransitionBegin(final TransitionContext<TState, TEvent> transitionContext) {
-        try {
-            for (final StateMachineEventHandler<TState, TEvent> handler : this.eventHandler) {
-                handler.onTransitionBegin(new TransitionEventArgsImpl<TState, TEvent>(transitionContext));
-            }
-        } catch (final Exception e) {
-            ((Notifier<TState, TEvent>) this).onExceptionThrown(transitionContext, e);
-        }
-    }
-
-    /**
-     * Fires a transition completed event.
-     * 
-     * @param transitionContext
-     *            the transition context
-     */
-    protected void onTransitionCompleted(final TransitionContext<TState, TEvent> transitionContext) {
-        try {
-            for (final StateMachineEventHandler<TState, TEvent> handler : this.eventHandler) {
-                handler.onTransitionCompleted(new TransitionCompletedEventArgsImpl<TState, TEvent>(this
-                        .getCurrentStateId(), transitionContext));
-            }
-        } catch (final Exception e) {
-            ((Notifier<TState, TEvent>) this).onExceptionThrown(transitionContext, e);
-        }
-    }
-
-    /**
-     * Fires the transaction declined event.
-     * 
-     * @param transitionContext
-     *            the transition context.
-     */
-    protected void onTransitionDeclined(final TransitionContext<TState, TEvent> transitionContext) {
-
-        try {
-            for (final StateMachineEventHandler<TState, TEvent> handler : this.eventHandler) {
-                handler.onTransitionDeclined(new TransitionEventArgsImpl<TState, TEvent>(transitionContext));
-            }
-        } catch (final Exception e) {
-            ((Notifier<TState, TEvent>) this).onExceptionThrown(transitionContext, e);
-        }
-
-    }
-
-    /**
-     * Removes an event handler.
-     * 
-     * @param handler
-     *            the event handle to be removed.
-     */
-    public void removeEventHandler(final StateMachineEventHandler<TState, TEvent> handler) {
-        this.eventHandler.remove(handler);
-    }
-
-    /**
-     * Returns the report of the execution.
-     * 
-     * @return
-     */
-    public String report() {
-        final StateMachineReport<TState, TEvent> report = new StateMachineReport<TState, TEvent>();
-        return report.report(this.toString(), this.states.getStates(), this.initialStateId);
-    }
-
-    /**
-     * Sets the current state.
-     * 
-     * @param state
-     *            the current state.
-     */
-    private void setCurrentState(final State<TState, TEvent> state) {
-        LOG.info("State machine {} switched to state {}.", this.getName(), state.getId());
-        this.currentState = state;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-        return this.name;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return this.name;
+	}
 
 }

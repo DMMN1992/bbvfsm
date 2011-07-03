@@ -30,33 +30,35 @@ import ch.bbv.fsm.impl.internal.transition.TransitionContext;
  * @param <TEvent>
  *            the type of the events.
  */
-public interface Notifier<TState, TEvent> {
+public interface Notifier<TState extends Enum<?>, TEvent extends Enum<?>> {
 
-    /**
-     * Called when an exception was thrown.
-     * 
-     * @param stateContext
-     *            the context.
-     * @param exception
-     *            the exception.
-     */
-    void onExceptionThrown(StateContext<TState, TEvent> stateContext, Exception exception);
+	/**
+	 * Called when an exception was thrown.
+	 * 
+	 * @param stateContext
+	 *            the context.
+	 * @param exception
+	 *            the exception.
+	 */
+	void onExceptionThrown(StateContext<TState, TEvent> stateContext,
+			Exception exception);
 
-    /**
-     * Called when an exception was thrown in a transition.
-     * 
-     * @param context
-     *            the transition context.
-     * @param exception
-     *            the exception.
-     */
-    void onExceptionThrown(TransitionContext<TState, TEvent> context, Exception exception);
+	/**
+	 * Called when an exception was thrown in a transition.
+	 * 
+	 * @param context
+	 *            the transition context.
+	 * @param exception
+	 *            the exception.
+	 */
+	void onExceptionThrown(TransitionContext<TState, TEvent> context,
+			Exception exception);
 
-    /**
-     * Called before a transition is executed.
-     * 
-     * @param context
-     *            the context.
-     */
-    void onTransitionBegin(TransitionContext<TState, TEvent> context);
+	/**
+	 * Called before a transition is executed.
+	 * 
+	 * @param context
+	 *            the context.
+	 */
+	void onTransitionBegin(TransitionContext<TState, TEvent> context);
 }

@@ -18,6 +18,8 @@
  *******************************************************************************/
 package ch.bbv.fsm.events;
 
+import ch.bbv.fsm.StateMachine;
+
 /**
  * Defines a context event argument.
  * 
@@ -27,6 +29,7 @@ package ch.bbv.fsm.events;
  * @param <TEvent>
  *            the type of the events.
  */
-public interface ContextEventArgs<TState, TEvent> {
+public interface ContextEventArgs<TState extends Enum<?>, TEvent extends Enum<?>> {
 
+	StateMachine<TState, TEvent> getSource();
 }

@@ -24,7 +24,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ch.bbv.fsm.HistoryType;
-import ch.bbv.fsm.StateMachine;
+import ch.bbv.fsm.StateMachineDefinition;
 import ch.bbv.fsm.impl.PassiveStateMachine;
 import ch.bbv.fsm.impl.StatesAndEvents.Events;
 import ch.bbv.fsm.impl.StatesAndEvents.States;
@@ -36,7 +36,7 @@ import ch.bbv.fsm.impl.StatesAndEvents.States;
  * 
  */
 public class ReportTest {
-    private StateMachine<States, Events> testee;
+    private StateMachineDefinition<States, Events> testee;
 
     public Void foo() {
         return null;

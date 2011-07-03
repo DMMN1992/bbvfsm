@@ -18,92 +18,92 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl.internal;
 
-import static ch.bbv.fsm.impl.Tool.*;
+import static ch.bbv.fsm.impl.Tool.any;
+import static ch.bbv.fsm.impl.Tool.from;
 import junit.framework.Assert;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.impl.PassiveStateMachine;
+import ch.bbv.fsm.StateMachineDefinition;
+import ch.bbv.fsm.impl.StateMachineDefinitionImpl;
 
 /**
  * Sample showing usage of state machine.
  */
 public class SyntaxTest {
 
-    public enum Events {
-        toA, toB, toC, toD
-    }
+	public enum Events {
+		toA, toB, toC, toD
+	}
 
-    public enum States {
-        A, B, C, D
-    }
+	public enum States {
+		A, B, C, D
+	}
 
-    private static final String EXIT_A = "ExitA";
+	private static final String EXIT_A = "ExitA";
 
-    private static final String ENTRY_A = "EntryA";;
+	private static final String ENTRY_A = "EntryA";;
 
-    private static final String ENTRY_B = "EntryB";
+	private static final String ENTRY_B = "EntryB";
 
-    private StateMachine<States, Events> testee;
-    private String fooEntryValue;
-    private String fooExitValue;
-    private boolean barValue;
+	private StateMachineDefinition<States, Events> definition;
+	private String fooEntryValue;
+	private String fooExitValue;
+	private boolean barValue;
 
-    public boolean bar(final Boolean value) {
-        this.barValue = value;
-        return true;
-    }
+	public boolean bar(final Boolean value) {
+		this.barValue = value;
+		return true;
+	}
 
-    public Void fooEntry(final String text) {
-        this.fooEntryValue = text;
-        return null;
-    }
+	public Void fooEntry(final String text) {
+		this.fooEntryValue = text;
+		return null;
+	}
 
-    public Void fooExit(final String text) {
-        this.fooExitValue = text;
-        return null;
-    }
+	public Void fooExit(final String text) {
+		this.fooExitValue = text;
+		return null;
+	}
 
-    @Before
-    public void setup() {
-        this.testee = new PassiveStateMachine<States, Events>("SimpleExample");
+	@Before
+	public void setup() {
+		this.definition = new StateMachineDefinitionImpl<States, Events>(
+				"SimpleExample");
 
-        this.testee.in(States.A).executeOnEntry(from(this).fooEntry(ENTRY_A)).executeOnExit(from(this).fooExit(EXIT_A))
-                .on(Events.toB).goTo(States.B).onlyIf(from(this).bar(any(Boolean.class)));
+		this.definition.in(States.A)
+				.executeOnEntry(from(this).fooEntry(ENTRY_A))
+				.executeOnExit(from(this).fooExit(EXIT_A)).on(Events.toB)
+				.goTo(States.B).onlyIf(from(this).bar(any(Boolean.class)));
 
-        this.testee.in(States.B).executeOnEntry(from(this).fooEntry(ENTRY_B)).on(Events.toB).goTo(States.B)
-                .onlyIf(from(this).bar(any(Boolean.class)));
+		this.definition.in(States.B)
+				.executeOnEntry(from(this).fooEntry(ENTRY_B)).on(Events.toB)
+				.goTo(States.B).onlyIf(from(this).bar(any(Boolean.class)));
 
-        this.testee.in(States.B).on(Events.toD).goTo(States.D);
-        this.testee.in(States.D).on(Events.toA).goTo(States.A);
-    }
+		this.definition.in(States.B).on(Events.toD).goTo(States.D);
+		this.definition.in(States.D).on(Events.toA).goTo(States.A);
+	}
 
-    @After
-    public void shutdown() {
-        this.testee.stop();
-    }
+	/**
+	 * Test Enter & Exit of state A.
+	 */
+	@Test
+	public void t1() {
+		StateMachine<States, Events> testee = this.definition
+				.createPassiveStateMachine("testee", States.A);
+		testee.start();
+		final String enterA = this.fooEntryValue;
+		testee.fire(Events.toB, true);
+		final boolean onlyIf = this.barValue;
+		final String exitA = this.fooExitValue;
+		final String enterB = this.fooEntryValue;
 
-    /**
-     * Test Enter & Exit of state A.
-     */
-    @Test
-    public void t1() {
-
-        this.testee.initialize(States.A);
-        this.testee.start();
-        final String enterA = this.fooEntryValue;
-        this.testee.fire(Events.toB, true);
-        final boolean onlyIf = this.barValue;
-        final String exitA = this.fooExitValue;
-        final String enterB = this.fooEntryValue;
-
-        Assert.assertTrue(onlyIf);
-        Assert.assertEquals(ENTRY_A, enterA);
-        Assert.assertEquals(EXIT_A, exitA);
-        Assert.assertEquals(ENTRY_B, enterB);
-    }
+		Assert.assertTrue(onlyIf);
+		Assert.assertEquals(ENTRY_A, enterA);
+		Assert.assertEquals(EXIT_A, exitA);
+		Assert.assertEquals(ENTRY_B, enterB);
+	}
 
 }

@@ -20,20 +20,20 @@ package ch.bbv.fsm.impl.internal.transition;
 
 import ch.bbv.fsm.impl.internal.state.State;
 
-public interface TransitionResult<TState, TEvent> {
+public interface TransitionResult<TState extends Enum<?>, TEvent extends Enum<?>> {
 
-    /**
-     * Returns the new state.
-     * 
-     * @return the new state.
-     */
-    State<TState, TEvent> getNewState();
+	/**
+	 * Returns the new state.
+	 * 
+	 * @return the new state.
+	 */
+	State<TState, TEvent> getNewState();
 
-    /**
-     * Gets a value indicating whether this transition is fired.
-     * 
-     * @return true if fired; otherwise, false.
-     */
-    boolean isFired();
+	/**
+	 * Gets a value indicating whether this transition is fired.
+	 * 
+	 * @return true if fired; otherwise, false.
+	 */
+	boolean isFired();
 
 }
