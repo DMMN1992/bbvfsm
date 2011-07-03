@@ -272,7 +272,7 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 			}
 		}
 		// this.setThisStateAsLastStateOfSuperState();
-		// TODO Implement//
+		// TODO Implement
 	}
 
 	@Override

@@ -25,28 +25,25 @@ import ch.bbv.fsm.dsl.MethodCall;
 
 public class MethodCallAction implements Action {
 
-    MethodCall methodCall;
+	MethodCall methodCall;
 
-    public MethodCallAction(final MethodCall methodCall) {
-        this.methodCall = methodCall;
-    }
+	public MethodCallAction(final MethodCall methodCall) {
+		this.methodCall = methodCall;
+	}
 
-    @Override
-    public void execute(final Object... arguments) {
+	@Override
+	public void execute(final Object... arguments) {
 
-        try {
-            this.methodCall.getMethod().invoke(this.methodCall.getOwner(), arguments);
-        } catch (final IllegalArgumentException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (final IllegalAccessException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (final InvocationTargetException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-    }
+		try {
+			this.methodCall.getMethod().invoke(this.methodCall.getOwner(),
+					arguments);
+		} catch (final IllegalArgumentException e) {
+			throw new RuntimeException(e);
+		} catch (final IllegalAccessException e) {
+			throw new RuntimeException(e);
+		} catch (final InvocationTargetException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 }
