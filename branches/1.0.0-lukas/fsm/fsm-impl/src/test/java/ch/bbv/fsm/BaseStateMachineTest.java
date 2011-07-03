@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import ch.bbv.fsm.events.ExceptionEventArgs;
@@ -32,6 +33,8 @@ import ch.bbv.fsm.impl.StateMachineDefinitionImpl;
 import ch.bbv.fsm.impl.StatesAndEvents;
 import ch.bbv.fsm.impl.StatesAndEvents.Events;
 import ch.bbv.fsm.impl.StatesAndEvents.States;
+
+import com.google.common.collect.Lists;
 
 /**
  * Base for state machine test fixtures.
@@ -148,32 +151,14 @@ public abstract class BaseStateMachineTest
 	}
 
 	protected abstract StateMachine<States, Events> createTestee(
-			StateMachineDefinition<States, Events> definition);
+			StateMachineDefinition<States, Events> definition,
+			States initialState);
 
 	protected void initTestee(StateMachineDefinition<States, Events> definition) {
-
+		testee = createTestee(definition, States.A);
+		testee.addEventHandler(new Handler());
+		testee.start();
 	}
-
-	//
-	// /**
-	// * Initializes a test.
-	// */
-	// public void setup() {
-	//
-	// this.exceptions = Lists.newArrayList();
-	// this.transitionBeginMessages = Lists.newArrayList();
-	// this.transitionCompletedMessages = Lists.newArrayList();
-	// this.transitionDeclinedMessages = Lists.newArrayList();
-	//
-	// this.testee.addEventHandler(new Handler());
-	//
-	// Assert.assertFalse(this.testee.isRunning());
-	//
-	// this.testee.initialize(States.A);
-	// this.testee.start();
-	//
-	// Assert.assertTrue(this.testee.isRunning());
-	// }
 
 	/**
 	 * An event can be fired onto the state machine and all notifications are
@@ -287,6 +272,17 @@ public abstract class BaseStateMachineTest
 
 		Assert.assertEquals(transitions,
 				this.transitionCompletedMessages.size());
+	}
+
+	/**
+	 * Initializes a test.
+	 */
+	@Before
+	public void setup() {
+		this.exceptions = Lists.newArrayList();
+		this.transitionBeginMessages = Lists.newArrayList();
+		this.transitionCompletedMessages = Lists.newArrayList();
+		this.transitionDeclinedMessages = Lists.newArrayList();
 	}
 
 	/**

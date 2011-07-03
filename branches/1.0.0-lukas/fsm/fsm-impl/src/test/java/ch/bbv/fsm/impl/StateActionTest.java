@@ -22,112 +22,121 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import ch.bbv.fsm.Action;
+import ch.bbv.fsm.StateMachine;
+import ch.bbv.fsm.StateMachineDefinition;
 import ch.bbv.fsm.impl.StatesAndEvents.Events;
 import ch.bbv.fsm.impl.StatesAndEvents.States;
-import ch.bbv.fsm.impl.internal.StateMachineImpl;
 
 public class StateActionTest {
-    // / <summary>
-    // / Entry actions are executed when a state is entered.
-    // / </summary>
-    @Test
-    public void EntryAction() {
-        final StateMachineImpl<States, Events> testee = new StateMachineImpl<States, Events>();
+	/**
+	 * Entry actions are executed when a state is entered.
+	 */
+	@Test
+	public void entryAction() {
+		final StateMachineDefinition<States, Events> stateMachineDefinition = new StateMachineDefinitionImpl<States, Events>();
 
-        final boolean[] entered = new boolean[1];
+		final boolean[] entered = new boolean[1];
 
-        final Action action = new Action() {
+		final Action action = new Action() {
 
-            @Override
-            public void execute(final Object... arguments) {
-                entered[0] = true;
-            }
+			@Override
+			public void execute(final Object... arguments) {
+				entered[0] = true;
+			}
 
-        };
+		};
 
-        testee.in(States.A).executeOnEntry(action);
+		stateMachineDefinition.in(States.A).executeOnEntry(action);
 
-        testee.initialize(States.A);
+		stateMachineDefinition.createPassiveStateMachine("entryAction",
+				States.A);
 
-        Assert.assertTrue(entered[0]);
-    }
+		Assert.assertTrue(entered[0]);
+	}
 
-    // / <summary>
-    // / Exit actions are executed when a state is left.
-    // / </summary>
-    @Test
-    public void ExitAction() {
-        final StateMachineImpl<States, Events> testee = new StateMachineImpl<States, Events>();
+	/**
+	 * Exit actions are executed when a state is left.
+	 */
+	@Test
+	public void exitAction() {
+		final StateMachineDefinition<States, Events> stateMachineDefinition = new StateMachineDefinitionImpl<States, Events>();
 
-        final boolean[] entered = new boolean[1];
+		final boolean[] entered = new boolean[1];
 
-        final Action action = new Action() {
+		final Action action = new Action() {
 
-            @Override
-            public void execute(final Object... arguments) {
-                entered[0] = true;
-            }
+			@Override
+			public void execute(final Object... arguments) {
+				entered[0] = true;
+			}
 
-        };
+		};
 
-        testee.in(States.A).executeOnExit(action).on(Events.B).goTo(States.B);
+		stateMachineDefinition.in(States.A).executeOnExit(action).on(Events.B)
+				.goTo(States.B);
 
-        testee.initialize(States.A);
-        testee.fire(Events.B);
+		StateMachine<States, Events> fsm = stateMachineDefinition
+				.createPassiveStateMachine("exitAction", States.A);
+		fsm.start();
+		fsm.fire(Events.B);
 
-        Assert.assertTrue(entered[0]);
-    }
+		Assert.assertTrue(entered[0]);
+	}
 
-    // / <summary>
-    // / Entry actions can be parametrized.
-    // / </summary>
-    @Test
-    public void ParameterizedEntryAction() {
-        final StateMachineImpl<States, Events> testee = new StateMachineImpl<States, Events>();
+	/**
+	 * Entry actions can be parametrized.
+	 */
+	@Test
+	public void parameterizedEntryAction() {
+		final StateMachineDefinition<States, Events> stateMachineDefinition = new StateMachineDefinitionImpl<States, Events>();
 
-        final int[] argument = new int[1];
-        argument[0] = 0;
+		final int[] argument = new int[1];
+		argument[0] = 0;
 
-        final Action action = new Action() {
+		final Action action = new Action() {
 
-            @Override
-            public void execute(final Object... arguments) {
-                argument[0] = (Integer) arguments[0];
-            }
+			@Override
+			public void execute(final Object... arguments) {
+				argument[0] = (Integer) arguments[0];
+			}
 
-        };
+		};
 
-        testee.in(States.A).executeOnEntry(action, 3);
+		stateMachineDefinition.in(States.A).executeOnEntry(action, 3);
 
-        testee.initialize(States.A);
+		stateMachineDefinition.createPassiveStateMachine(
+				"parameterizedEntryAction", States.A);
 
-        Assert.assertEquals(3, argument[0]);
-    }
+		Assert.assertEquals(3, argument[0]);
+	}
 
-    // / <summary>
-    // / Exit actions can be parametrized.
-    // / </summary>
-    @Test
-    public void ParametrizedExitAction() {
-        final StateMachineImpl<States, Events> testee = new StateMachineImpl<States, Events>();
+	/**
+	 * Exit actions can be parametrized.
+	 */
+	@Test
+	public void ParametrizedExitAction() {
+		final StateMachineDefinition<States, Events> stateMachineDefinition = new StateMachineDefinitionImpl<States, Events>();
 
-        final int[] argument = new int[1];
-        argument[0] = 0;
+		final int[] argument = new int[1];
+		argument[0] = 0;
 
-        final Action action = new Action() {
+		final Action action = new Action() {
 
-            @Override
-            public void execute(final Object... arguments) {
-                argument[0] = (Integer) arguments[0];
-            }
+			@Override
+			public void execute(final Object... arguments) {
+				argument[0] = (Integer) arguments[0];
+			}
 
-        };
+		};
 
-        testee.in(States.A).executeOnExit(action, 3).on(Events.B).goTo(States.B);
+		stateMachineDefinition.in(States.A).executeOnExit(action, 3)
+				.on(Events.B).goTo(States.B);
 
-        testee.initialize(States.A);
-        testee.fire(Events.B);
+		StateMachine<States, Events> fsm = stateMachineDefinition
+				.createPassiveStateMachine("exitAction", States.A);
+		fsm.start();
+		fsm.fire(Events.B);
 
-        Assert.assertEquals(3, argument[0]);
-    }
+		Assert.assertEquals(3, argument[0]);
+	}
 }

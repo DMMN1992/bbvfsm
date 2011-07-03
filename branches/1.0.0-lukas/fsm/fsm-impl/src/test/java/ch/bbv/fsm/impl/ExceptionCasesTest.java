@@ -138,6 +138,7 @@ public class ExceptionCasesTest {
 		def.addEventHandler(new Handler());
 		StateMachine<States, Events> testee = def.createPassiveStateMachine(
 				"testee", States.A);
+		testee.start();
 		testee.fire(Events.B, eventArguments);
 
 		this.assertException(States.A, Events.B, eventArguments, e);
@@ -163,12 +164,14 @@ public class ExceptionCasesTest {
 		};
 
 		StateMachineDefinition<States, Events> def = new StateMachineDefinitionImpl<States, Events>();
+		def.addEventHandler(new Handler());
 		def.in(States.A).on(Events.B).goTo(States.B);
 
 		def.in(States.B).executeOnEntry(throwException);
 
 		StateMachine<States, Events> testee = def.createPassiveStateMachine(
 				"testee", States.A);
+		testee.start();
 		testee.fire(Events.B, eventArguments);
 
 		Assert.assertEquals(e, this.recordedException);
@@ -193,11 +196,13 @@ public class ExceptionCasesTest {
 		};
 
 		StateMachineDefinition<States, Events> def = new StateMachineDefinitionImpl<States, Events>();
+		def.addEventHandler(new Handler());
 		def.in(States.A).executeOnExit(throwException).on(Events.B)
 				.goTo(States.B);
 
 		StateMachine<States, Events> testee = def.createPassiveStateMachine(
 				"testee", States.A);
+		testee.start();
 		testee.fire(Events.B, eventArguments);
 
 		Assert.assertEquals(exception, this.recordedException);
@@ -229,6 +234,7 @@ public class ExceptionCasesTest {
 
 		StateMachine<States, Events> testee = def.createPassiveStateMachine(
 				"testee", States.A);
+		testee.start();
 		testee.fire(Events.B, eventArguments);
 
 		this.assertException(States.A, Events.B, eventArguments, e);

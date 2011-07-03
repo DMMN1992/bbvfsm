@@ -65,6 +65,7 @@ public class GuardTest {
 
 		StateMachine<States, Events> fsm = stateMachineDefinition
 				.createPassiveStateMachine("allGuardsReturnFalse", States.A);
+		fsm.start();
 
 		fsm.fire(Events.A);
 
@@ -97,6 +98,7 @@ public class GuardTest {
 
 		StateMachine<States, Events> fsm = stateMachineDefinition
 				.createPassiveStateMachine("allGuardsReturnFalse", States.A);
+		fsm.start();
 
 		fsm.fire(Events.A, originalEventArguments);
 
@@ -134,6 +136,7 @@ public class GuardTest {
 
 		StateMachine<States, Events> fsm = stateMachineDefinition
 				.createPassiveStateMachine("allGuardsReturnFalse", States.A);
+		fsm.start();
 
 		fsm.fire(Events.A);
 

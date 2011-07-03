@@ -18,40 +18,48 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl;
 
-import static ch.bbv.fsm.impl.Tool.*;
+import static ch.bbv.fsm.impl.Tool.any;
+import static ch.bbv.fsm.impl.Tool.from;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.StateMachineDefinition;
-import ch.bbv.fsm.impl.PassiveStateMachine;
 import ch.bbv.fsm.impl.StatesAndEvents.Events;
 import ch.bbv.fsm.impl.StatesAndEvents.States;
 
 public class NewSyntaxTest {
 
-    String testString;
-    int testNumber;
+	String testString;
+	int testNumber;
 
-    public Void actionMethod(final String a, final Integer b) {
-        this.testString = a;
-        this.testNumber = b;
-        return null;
-    }
+	public Void actionMethod(final String a, final Integer b) {
+		this.testString = a;
+		this.testNumber = b;
+		return null;
+	}
 
-    @Test
-    public void transitionTest() {
-        final StateMachineDefinition<States, Events> sm = new PassiveStateMachine<States, Events>();
+	@Test
+	public void transitionTest() {
+		StateMachineDefinition<States, Events> stateMachineDefinition = new StateMachineDefinitionImpl<States, Events>();
 
-        sm.in(States.A).on(Events.B).goTo(States.B).execute(from(this).actionMethod(any(String.class), any(int.class)));
+		stateMachineDefinition
+				.in(States.A)
+				.on(Events.B)
+				.goTo(States.B)
+				.execute(
+						from(this).actionMethod(any(String.class),
+								any(int.class)));
 
-        sm.initialize(States.A);
-        sm.start();
+		StateMachine<States, Events> fsm = stateMachineDefinition
+				.createPassiveStateMachine("transitionTest", States.A);
+		fsm.start();
 
-        sm.fire(Events.B, "testString", 77);
+		fsm.fire(Events.B, "testString", 77);
 
-        Assert.assertEquals("testString", this.testString);
-        Assert.assertEquals(77, this.testNumber);
-    }
+		Assert.assertEquals("testString", this.testString);
+		Assert.assertEquals(77, this.testNumber);
+	}
 
 }

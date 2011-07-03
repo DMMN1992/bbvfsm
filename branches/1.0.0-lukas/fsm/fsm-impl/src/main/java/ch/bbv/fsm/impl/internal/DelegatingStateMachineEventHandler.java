@@ -8,13 +8,15 @@ import ch.bbv.fsm.events.TransitionCompletedEventArgs;
 import ch.bbv.fsm.events.TransitionEventArgs;
 import ch.bbv.fsm.events.TransitionExceptionEventArgs;
 
-import com.google.common.collect.Lists;
-
 public class DelegatingStateMachineEventHandler<TState extends Enum<?>, TEvent extends Enum<?>>
 		implements StateMachineEventHandler<TState, TEvent> {
 
-	private final List<StateMachineEventHandler<TState, TEvent>> eventHandlers = Lists
-			.newLinkedList();
+	private final List<StateMachineEventHandler<TState, TEvent>> eventHandlers;
+
+	public DelegatingStateMachineEventHandler(
+			List<StateMachineEventHandler<TState, TEvent>> eventHandler) {
+		this.eventHandlers = eventHandler;
+	}
 
 	@Override
 	public void onExceptionThrown(ExceptionEventArgs<TState, TEvent> arg) {
@@ -52,13 +54,4 @@ public class DelegatingStateMachineEventHandler<TState extends Enum<?>, TEvent e
 			handler.onTransitionThrowsException(arg);
 		}
 	}
-
-	public void addEventHandler(
-			final StateMachineEventHandler<TState, TEvent> handler) {
-	}
-
-	public void removeEventHandler(
-			final StateMachineEventHandler<TState, TEvent> handler) {
-	}
-
 }

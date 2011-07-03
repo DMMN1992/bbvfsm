@@ -28,7 +28,7 @@ public class ActiveStateMachineTest extends BaseStateMachineTest {
 
 	@Override
 	protected StateMachine<States, Events> createTestee(
-			StateMachineDefinition<States, Events> definition) {
-		return definition.createActiveStateMachine("Testee");
+			StateMachineDefinition<States, Events> definition, States states) {
+		return definition.createActiveStateMachine("Testee", states);
 	}
 }

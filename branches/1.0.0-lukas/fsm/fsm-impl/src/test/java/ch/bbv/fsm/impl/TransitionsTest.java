@@ -19,121 +19,118 @@
 package ch.bbv.fsm.impl;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import ch.bbv.fsm.Action;
+import ch.bbv.fsm.StateMachine;
+import ch.bbv.fsm.StateMachineDefinition;
 import ch.bbv.fsm.events.StateMachineEventAdapter;
 import ch.bbv.fsm.events.TransitionEventArgs;
 import ch.bbv.fsm.impl.StatesAndEvents.Events;
 import ch.bbv.fsm.impl.StatesAndEvents.States;
-import ch.bbv.fsm.impl.internal.StateMachineImpl;
 
 public class TransitionsTest {
-    private class Handler extends StateMachineEventAdapter<States, Events> {
+	private class Handler extends StateMachineEventAdapter<States, Events> {
 
-        @Override
-        public void onTransitionDeclined(final TransitionEventArgs<States, Events> arg) {
-            TransitionsTest.this.declined = true;
+		@Override
+		public void onTransitionDeclined(
+				final TransitionEventArgs<States, Events> arg) {
+			TransitionsTest.this.declined = true;
 
-        }
-    }
+		}
+	}
 
-    // / <summary>
-    // / Object under test.
-    // / </summary>
-    private StateMachineImpl<States, Events> testee;
-    Object[] action1Arguments = null;
-    Object[] action2Arguments = null;
-    Boolean executed = false;
+	Object[] action1Arguments = null;
+	Object[] action2Arguments = null;
+	Boolean executed = false;
 
-    // / <summary>
-    // / Initializes a test.
-    // / </summary>
+	boolean declined = false;
 
-    boolean declined = false;
+	/**
+	 * Actions on transitions are performed and the event arguments are passed
+	 */
+	@Test
+	public void executeActions() {
 
-    // / <summary>
-    // / Actions on transitions are performed and the event arguments are passed
-    // to them.
-    // / </summary>
-    @Test
-    public void ExecuteActions() {
+		final Action action1 = new Action() {
 
-        final Action action1 = new Action() {
+			@Override
+			public void execute(final Object... arguments) {
+				TransitionsTest.this.action1Arguments = arguments;
 
-            @Override
-            public void execute(final Object... arguments) {
-                TransitionsTest.this.action1Arguments = arguments;
+			}
+		};
 
-            }
-        };
+		final Action action2 = new Action() {
 
-        final Action action2 = new Action() {
+			@Override
+			public void execute(final Object... arguments) {
+				TransitionsTest.this.action2Arguments = arguments;
 
-            @Override
-            public void execute(final Object... arguments) {
-                TransitionsTest.this.action2Arguments = arguments;
+			}
+		};
 
-            }
-        };
+		final StateMachineDefinition<States, Events> stateMachineDefinition = new StateMachineDefinitionImpl<States, Events>();
 
-        this.testee.in(States.A).on(Events.B).goTo(States.B).execute(action1, action2);
+		stateMachineDefinition.in(States.A).on(Events.B).goTo(States.B)
+				.execute(action1, action2);
 
-        this.testee.initialize(States.A);
+		StateMachine<States, Events> fsm = stateMachineDefinition
+				.createPassiveStateMachine("transitionTest", States.A);
+		fsm.start();
 
-        final Object[] eventArguments = new Object[] { 1, 2, 3, "test" };
-        this.testee.fire(Events.B, eventArguments);
+		final Object[] eventArguments = new Object[] { 1, 2, 3, "test" };
+		fsm.fire(Events.B, eventArguments);
 
-        Assert.assertArrayEquals(eventArguments, this.action1Arguments);
-        Assert.assertArrayEquals(eventArguments, this.action2Arguments);
-    }
+		Assert.assertArrayEquals(eventArguments, this.action1Arguments);
+		Assert.assertArrayEquals(eventArguments, this.action2Arguments);
+	}
 
-    // / <summary>
-    // / Internal transitions can be executed (internal transition = transition
-    // that remains in the same state and does not execute exit and entry
-    // actions.
-    // / </summary>
-    @Test
-    public void InternalTransition() {
+	/**
+	 * Internal transitions can be executed (internal transition = transition
+	 * that remains in the same state and does not execute exit and entry
+	 * actions.
+	 */
+	@Test
+	public void internalTransition() {
 
-        final Action action2 = new Action() {
+		final Action action2 = new Action() {
 
-            @Override
-            public void execute(final Object... arguments) {
-                TransitionsTest.this.executed = true;
+			@Override
+			public void execute(final Object... arguments) {
+				TransitionsTest.this.executed = true;
 
-            }
-        };
+			}
+		};
 
-        this.testee.in(States.A).on(Events.A).execute(action2);
-        this.testee.initialize(States.A);
-        this.testee.fire(Events.A);
+		final StateMachineDefinition<States, Events> stateMachineDefinition = new StateMachineDefinitionImpl<States, Events>();
+		stateMachineDefinition.in(States.A).on(Events.A).execute(action2);
+		StateMachine<States, Events> fsm = stateMachineDefinition
+				.createPassiveStateMachine("transitionTest", States.A);
+		fsm.start();
+		fsm.fire(Events.A);
 
-        Assert.assertTrue(this.executed);
-        Assert.assertEquals(States.A, this.testee.getCurrentStateId());
-    }
+		Assert.assertTrue(this.executed);
+		Assert.assertEquals(States.A, fsm.getCurrentState());
+	}
 
-    // / <summary>
-    // / When no transition for the fired event can be found in the entire
-    // / hierarchy up from the current state then
-    // / </summary>
-    @Test
-    public void MissingTransition() {
-        this.testee.in(States.A).on(Events.B).goTo(States.B);
+	/**
+	 * When no transition for the fired event can be found in the entire
+	 * hierarchy up from the current state then
+	 */
+	@Test
+	public void missingTransition() {
+		final StateMachineDefinition<States, Events> stateMachineDefinition = new StateMachineDefinitionImpl<States, Events>();
+		stateMachineDefinition.in(States.A).on(Events.B).goTo(States.B);
 
-        this.testee.addEventHandler(new Handler());
+		stateMachineDefinition.addEventHandler(new Handler());
+		StateMachine<States, Events> fsm = stateMachineDefinition
+				.createPassiveStateMachine("transitionTest", States.A);
+		fsm.start();
 
-        this.testee.initialize(States.A);
+		fsm.fire(Events.C);
 
-        this.testee.fire(Events.C);
-
-        Assert.assertTrue(this.declined);
-        Assert.assertEquals(States.A, this.testee.getCurrentStateId());
-    }
-
-    @Before
-    public void setUp() {
-        this.testee = new StateMachineImpl<States, Events>();
-    }
+		Assert.assertTrue(this.declined);
+		Assert.assertEquals(States.A, fsm.getCurrentState());
+	}
 }

@@ -10,6 +10,7 @@ import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.StateMachineDefinition;
 import ch.bbv.fsm.dsl.EntryActionSyntax;
 import ch.bbv.fsm.events.StateMachineEventHandler;
+import ch.bbv.fsm.impl.internal.DelegatingStateMachineEventHandler;
 import ch.bbv.fsm.impl.internal.Notifier;
 import ch.bbv.fsm.impl.internal.StateBuilder;
 import ch.bbv.fsm.impl.internal.StateMachineImpl;
@@ -109,6 +110,9 @@ public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends E
 			TState initialState) {
 		ActiveStateMachine<TState, TEvent> activeStateMachine = new ActiveStateMachine<TState, TEvent>(
 				name, states);
+		activeStateMachine
+				.addEventHandler(new DelegatingStateMachineEventHandler<TState, TEvent>(
+						eventHandler));
 		activeStateMachine.initialize(initialState);
 		return activeStateMachine;
 
@@ -118,6 +122,9 @@ public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends E
 	public StateMachine<TState, TEvent> createActiveStateMachine(String name) {
 		ActiveStateMachine<TState, TEvent> activeStateMachine = new ActiveStateMachine<TState, TEvent>(
 				name, states);
+		activeStateMachine
+				.addEventHandler(new DelegatingStateMachineEventHandler<TState, TEvent>(
+						eventHandler));
 		return activeStateMachine;
 	}
 
@@ -126,6 +133,9 @@ public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends E
 			TState initialState) {
 		PassiveStateMachine<TState, TEvent> passiveStateMachine = new PassiveStateMachine<TState, TEvent>(
 				name, states);
+		passiveStateMachine
+				.addEventHandler(new DelegatingStateMachineEventHandler<TState, TEvent>(
+						eventHandler));
 		passiveStateMachine.initialize(initialState);
 		return passiveStateMachine;
 
@@ -135,6 +145,9 @@ public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends E
 	public StateMachine<TState, TEvent> createPassiveStateMachine(String name) {
 		PassiveStateMachine<TState, TEvent> passiveStateMachine = new PassiveStateMachine<TState, TEvent>(
 				name, states);
+		passiveStateMachine
+				.addEventHandler(new DelegatingStateMachineEventHandler<TState, TEvent>(
+						eventHandler));
 		return passiveStateMachine;
 	}
 

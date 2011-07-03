@@ -22,44 +22,45 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ch.bbv.fsm.HistoryType;
+import ch.bbv.fsm.StateMachineDefinition;
 import ch.bbv.fsm.impl.StatesAndEvents.Events;
 import ch.bbv.fsm.impl.StatesAndEvents.States;
-import ch.bbv.fsm.impl.internal.StateMachineImpl;
 
-// / <summary>
-// / Tests hierarchy building in the <see cref="StateMachine{TState,TEvent}"/>.
-// / </summary>
-
+/**
+ * Tests hierarchy building in the {@link StateMachineDefinition}.
+ */
 public class StateMachineBuildHierarchyTest {
-    // / <summary>
-    // / Object under test.
-    // / </summary>
-    private StateMachineImpl<States, Events> testee;
+	/**
+	 * Object under test.
+	 */
+	private StateMachineDefinition<States, Events> testee;
 
-    // / <summary>
-    // / If a state is specified as the inital sub state that is not in the list
-    // of sub states then an <see cref="ArgumentException"/> is thrown.
-    // / </summary>
-    @Test(expected = IllegalArgumentException.class)
-    public void AddHierarchicalStatesInitialStateIsNotASubState() {
-        this.testee.defineHierarchyOn(States.B, States.A, HistoryType.NONE, States.B1, States.B2);
+	/**
+	 * If a state is specified as the inital sub state that is not in the list
+	 * of sub states then an {@link IllegalArgumentException} is thrown.
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void addHierarchicalStatesInitialStateIsNotASubState() {
+		this.testee.defineHierarchyOn(States.B, States.A, HistoryType.NONE,
+				States.B1, States.B2);
 
-    }
+	}
 
-    // / <summary>
-    // / If the super-state is specified as the initial state of its sub-states
-    // then an <see cref="ArgumentException"/> is thrown.
-    // / </summary>
-    @Test(expected = IllegalArgumentException.class)
-    public void AddHierarchicalStatesInitialStateIsSuperStateItself() {
-        this.testee.defineHierarchyOn(States.B, States.B, HistoryType.NONE, States.B1, States.B2);
-    }
+	/**
+	 * If the super-state is specified as the initial state of its sub-states
+	 * then an {@link IllegalArgumentException} is thrown.
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void addHierarchicalStatesInitialStateIsSuperStateItself() {
+		this.testee.defineHierarchyOn(States.B, States.B, HistoryType.NONE,
+				States.B1, States.B2);
+	}
 
-    // / <summary>
-    // / Initializes a test.
-    // / </summary>
-    @Before
-    public void SetUp() {
-        this.testee = new StateMachineImpl<States, Events>();
-    }
+	/**
+	 * Initializes a test.
+	 */
+	@Before
+	public void setUp() {
+		this.testee = new StateMachineDefinitionImpl<States, Events>();
+	}
 }
