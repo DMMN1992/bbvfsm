@@ -23,6 +23,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.events.StateMachineEventHandler;
 import ch.bbv.fsm.impl.internal.events.ExceptionEventArgsImpl;
 import ch.bbv.fsm.impl.internal.events.TransitionCompletedEventArgsImpl;
@@ -61,11 +62,6 @@ public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	private State<TState, TEvent> currentState;
 
 	/**
-	 * Whether this state machine was initialized.
-	 */
-	private boolean initialized;
-
-	/**
 	 * The initial state of the state machine.
 	 */
 	private TState initialStateId;
@@ -80,26 +76,20 @@ public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 */
 	private final List<StateMachineEventHandler<TState, TEvent>> eventHandler;
 
+	private final StateMachine<TState, TEvent> stateMachine;
+
 	/**
 	 * Initializes a new instance of the StateMachineImpl<TState,TEvent> class.
 	 * 
 	 * @param name
 	 *            The name of this state machine used in log messages.
 	 */
-	public StateMachineImpl(final String name,
-			StateDictionary<TState, TEvent> states) {
+	public StateMachineImpl(final StateMachine<TState, TEvent> stateMachine,
+			final String name, StateDictionary<TState, TEvent> states) {
 		this.name = name;
 		this.states = states;
+		this.stateMachine = stateMachine;
 		this.eventHandler = Lists.newArrayList();
-	}
-
-	/**
-	 * Checks if the state machine is initialized.
-	 */
-	private void checkStateMachineIsInitialized() {
-		if (!this.initialized) {
-			throw new IllegalStateException("State machine is not initialized.");
-		}
 	}
 
 	/**
@@ -129,7 +119,7 @@ public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 		}
 
 		final TransitionContext<TState, TEvent> context = new TransitionContext<TState, TEvent>(
-				getCurrentState(), eventId, eventArguments);
+				getCurrentState(), eventId, eventArguments, stateMachine, this);
 		final TransitionResult<TState, TEvent> result = this.currentState
 				.fire(context);
 
@@ -152,7 +142,6 @@ public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 * @return the current state.
 	 */
 	private State<TState, TEvent> getCurrentState() {
-		this.checkStateMachineIsInitialized();
 		return this.currentState;
 	}
 
@@ -193,12 +182,6 @@ public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 					"initialState; The initial state must not be null.");
 		}
 
-		if (this.initialized) {
-			throw new IllegalStateException(
-					"State machine is already initialized.");
-		}
-
-		this.initialized = true;
 		this.initialStateId = initialState.getId();
 
 		final StateMachineInitializer<TState, TEvent> initializer = new StateMachineInitializer<TState, TEvent>(
@@ -217,7 +200,7 @@ public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 				initialState);
 
 		final StateContext<TState, TEvent> stateContext = new StateContext<TState, TEvent>(
-				null);
+				null, stateMachine, this);
 		this.initialize(this.states.getState(initialState), stateContext);
 
 		LOG.info("State machine {} performed {}.", this,

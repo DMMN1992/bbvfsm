@@ -59,7 +59,7 @@ public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends E
 	 */
 	public StateMachineDefinitionImpl(final String name) {
 		this.name = name;
-		this.states = new StateDictionary<TState, TEvent>(this);
+		this.states = new StateDictionary<TState, TEvent>();
 		this.eventHandler = Lists.newArrayList();
 	}
 
@@ -84,7 +84,7 @@ public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends E
 	@Override
 	public EntryActionSyntax<TState, TEvent> in(final TState state) {
 		final State<TState, TEvent> newState = this.states.getState(state);
-		return new StateBuilder<TState, TEvent>(newState, this.states, this);
+		return new StateBuilder<TState, TEvent>(newState, this.states);
 	}
 
 	@Override
@@ -154,8 +154,7 @@ public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends E
 						stateContext, exception));
 			}
 		} catch (final Exception e) {
-			((Notifier<TState, TEvent>) this)
-					.onExceptionThrown(stateContext, e);
+			LOG.error("Exception during event handler.", e);
 		}
 
 	}
@@ -170,8 +169,7 @@ public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends E
 						transitionContext, exception));
 			}
 		} catch (final Exception e) {
-			((Notifier<TState, TEvent>) this).onExceptionThrown(
-					transitionContext, e);
+			LOG.error("Exception during event handler.", e);
 		}
 
 	}
@@ -185,8 +183,7 @@ public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends E
 						transitionContext));
 			}
 		} catch (final Exception e) {
-			((Notifier<TState, TEvent>) this).onExceptionThrown(
-					transitionContext, e);
+			onExceptionThrown(transitionContext, e);
 		}
 	}
 

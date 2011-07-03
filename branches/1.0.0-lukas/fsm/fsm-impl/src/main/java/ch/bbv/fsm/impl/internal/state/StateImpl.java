@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 
 import ch.bbv.fsm.HistoryType;
 import ch.bbv.fsm.impl.internal.ActionHolder;
-import ch.bbv.fsm.impl.internal.Notifier;
 import ch.bbv.fsm.impl.internal.state.StateContext.RecordType;
 import ch.bbv.fsm.impl.internal.transition.Transition;
 import ch.bbv.fsm.impl.internal.transition.TransitionContext;
@@ -69,11 +68,6 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	private final TransitionDictionary<TState, TEvent> transitions;
 
 	/**
-	 * The notifier used to notify events.
-	 */
-	private final Notifier<TState, TEvent> notifier;
-
-	/**
 	 * The initial sub-state of this state.
 	 */
 	private State<TState, TEvent> initialState;
@@ -99,11 +93,6 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	private ActionHolder exitAction;
 
 	/**
-	 * the last active state.
-	 */
-	private State<TState, TEvent> lastActiveState;
-
-	/**
 	 * Initializes a new instance of the state.
 	 * 
 	 * @param id
@@ -112,10 +101,9 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 *            the notifier used to notify events.
 	 */
 
-	public StateImpl(final TState id, final Notifier<TState, TEvent> notifier) {
+	public StateImpl(final TState id) {
 		this.id = id;
 		this.level = 1;
-		this.notifier = notifier;
 
 		this.subStates = Lists.newArrayList();
 		this.transitions = new TransitionDictionaryImpl<TState, TEvent>(this);
@@ -198,9 +186,10 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 			final StateContext<TState, TEvent> stateContext) {
 		this.entry(stateContext);
 
-		return this.lastActiveState == null ? this : this.lastActiveState
-				.enterDeep(stateContext);
-
+		// TODO Implement
+		// return this.lastActiveState == null ? this : this.lastActiveState
+		// .enterDeep(stateContext);
+		return null;
 	}
 
 	/**
@@ -212,8 +201,10 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 */
 	private State<TState, TEvent> enterHistoryDeep(
 			final StateContext<TState, TEvent> stateContext) {
-		return this.getLastActiveState() != null ? this.getLastActiveState()
-				.enterDeep(stateContext) : this;
+		// return this.getLastActiveState() != null ? this.getLastActiveState()
+		// .enterDeep(stateContext) : this;
+		// TODO Implement
+		return null;
 	}
 
 	/**
@@ -238,8 +229,10 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 */
 	private State<TState, TEvent> enterHistoryShallow(
 			final StateContext<TState, TEvent> stateContext) {
-		return this.getLastActiveState() != null ? this.getLastActiveState()
-				.enterShallow(stateContext) : this;
+		// return this.getLastActiveState() != null ? this.getLastActiveState()
+		// .enterShallow(stateContext) : this;
+		// TODO Implement
+		return null;
 	}
 
 	@Override
@@ -278,8 +271,8 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 				handleException(e, stateContext);
 			}
 		}
-		this.setThisStateAsLastStateOfSuperState();
-
+		// this.setThisStateAsLastStateOfSuperState();
+		// TODO Implement//
 	}
 
 	@Override
@@ -334,11 +327,6 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	}
 
 	@Override
-	public State<TState, TEvent> getLastActiveState() {
-		return this.lastActiveState;
-	}
-
-	@Override
 	public int getLevel() {
 		return this.level;
 	}
@@ -369,7 +357,7 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	private void handleException(final Exception exception,
 			final StateContext<TState, TEvent> stateContext) {
 		stateContext.getExceptions().add(exception);
-		this.notifier.onExceptionThrown(stateContext, exception);
+		stateContext.getNotifier().onExceptionThrown(stateContext, exception);
 	}
 
 	@Override
@@ -405,14 +393,8 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 		this.checkInitialStateIsASubState(initialState);
 
 		this.initialState = initialState;
-		this.lastActiveState = initialState;
-
-	}
-
-	@Override
-	public void setLastActiveState(final State<TState, TEvent> state) {
-		this.lastActiveState = state;
-
+		// this.lastActiveState = initialState;
+		// TODO Implement
 	}
 
 	@Override
@@ -436,15 +418,6 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 		this.superState = superState;
 		this.setInitialLevel();
 
-	}
-
-	/**
-	 * Sets this instance as the last state of this instance's super state.
-	 */
-	private void setThisStateAsLastStateOfSuperState() {
-		if (this.superState != null) {
-			this.superState.setLastActiveState(this);
-		}
 	}
 
 	@Override

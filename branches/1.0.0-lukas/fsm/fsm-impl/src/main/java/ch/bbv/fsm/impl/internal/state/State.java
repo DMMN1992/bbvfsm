@@ -135,13 +135,6 @@ public interface State<TState extends Enum<?>, TEvent extends Enum<?>> {
 	State<TState, TEvent> getInitialState();
 
 	/**
-	 * Returns the last active state.
-	 * 
-	 * @return the last active state.
-	 */
-	State<TState, TEvent> getLastActiveState();
-
-	/**
 	 * Returns the level in the hierarchy.
 	 * 
 	 * @return the level in the hierarchy.
@@ -202,14 +195,6 @@ public interface State<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 *            the initial sub-state.
 	 */
 	void setInitialState(State<TState, TEvent> initialState);
-
-	/**
-	 * Sets the last active state of this state.
-	 * 
-	 * @param state
-	 *            the last active state of this state.
-	 */
-	void setLastActiveState(State<TState, TEvent> state);
 
 	/**
 	 * Sets the level in the hierarchy.

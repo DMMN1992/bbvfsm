@@ -23,37 +23,35 @@ import java.lang.reflect.Method;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 import ch.bbv.fsm.dsl.MethodCall;
+
 /**
  * The method call interceptor.
  * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
  */
 public class MethodCallInterceptor implements MethodInterceptor {
-    private final Object owner;
+	private final Object owner;
 
-    /**
-     * Creates a new instance.
-     * 
-     * @param owner
-     *            the owner of the method.
-     */
-    public MethodCallInterceptor(final Object owner) {
-        this.owner = owner;
-    }
+	/**
+	 * Creates a new instance.
+	 * 
+	 * @param owner
+	 *            the owner of the method.
+	 */
+	public MethodCallInterceptor(final Object owner) {
+		this.owner = owner;
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see net.sf.cglib.proxy.MethodInterceptor#intercept(java.lang.Object,
-     * java.lang.reflect.Method, java.lang.Object[], net.sf.cglib.proxy.MethodProxy)
-     */
-    @Override
-    public Object intercept(final Object object, final Method method, final Object[] args, final MethodProxy methodProxy) throws Throwable {
-        if (!method.isAccessible()) {
-            method.setAccessible(true);
-        }
-        final MethodCall methodCall = new MethodCallImpl(this.owner, method, args);
-        MethodCallImpl.push(methodCall);
-        return null;
-    }
+	@Override
+	public Object intercept(final Object object, final Method method,
+			final Object[] args, final MethodProxy methodProxy)
+			throws Throwable {
+		if (!method.isAccessible()) {
+			method.setAccessible(true);
+		}
+		final MethodCall methodCall = new MethodCallImpl(this.owner, method,
+				args);
+		MethodCallImpl.push(methodCall);
+		return null;
+	}
 }

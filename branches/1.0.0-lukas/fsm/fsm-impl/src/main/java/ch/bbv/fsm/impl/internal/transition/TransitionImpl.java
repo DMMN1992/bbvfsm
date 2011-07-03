@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 
 import ch.bbv.fsm.Action;
 import ch.bbv.fsm.Function;
-import ch.bbv.fsm.impl.internal.Notifier;
 import ch.bbv.fsm.impl.internal.state.State;
 import ch.bbv.fsm.impl.internal.state.StateContext;
 
@@ -41,8 +40,6 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 */
 	private final List<Action> actions;
 
-	private final Notifier<TState, TEvent> notifier;
-
 	private State<TState, TEvent> source;
 
 	private State<TState, TEvent> traget;
@@ -54,9 +51,7 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 * 
 	 * @param notifier
 	 */
-	public TransitionImpl(final Notifier<TState, TEvent> notifier) {
-		this.notifier = notifier;
-
+	public TransitionImpl() {
 		this.actions = Lists.newArrayList();
 	}
 
@@ -158,7 +153,7 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 					.getNotFired();
 		}
 
-		this.notifier.onTransitionBegin(context);
+		context.getNotifier().onTransitionBegin(context);
 
 		State<TState, TEvent> newState = context.getState();
 
@@ -229,7 +224,7 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	private void handleException(final Exception exception,
 			final TransitionContext<TState, TEvent> context) {
 		context.getExceptions().add(exception);
-		this.notifier.onExceptionThrown(context, exception);
+		context.getNotifier().onExceptionThrown(context, exception);
 	}
 
 	/**

@@ -21,6 +21,7 @@ package ch.bbv.fsm.impl.internal.state;
 import java.util.List;
 
 import ch.bbv.fsm.StateMachine;
+import ch.bbv.fsm.impl.internal.Notifier;
 
 import com.google.common.collect.Lists;
 
@@ -131,14 +132,22 @@ public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 */
 	private final List<Record> records;
 
+	private final StateMachine<TState, TEvent> stateMachine;
+
+	private final Notifier<TState, TEvent> notifier;
+
 	/**
 	 * Creates a new instance.
 	 * 
 	 * @param sourceState
 	 *            the source state of the transition.
 	 */
-	public StateContext(final State<TState, TEvent> sourceState) {
+	public StateContext(final State<TState, TEvent> sourceState,
+			final StateMachine<TState, TEvent> stateMachine,
+			final Notifier<TState, TEvent> notifier) {
 		this.sourceState = sourceState;
+		this.stateMachine = stateMachine;
+		this.notifier = notifier;
 		this.exceptions = Lists.newArrayList();
 		this.records = Lists.newArrayList();
 	}
@@ -189,8 +198,11 @@ public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
 	}
 
 	public StateMachine<TState, TEvent> getStateMachine() {
-		// TODO Auto-generated method stub
-		return null;
+		return stateMachine;
+	}
+
+	public Notifier<TState, TEvent> getNotifier() {
+		return notifier;
 	}
 
 }

@@ -49,7 +49,6 @@ public class StateBuilder<TState extends Enum<?>, TEvent extends Enum<?>>
 
 	private final State<TState, TEvent> state;
 	private final StateDictionary<TState, TEvent> stateDictionary;
-	private final Notifier<TState, TEvent> notifier;
 	private Transition<TState, TEvent> currentTransition;
 
 	/**
@@ -63,11 +62,9 @@ public class StateBuilder<TState extends Enum<?>, TEvent extends Enum<?>>
 	 *            the notifier
 	 */
 	public StateBuilder(final State<TState, TEvent> state,
-			final StateDictionary<TState, TEvent> stateDictionary,
-			final Notifier<TState, TEvent> notifier) {
+			final StateDictionary<TState, TEvent> stateDictionary) {
 		this.state = state;
 		this.stateDictionary = stateDictionary;
-		this.notifier = notifier;
 	}
 
 	/*
@@ -202,8 +199,7 @@ public class StateBuilder<TState extends Enum<?>, TEvent extends Enum<?>>
 	 */
 	@Override
 	public EventActionSyntax<TState, TEvent> on(final TEvent eventId) {
-		this.currentTransition = new TransitionImpl<TState, TEvent>(
-				this.notifier);
+		this.currentTransition = new TransitionImpl<TState, TEvent>();
 
 		this.state.getTransitions().add(eventId, this.currentTransition);
 

@@ -21,8 +21,6 @@ package ch.bbv.fsm.impl.internal.state;
 import java.util.List;
 import java.util.concurrent.ConcurrentMap;
 
-import ch.bbv.fsm.impl.internal.Notifier;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.MapMaker;
 
@@ -38,17 +36,12 @@ import com.google.common.collect.MapMaker;
 public class StateDictionary<TState extends Enum<?>, TEvent extends Enum<?>> {
 
 	private final ConcurrentMap<TState, State<TState, TEvent>> dictionary;
-	private final Notifier<TState, TEvent> notifier;
 
 	/**
 	 * Creates a new instance of the state dictionary.
-	 * 
-	 * @param notifier
-	 *            the notifier.
 	 */
-	public StateDictionary(final Notifier<TState, TEvent> notifier) {
+	public StateDictionary() {
 		this.dictionary = new MapMaker().makeMap();
-		this.notifier = notifier;
 	}
 
 	/**
@@ -61,7 +54,7 @@ public class StateDictionary<TState extends Enum<?>, TEvent extends Enum<?>> {
 	public State<TState, TEvent> getState(final TState stateId) {
 		if (!this.dictionary.containsKey(stateId)) {
 			this.dictionary.putIfAbsent(stateId, new StateImpl<TState, TEvent>(
-					stateId, this.notifier));
+					stateId));
 		}
 
 		return this.dictionary.get(stateId);
