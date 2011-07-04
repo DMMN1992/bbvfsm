@@ -205,8 +205,6 @@ public abstract class BaseStateMachineTest
 	@Test
 	public void priorityFire() {
 		final int transitions = 3;
-		// AutoResetEvent allTransitionsCompleted =
-		// this.SetUpWaitForAllTransitions(Transitions);
 
 		final Action<States, Events> a = new Action<States, Events>() {
 
@@ -242,6 +240,8 @@ public abstract class BaseStateMachineTest
 
 	@Test
 	public void startTwice() {
+		StateMachineDefinition<States, Events> definition = new StateMachineDefinitionImpl<StatesAndEvents.States, StatesAndEvents.Events>();
+		initTestee(definition);
 		this.testee.start();
 	}
 
@@ -258,6 +258,8 @@ public abstract class BaseStateMachineTest
 		stateMachineDefinition.in(States.A).on(Events.B).goTo(States.B);
 
 		stateMachineDefinition.in(States.B).on(Events.C).goTo(States.C);
+
+		initTestee(stateMachineDefinition);
 
 		this.testee.stop();
 

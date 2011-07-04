@@ -26,7 +26,6 @@ import ch.bbv.fsm.dsl.EventSyntax;
 import ch.bbv.fsm.dsl.ExecuteSyntax;
 import ch.bbv.fsm.dsl.ExitActionSyntax;
 import ch.bbv.fsm.dsl.GotoSyntax;
-import ch.bbv.fsm.dsl.GuardSyntax;
 import ch.bbv.fsm.impl.internal.aop.MethodCallImpl;
 import ch.bbv.fsm.impl.internal.state.State;
 import ch.bbv.fsm.impl.internal.state.StateDictionary;
@@ -68,32 +67,16 @@ public class StateBuilder<TState extends Enum<?>, TEvent extends Enum<?>>
 	}
 
 	@Override
-	public GuardSyntax<TState, TEvent> execute(
-			final Action<TState, TEvent>... actions) {
-		if (actions == null) {
-			return this;
-		}
-
-		for (final Action<TState, TEvent> action : actions) {
-			this.currentTransition.getActions().add(action);
-		}
-
+	public ExecuteSyntax<TState, TEvent> execute(
+			final Action<TState, TEvent> action) {
+		this.currentTransition.getActions().add(action);
 		return this;
 	}
 
 	@Override
-	public GuardSyntax<TState, TEvent> execute(final Object... methodCalls) {
-
-		if (methodCalls == null) {
-			return this;
-		}
-
-		for (@SuppressWarnings("unused")
-		final Object action : methodCalls) {
-			this.currentTransition.getActions().add(
-					new MethodCallAction<TState, TEvent>(MethodCallImpl.pop()));
-		}
-
+	public ExecuteSyntax<TState, TEvent> execute(final Object methodCall) {
+		this.currentTransition.getActions().add(
+				new MethodCallAction<TState, TEvent>(MethodCallImpl.pop()));
 		return this;
 	}
 

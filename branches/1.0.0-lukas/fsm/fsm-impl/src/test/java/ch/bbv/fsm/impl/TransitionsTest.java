@@ -77,7 +77,7 @@ public class TransitionsTest {
 		final StateMachineDefinition<States, Events> stateMachineDefinition = new StateMachineDefinitionImpl<States, Events>();
 
 		stateMachineDefinition.in(States.A).on(Events.B).goTo(States.B)
-				.execute(action1, action2);
+				.execute(action1).execute(action2);
 
 		StateMachine<States, Events> fsm = stateMachineDefinition
 				.createPassiveStateMachine("transitionTest", States.A);

@@ -30,7 +30,7 @@ public interface ExecuteSyntax<TState extends Enum<?>, TEvent extends Enum<?>>
 	 *            The actions.
 	 * @return Guard syntax.
 	 */
-	GuardSyntax<TState, TEvent> execute(Action<TState, TEvent>... actions);
+	ExecuteSyntax<TState, TEvent> execute(Action<TState, TEvent> action);
 
 	/**
 	 * Defines the actions to execute on a transition.
@@ -39,5 +39,5 @@ public interface ExecuteSyntax<TState extends Enum<?>, TEvent extends Enum<?>>
 	 *            The actions.
 	 * @return Guard syntax.
 	 */
-	GuardSyntax<TState, TEvent> execute(Object... methodCall);
+	ExecuteSyntax<TState, TEvent> execute(Object methodCall);
 }

@@ -30,7 +30,7 @@ public interface EventActionSyntax<TState extends Enum<?>, TEvent extends Enum<?
 	 *            The actions.
 	 * @return Guard syntax.
 	 */
-	GuardSyntax<TState, TEvent> execute(Action<TState, TEvent>... actions);
+	GuardSyntax<TState, TEvent> execute(Action<TState, TEvent> action);
 
 	/**
 	 * Defines where to go in response to an event.
