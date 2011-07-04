@@ -185,11 +185,10 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	public State<TState, TEvent> enterDeep(
 			final StateContext<TState, TEvent> stateContext) {
 		this.entry(stateContext);
-
-		// TODO Implement
-		// return this.lastActiveState == null ? this : this.lastActiveState
-		// .enterDeep(stateContext);
-		return null;
+		State<TState, TEvent> lastActiveState = stateContext
+				.getLastActiveSubState(this);
+		return lastActiveState == null ? this : lastActiveState
+				.enterDeep(stateContext);
 	}
 
 	/**
@@ -201,10 +200,10 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 */
 	private State<TState, TEvent> enterHistoryDeep(
 			final StateContext<TState, TEvent> stateContext) {
-		// return this.getLastActiveState() != null ? this.getLastActiveState()
-		// .enterDeep(stateContext) : this;
-		// TODO Implement
-		return null;
+		State<TState, TEvent> lastActiveState = stateContext
+				.getLastActiveSubState(this);
+		return lastActiveState != null ? lastActiveState
+				.enterDeep(stateContext) : this;
 	}
 
 	/**
@@ -229,10 +228,10 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 */
 	private State<TState, TEvent> enterHistoryShallow(
 			final StateContext<TState, TEvent> stateContext) {
-		// return this.getLastActiveState() != null ? this.getLastActiveState()
-		// .enterShallow(stateContext) : this;
-		// TODO Implement
-		return null;
+		State<TState, TEvent> lastActiveState = stateContext
+				.getLastActiveSubState(this);
+		return lastActiveState != null ? lastActiveState
+				.enterShallow(stateContext) : this;
 	}
 
 	@Override
@@ -271,8 +270,15 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 				handleException(e, stateContext);
 			}
 		}
-		// this.setThisStateAsLastStateOfSuperState();
-		// TODO Implement
+		this.setThisStateAsLastStateOfSuperState(stateContext);
+	}
+
+	private void setThisStateAsLastStateOfSuperState(
+			final StateContext<TState, TEvent> stateContext) {
+		if (superState != null
+				&& !HistoryType.NONE.equals(superState.getHistoryType())) {
+			stateContext.setLastActiveSubState(superState, this);
+		}
 	}
 
 	@Override
@@ -391,10 +397,7 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	public void setInitialState(final State<TState, TEvent> initialState) {
 		this.checkInitialStateIsNotThisInstance(initialState);
 		this.checkInitialStateIsASubState(initialState);
-
 		this.initialState = initialState;
-		// this.lastActiveState = initialState;
-		// TODO Implement
 	}
 
 	@Override

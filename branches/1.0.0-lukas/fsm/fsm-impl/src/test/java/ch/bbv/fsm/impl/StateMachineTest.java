@@ -337,7 +337,7 @@ public class StateMachineTest {
 		StateMachine<States, Events> testee = stateMachineDefinition
 				.createPassiveStateMachine(
 						"executeTransitionBetweenStatesOnDifferentLevelsDownwards",
-						States.B1);
+						States.B2);
 		testee.start();
 		testee.fire(Events.A);
 
@@ -357,7 +357,7 @@ public class StateMachineTest {
 	 * entered sub-state is entered (no recursive history).
 	 */
 	@Test
-	public void ExecuteTransitionWithHistoryTypeShallow() {
+	public void executeTransitionWithHistoryTypeShallow() {
 		StateMachine<States, Events> testee = stateMachineDefinition
 				.createPassiveStateMachine(
 						"executeTransitionBetweenStatesOnDifferentLevelsDownwards",

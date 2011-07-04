@@ -81,8 +81,7 @@ public class ActiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>>
 	 */
 	public ActiveStateMachine(String name,
 			StateDictionary<TState, TEvent> states) {
-		this.stateMachine = new StateMachineImpl<TState, TEvent>(this, name,
-				states);
+		this.stateMachine = new StateMachineImpl<TState, TEvent>(name, states);
 		this.events = new LinkedBlockingDeque<EventInformation<TEvent>>();
 		this.executorService = Executors.newFixedThreadPool(1);
 	}

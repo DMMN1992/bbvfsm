@@ -51,6 +51,7 @@ public class ContextEventArgsImpl<TState extends Enum<?>, TEvent extends Enum<?>
 
 	@Override
 	public StateMachine<TState, TEvent> getSource() {
-		return this.stateContext.getStateMachine();
+		// TODO Implement context
+		return null;// this.stateContext.getStateMachine();
 	}
 }

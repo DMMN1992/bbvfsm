@@ -68,8 +68,7 @@ public class PassiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>>
 	 */
 	public PassiveStateMachine(final String name,
 			StateDictionary<TState, TEvent> states) {
-		this.stateMachine = new StateMachineImpl<TState, TEvent>(this, name,
-				states);
+		this.stateMachine = new StateMachineImpl<TState, TEvent>(name, states);
 		this.events = new LinkedList<EventInformation<TEvent>>();
 	}
 

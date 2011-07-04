@@ -20,8 +20,8 @@ package ch.bbv.fsm.impl.internal.state;
 
 import java.util.List;
 
-import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.impl.internal.Notifier;
+import ch.bbv.fsm.impl.internal.StateMachineImpl;
 
 import com.google.common.collect.Lists;
 
@@ -132,7 +132,7 @@ public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 */
 	private final List<Record> records;
 
-	private final StateMachine<TState, TEvent> stateMachine;
+	private final StateMachineImpl<TState, TEvent> stateMachine;
 
 	private final Notifier<TState, TEvent> notifier;
 
@@ -143,7 +143,7 @@ public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 *            the source state of the transition.
 	 */
 	public StateContext(final State<TState, TEvent> sourceState,
-			final StateMachine<TState, TEvent> stateMachine,
+			final StateMachineImpl<TState, TEvent> stateMachine,
 			final Notifier<TState, TEvent> notifier) {
 		this.sourceState = sourceState;
 		this.stateMachine = stateMachine;
@@ -197,12 +197,28 @@ public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
 		return this.sourceState;
 	}
 
-	public StateMachine<TState, TEvent> getStateMachine() {
+	public StateMachineImpl<TState, TEvent> getStateMachine() {
 		return stateMachine;
 	}
 
 	public Notifier<TState, TEvent> getNotifier() {
 		return notifier;
+	}
+
+	public State<TState, TEvent> getLastActiveSubState(
+			State<TState, TEvent> superState) {
+		State<TState, TEvent> result = null;
+		if (superState != null) {
+			result = stateMachine.getLastActiveSubState(superState);
+			if (result == null)
+				result = superState.getInitialState();
+		}
+		return result;
+	}
+
+	public void setLastActiveSubState(State<TState, TEvent> superState,
+			State<TState, TEvent> subState) {
+		stateMachine.setLastActiveSubState(superState, subState);
 	}
 
 }

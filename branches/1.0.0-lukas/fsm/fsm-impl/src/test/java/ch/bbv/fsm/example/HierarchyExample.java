@@ -65,8 +65,8 @@ public class HierarchyExample {
 	public void testDeep() {
 		StateMachine<States, Events> testee = stateMachineDefinition
 				.createPassiveStateMachine("testDeep", States.A);
-
 		testee.start();
+
 		testee.fire(Events.toB, true);
 		testee.fire(Events.toC);
 		testee.fire(Events.toD);
