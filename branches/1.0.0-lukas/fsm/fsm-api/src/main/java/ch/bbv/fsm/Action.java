@@ -19,16 +19,18 @@
 package ch.bbv.fsm;
 
 /**
- * @author Ueli Kurmann (bbv Software Services AG) 
+ * @author Ueli Kurmann (bbv Software Services AG)
  */
-public interface Action {
+public interface Action<TState extends Enum<?>, TEvent extends Enum<?>> {
 
-    /**
-     * Executes the action.
-     * 
-     * @param arguments
-     *            the arguments of the action.
-     */
-    void execute(Object... arguments);
+	/**
+	 * Executes the action.
+	 * 
+	 * @param stateMachine
+	 *            the calling state machine
+	 * @param arguments
+	 *            the arguments of the action.
+	 */
+	void execute(StateMachine<TState, TEvent> stateMachine, Object... arguments);
 
 }

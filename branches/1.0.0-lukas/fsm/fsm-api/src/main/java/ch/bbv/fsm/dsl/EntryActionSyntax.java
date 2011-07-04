@@ -23,44 +23,44 @@ import ch.bbv.fsm.Action;
 /**
  * Entry Action Syntax.
  * 
- * @author Ueli Kurmann (bbv Software Services AG) 
+ * @author Ueli Kurmann (bbv Software Services AG)
  * @param <TState>
  *            the type of the states.
  * @param <TEvent>
  *            the type of the events.
  */
-public interface EntryActionSyntax<TState, TEvent> extends ExitActionSyntax<TState, TEvent>, EventSyntax<TState, TEvent> {
+public interface EntryActionSyntax<TState extends Enum<?>, TEvent extends Enum<?>>
+		extends ExitActionSyntax<TState, TEvent>, EventSyntax<TState, TEvent> {
 
-    /**
-     * Defines an entry action.
-     * 
-     * @param <T>
-     * @param action
-     *            the Action
-     * @return the ExitActionSyntax.
-     */
-    <T> ExitActionSyntax<TState, TEvent> executeOnEntry(Action action);
+	/**
+	 * Defines an entry action.
+	 * 
+	 * @param action
+	 *            the Action
+	 * @return the ExitActionSyntax.
+	 */
+	ExitActionSyntax<TState, TEvent> executeOnEntry(
+			Action<TState, TEvent> action);
 
-    /**
-     * Defines an entry action.
-     * 
-     * @param <T>
-     *            The return type of the action.
-     * @param action
-     *            The action.
-     * @param parameter
-     *            (necessary?)
-     * @return the ExitActionSyntax
-     */
-    <T> ExitActionSyntax<TState, TEvent> executeOnEntry(Action action, T parameter);
+	/**
+	 * Defines an entry action.
+	 * 
+	 * @param <T>
+	 *            The return type of the action.
+	 * @param action
+	 *            The action.
+	 * @param parameter
+	 *            (necessary?)
+	 * @return the ExitActionSyntax
+	 */
+	<T> ExitActionSyntax<TState, TEvent> executeOnEntry(
+			Action<TState, TEvent> action, T parameter);
 
-    /**
-     * Defines an entry action.
-     * 
-     * @param <T>
-     * @param methodCall
-     * @return
-     */
-    <T> ExitActionSyntax<TState, TEvent> executeOnEntry(Object methodCall);
-
+	/**
+	 * Defines an entry action.
+	 * 
+	 * @param methodCall
+	 * @return
+	 */
+	ExitActionSyntax<TState, TEvent> executeOnEntry(Object methodCall);
 }

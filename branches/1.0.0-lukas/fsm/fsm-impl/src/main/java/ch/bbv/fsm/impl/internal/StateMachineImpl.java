@@ -24,6 +24,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.events.StateMachineEventHandler;
 import ch.bbv.fsm.impl.internal.events.ExceptionEventArgsImpl;
 import ch.bbv.fsm.impl.internal.events.TransitionCompletedEventArgsImpl;
@@ -80,16 +81,19 @@ public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 */
 	private final List<StateMachineEventHandler<TState, TEvent>> eventHandler;
 
+	private final StateMachine<TState, TEvent> stateMachine;
+
 	/**
 	 * Initializes a new instance of the StateMachineImpl<TState,TEvent> class.
 	 * 
 	 * @param name
 	 *            The name of this state machine used in log messages.
 	 */
-	public StateMachineImpl(final String name,
-			StateDictionary<TState, TEvent> states) {
+	public StateMachineImpl(final StateMachine<TState, TEvent> stateMachine,
+			final String name, StateDictionary<TState, TEvent> states) {
 		this.name = name;
 		this.states = states;
+		this.stateMachine = stateMachine;
 		this.eventHandler = Lists.newArrayList();
 	}
 
@@ -344,6 +348,10 @@ public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	@Override
 	public String toString() {
 		return this.name;
+	}
+
+	public StateMachine<TState, TEvent> getStateMachine() {
+		return stateMachine;
 	}
 
 }

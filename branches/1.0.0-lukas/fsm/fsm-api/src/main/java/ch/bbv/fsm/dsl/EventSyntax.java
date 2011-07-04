@@ -18,14 +18,14 @@
  *******************************************************************************/
 package ch.bbv.fsm.dsl;
 
-public interface EventSyntax<TState, TEvent> {
+public interface EventSyntax<TState extends Enum<?>, TEvent extends Enum<?>> {
 
-    /**
-     * Defines an event that is accepted. 
-     * 
-     * @param eventId
-     *            the event id.
-     * @return >Event action syntax.
-     */
-    EventActionSyntax<TState, TEvent> on(TEvent eventId);
+	/**
+	 * Defines an event that is accepted.
+	 * 
+	 * @param eventId
+	 *            the event id.
+	 * @return >Event action syntax.
+	 */
+	EventActionSyntax<TState, TEvent> on(TEvent eventId);
 }

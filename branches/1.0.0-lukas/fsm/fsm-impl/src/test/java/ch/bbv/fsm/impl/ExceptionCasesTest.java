@@ -124,10 +124,11 @@ public class ExceptionCasesTest {
 		final Object[] eventArguments = new Object[] { 1, 2, "test" };
 		final RuntimeException e = new RuntimeException();
 
-		final Action throwException = new Action() {
+		final Action<States, Events> throwException = new Action<States, Events>() {
 
 			@Override
-			public void execute(final Object... arguments) {
+			public void execute(StateMachine<States, Events> stateMachine,
+					Object... arguments) {
 				throw e;
 			}
 		};
@@ -155,10 +156,11 @@ public class ExceptionCasesTest {
 
 		final RuntimeException e = new RuntimeException();
 
-		final Action throwException = new Action() {
+		final Action<States, Events> throwException = new Action<States, Events>() {
 
 			@Override
-			public void execute(final Object... arguments) {
+			public void execute(StateMachine<States, Events> stateMachine,
+					Object... arguments) {
 				throw e;
 			}
 		};
@@ -187,10 +189,11 @@ public class ExceptionCasesTest {
 		final Object[] eventArguments = new Object[] { 1, 2, "test" };
 		final RuntimeException exception = new RuntimeException();
 
-		final Action throwException = new Action() {
+		final Action<States, Events> throwException = new Action<States, Events>() {
 
 			@Override
-			public void execute(final Object... arguments) {
+			public void execute(StateMachine<States, Events> stateMachine,
+					Object... arguments) {
 				throw exception;
 			}
 		};
@@ -220,9 +223,10 @@ public class ExceptionCasesTest {
 		final Object[] eventArguments = new Object[] { 1, 2, "test" };
 		final RuntimeException e = new RuntimeException();
 
-		final Function<Object[], Boolean> f1 = new Function<Object[], Boolean>() {
+		final Function<States, Events, Object[], Boolean> f1 = new Function<States, Events, Object[], Boolean>() {
 			@Override
-			public Boolean execute(final Object[] parameter) {
+			public Boolean execute(StateMachine<States, Events> stateMachine,
+					final Object[] parameter) {
 				throw e;
 			}
 		};

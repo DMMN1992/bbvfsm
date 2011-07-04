@@ -20,23 +20,24 @@ package ch.bbv.fsm.dsl;
 
 import ch.bbv.fsm.Action;
 
-public interface ExecuteSyntax<TState, TEvent> extends GuardSyntax<TState, TEvent> {
+public interface ExecuteSyntax<TState extends Enum<?>, TEvent extends Enum<?>>
+		extends GuardSyntax<TState, TEvent> {
 
-    /** 
-     * Defines the actions to execute on a transition.
-     * 
-     * @param actions
-     *            The actions.
-     * @return Guard syntax.
-     */
-    GuardSyntax<TState, TEvent> execute(Action... actions);
+	/**
+	 * Defines the actions to execute on a transition.
+	 * 
+	 * @param actions
+	 *            The actions.
+	 * @return Guard syntax.
+	 */
+	GuardSyntax<TState, TEvent> execute(Action<TState, TEvent>... actions);
 
-    /**
-     * Defines the actions to execute on a transition.
-     * 
-     * @param actions
-     *            The actions.
-     * @return Guard syntax.
-     */
-    GuardSyntax<TState, TEvent> execute(Object... methodCall);
+	/**
+	 * Defines the actions to execute on a transition.
+	 * 
+	 * @param actions
+	 *            The actions.
+	 * @return Guard syntax.
+	 */
+	GuardSyntax<TState, TEvent> execute(Object... methodCall);
 }

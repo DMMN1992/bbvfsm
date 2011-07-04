@@ -154,7 +154,8 @@ public abstract class BaseStateMachineTest
 			StateMachineDefinition<States, Events> definition,
 			States initialState);
 
-	protected void initTestee(StateMachineDefinition<States, Events> definition) {
+	protected void initTestee(
+			final StateMachineDefinition<States, Events> definition) {
 		testee = createTestee(definition, States.A);
 		testee.addEventHandler(new Handler());
 		testee.start();
@@ -207,13 +208,14 @@ public abstract class BaseStateMachineTest
 		// AutoResetEvent allTransitionsCompleted =
 		// this.SetUpWaitForAllTransitions(Transitions);
 
-		final Action a = new Action() {
+		final Action<States, Events> a = new Action<States, Events>() {
 
 			@Override
-			public void execute(final Object... arguments) {
-				// BaseStateMachineTest.this.testee.fire(Events.D);
-				// BaseStateMachineTest.this.testee.firePriority(Events.C);
-
+			public void execute(
+					final StateMachine<States, Events> stateMaschine,
+					final Object... arguments) {
+				stateMaschine.fire(Events.D);
+				stateMaschine.firePriority(Events.C);
 			}
 
 		};

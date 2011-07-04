@@ -18,6 +18,7 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl.internal;
 
+import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.dsl.MethodCall;
 
 /**
@@ -25,29 +26,23 @@ import ch.bbv.fsm.dsl.MethodCall;
  * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
  */
-public class ActionHolderMethodCall implements ActionHolder {
+public class ActionHolderMethodCall<TState extends Enum<?>, TEvent extends Enum<?>>
+		implements ActionHolder<TState, TEvent> {
 
-    private final MethodCall methodCall;
+	private final MethodCall methodCall;
 
-    /**
-     * Creates a new instance.
-     * 
-     * @param methodCall
-     *            the method call instance.
-     */
-    public ActionHolderMethodCall(final MethodCall methodCall) {
-        this.methodCall = methodCall;
-    }
+	/**
+	 * Creates a new instance.
+	 * 
+	 * @param methodCall
+	 *            the method call instance.
+	 */
+	public ActionHolderMethodCall(final MethodCall methodCall) {
+		this.methodCall = methodCall;
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see ch.bbv.asm.impl.internal.ActionHolder#execute()
-     */
-    @Override
-    public void execute() {
-        this.methodCall.execute();
-
-    }
-
+	@Override
+	public void execute(StateMachine<TState, TEvent> stateMachine) {
+		this.methodCall.execute();
+	}
 }

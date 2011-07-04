@@ -18,15 +18,16 @@
  *******************************************************************************/
 package ch.bbv.fsm.dsl;
 
-public interface GotoSyntax<TState, TEvent> extends EventSyntax<TState, TEvent> {
+public interface GotoSyntax<TState extends Enum<?>, TEvent extends Enum<?>>
+		extends EventSyntax<TState, TEvent> {
 
-    /**
-     * Defines where to go in response to an event.
-     * 
-     * @param target
-     *            the target.
-     * @return Execute syntax.
-     */
-    ExecuteSyntax<TState, TEvent> goTo(TState target);
+	/**
+	 * Defines where to go in response to an event.
+	 * 
+	 * @param target
+	 *            the target.
+	 * @return Execute syntax.
+	 */
+	ExecuteSyntax<TState, TEvent> goTo(TState target);
 
 }

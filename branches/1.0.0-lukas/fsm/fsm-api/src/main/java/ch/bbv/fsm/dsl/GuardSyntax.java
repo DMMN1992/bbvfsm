@@ -20,25 +20,27 @@ package ch.bbv.fsm.dsl;
 
 import ch.bbv.fsm.Function;
 
-public interface GuardSyntax<TState, TEvent> extends EventSyntax<TState, TEvent> {
+public interface GuardSyntax<TState extends Enum<?>, TEvent extends Enum<?>>
+		extends EventSyntax<TState, TEvent> {
 
-    /**
-     * Defines a guard for a transition. A boolean itself is not valid. There
-     * needs to be a function call using from(owner).function returning a
-     * boolean.
-     * 
-     * @param a
-     *            function call using the from construct.
-     * @return the event syntax.
-     */
-    EventSyntax<TState, TEvent> onlyIf(boolean guard);
+	/**
+	 * Defines a guard for a transition. A boolean itself is not valid. There
+	 * needs to be a function call using from(owner).function returning a
+	 * boolean.
+	 * 
+	 * @param a
+	 *            function call using the from construct.
+	 * @return the event syntax.
+	 */
+	EventSyntax<TState, TEvent> onlyIf(boolean guard);
 
-    /**
-     * Defines a guard for a transition.
-     * 
-     * @param guard
-     *            the guard.
-     * @return Event syntax.
-     */
-    EventSyntax<TState, TEvent> onlyIf(Function<Object[], Boolean> guard);
+	/**
+	 * Defines a guard for a transition.
+	 * 
+	 * @param guard
+	 *            the guard.
+	 * @return Event syntax.
+	 */
+	EventSyntax<TState, TEvent> onlyIf(
+			Function<TState, TEvent, Object[], Boolean> guard);
 }

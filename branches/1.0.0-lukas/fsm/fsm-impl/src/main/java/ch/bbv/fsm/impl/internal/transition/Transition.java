@@ -49,14 +49,14 @@ public interface Transition<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * 
 	 * @return the actions of this transition.
 	 */
-	List<Action> getActions();
+	List<Action<TState, TEvent>> getActions();
 
 	/**
 	 * Gets or sets the guard of this transition.
 	 * 
 	 * @return the guard.
 	 */
-	Function<Object[], Boolean> getGuard();
+	Function<TState, TEvent, Object[], Boolean> getGuard();
 
 	/**
 	 * Returns the source state of the transition.
@@ -79,7 +79,7 @@ public interface Transition<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param guard
 	 *            the guard function.
 	 */
-	void setGuard(Function<Object[], Boolean> guard);
+	void setGuard(Function<TState, TEvent, Object[], Boolean> guard);
 
 	/**
 	 * Sets the source state of the transition.

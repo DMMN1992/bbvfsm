@@ -19,36 +19,33 @@
 package ch.bbv.fsm.impl.internal;
 
 import ch.bbv.fsm.Action;
+import ch.bbv.fsm.StateMachine;
 
 /**
  * Wraps an action without parameters.
  * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
  */
-public class ActionHolderNoParameter implements ActionHolder {
+public class ActionHolderNoParameter<TState extends Enum<?>, TEvent extends Enum<?>>
+		implements ActionHolder<TState, TEvent> {
 
-    /**
-     * the wrapped action.
-     */
-    private final Action action;
+	/**
+	 * the wrapped action.
+	 */
+	private final Action<TState, TEvent> action;
 
-    /**
-     * Initializes a new instance.
-     * 
-     * @param action
-     *            the action to wrap.
-     */
-    public ActionHolderNoParameter(final Action action) {
-        this.action = action;
-    }
+	/**
+	 * Initializes a new instance.
+	 * 
+	 * @param action
+	 *            the action to wrap.
+	 */
+	public ActionHolderNoParameter(final Action<TState, TEvent> action) {
+		this.action = action;
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see ch.bbv.asm.impl.internal.ActionHolder#execute()
-     */
-    @Override
-    public void execute() {
-        this.action.execute();
-    }
+	@Override
+	public void execute(StateMachine<TState, TEvent> stateMachine) {
+		this.action.execute(stateMachine);
+	}
 }

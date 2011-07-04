@@ -20,6 +20,7 @@ package ch.bbv.fsm.impl.internal.state;
 
 import java.util.List;
 
+import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.impl.internal.Notifier;
 import ch.bbv.fsm.impl.internal.StateMachineImpl;
 
@@ -132,7 +133,7 @@ public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 */
 	private final List<Record> records;
 
-	private final StateMachineImpl<TState, TEvent> stateMachine;
+	private final StateMachineImpl<TState, TEvent> stateMachineImpl;
 
 	private final Notifier<TState, TEvent> notifier;
 
@@ -143,10 +144,10 @@ public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 *            the source state of the transition.
 	 */
 	public StateContext(final State<TState, TEvent> sourceState,
-			final StateMachineImpl<TState, TEvent> stateMachine,
+			final StateMachineImpl<TState, TEvent> stateMachineImpl,
 			final Notifier<TState, TEvent> notifier) {
 		this.sourceState = sourceState;
-		this.stateMachine = stateMachine;
+		this.stateMachineImpl = stateMachineImpl;
 		this.notifier = notifier;
 		this.exceptions = Lists.newArrayList();
 		this.records = Lists.newArrayList();
@@ -197,8 +198,12 @@ public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
 		return this.sourceState;
 	}
 
-	public StateMachineImpl<TState, TEvent> getStateMachine() {
-		return stateMachine;
+	public StateMachineImpl<TState, TEvent> getStateMachineImpl() {
+		return stateMachineImpl;
+	}
+
+	public StateMachine<TState, TEvent> getStateMachine() {
+		return stateMachineImpl.getStateMachine();
 	}
 
 	public Notifier<TState, TEvent> getNotifier() {
@@ -209,7 +214,7 @@ public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
 			State<TState, TEvent> superState) {
 		State<TState, TEvent> result = null;
 		if (superState != null) {
-			result = stateMachine.getLastActiveSubState(superState);
+			result = stateMachineImpl.getLastActiveSubState(superState);
 			if (result == null)
 				result = superState.getInitialState();
 		}
@@ -218,7 +223,7 @@ public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
 
 	public void setLastActiveSubState(State<TState, TEvent> superState,
 			State<TState, TEvent> subState) {
-		stateMachine.setLastActiveSubState(superState, subState);
+		stateMachineImpl.setLastActiveSubState(superState, subState);
 	}
 
 }

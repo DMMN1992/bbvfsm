@@ -27,15 +27,18 @@ package ch.bbv.fsm;
  * @param <ReturnType>
  *            return type
  */
-public interface Function<ParameterType, ReturnType> {
+public interface Function<TState extends Enum<?>, TEvent extends Enum<?>, ParameterType, ReturnType> {
 
-    /**
-     * Executes the function.
-     * 
-     * @param parameter
-     *            the parameter of the function.
-     * @return the return value of the function.
-     */
-    ReturnType execute(ParameterType parameter);
+	/**
+	 * Executes the function.
+	 * 
+	 * @param stateMachine
+	 *            the calling state machine
+	 * @param parameter
+	 *            the parameter of the function.
+	 * @return the return value of the function.
+	 */
+	ReturnType execute(StateMachine<TState, TEvent> stateMachine,
+			ParameterType parameter);
 
 }

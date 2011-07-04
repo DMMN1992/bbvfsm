@@ -34,19 +34,21 @@ public class PassiveStateMachineSample {
 	/**
 	 * Announces the floor.
 	 */
-	private final Action announceFloor = new Action() {
+	private final Action<States, Events> announceFloor = new Action<States, Events>() {
 		@Override
-		public void execute(final Object... arguments) {
+		public void execute(StateMachine<States, Events> stateMachine,
+				final Object... arguments) {
 			System.out.println("announceFloor: 1");
-		};
+		}
 	};
 
 	/**
 	 * Announces that the elevator is overloaded.
 	 */
-	private final Action announceOverload = new Action() {
+	private final Action<States, Events> announceOverload = new Action<States, Events>() {
 		@Override
-		public void execute(final Object... arguments) {
+		public void execute(StateMachine<States, Events> stateMachine,
+				final Object... arguments) {
 			System.out.println("announceOverload...");
 		};
 	};
@@ -54,9 +56,10 @@ public class PassiveStateMachineSample {
 	/**
 	 * Checks whether the elevator is overloaded.
 	 */
-	private final Function<Object[], Boolean> checkOverload = new Function<Object[], Boolean>() {
+	private final Function<States, Events, Object[], Boolean> checkOverload = new Function<States, Events, Object[], Boolean>() {
 		@Override
-		public Boolean execute(final Object[] arguments) {
+		public Boolean execute(StateMachine<States, Events> stateMachine,
+				final Object[] arguments) {
 			return true;
 		};
 	};

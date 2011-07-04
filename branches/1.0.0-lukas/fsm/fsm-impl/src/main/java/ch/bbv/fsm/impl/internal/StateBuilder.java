@@ -67,18 +67,14 @@ public class StateBuilder<TState extends Enum<?>, TEvent extends Enum<?>>
 		this.stateDictionary = stateDictionary;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.asm.dsl.EventActionSyntax#execute(ch.bbv.asm.Action[])
-	 */
 	@Override
-	public GuardSyntax<TState, TEvent> execute(final Action... actions) {
+	public GuardSyntax<TState, TEvent> execute(
+			final Action<TState, TEvent>... actions) {
 		if (actions == null) {
 			return this;
 		}
 
-		for (final Action action : actions) {
+		for (final Action<TState, TEvent> action : actions) {
 			this.currentTransition.getActions().add(action);
 		}
 
@@ -95,141 +91,83 @@ public class StateBuilder<TState extends Enum<?>, TEvent extends Enum<?>>
 		for (@SuppressWarnings("unused")
 		final Object action : methodCalls) {
 			this.currentTransition.getActions().add(
-					new MethodCallAction(MethodCallImpl.pop()));
+					new MethodCallAction<TState, TEvent>(MethodCallImpl.pop()));
 		}
 
 		return this;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.asm.dsl.EntryActionSyntax#executeOnEntry(ch.bbv.asm.Action)
-	 */
 	@Override
-	public ExitActionSyntax<TState, TEvent> executeOnEntry(final Action action) {
-		this.state.setEntryAction(new ActionHolderNoParameter(action));
-
+	public ExitActionSyntax<TState, TEvent> executeOnEntry(
+			final Action<TState, TEvent> action) {
+		this.state.setEntryAction(new ActionHolderNoParameter<TState, TEvent>(
+				action));
 		return this;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.asm.dsl.EntryActionSyntax#executeOnEntry(ch.bbv.asm.Action,
-	 * java.lang.Object)
-	 */
 	@Override
 	public <T> ExitActionSyntax<TState, TEvent> executeOnEntry(
-			final Action action, final T parameter) {
-		this.state.setEntryAction(new ActionHolderParameter<T>(action,
-				parameter));
-
+			final Action<TState, TEvent> action, final T parameter) {
+		this.state.setEntryAction(new ActionHolderParameter<TState, TEvent, T>(
+				action, parameter));
 		return this;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * ch.bbv.asm.tdl.EntryActionSyntax#executeOnEntry(ch.bbv.asm.tdl.MethodCall
-	 * )
-	 */
 	@Override
 	public ExitActionSyntax<TState, TEvent> executeOnEntry(final Object action) {
-		this.state.setEntryAction(new ActionHolderMethodCall(MethodCallImpl
-				.pop()));
+		this.state.setEntryAction(new ActionHolderMethodCall<TState, TEvent>(
+				MethodCallImpl.pop()));
 		return this;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.asm.dsl.ExitActionSyntax#executeOnExit(ch.bbv.asm.Action)
-	 */
 	@Override
-	public ExitActionSyntax<TState, TEvent> executeOnExit(final Action action) {
-		this.state.setExitAction(new ActionHolderNoParameter(action));
-
+	public ExitActionSyntax<TState, TEvent> executeOnExit(
+			final Action<TState, TEvent> action) {
+		this.state.setExitAction(new ActionHolderNoParameter<TState, TEvent>(
+				action));
 		return this;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.asm.dsl.ExitActionSyntax#executeOnExit(ch.bbv.asm.Action,
-	 * java.lang.Object)
-	 */
 	@Override
-	public <T> EventSyntax<TState, TEvent> executeOnExit(final Action action,
-			final T parameter) {
-		this.state
-				.setExitAction(new ActionHolderParameter<T>(action, parameter));
+	public <T> EventSyntax<TState, TEvent> executeOnExit(
+			final Action<TState, TEvent> action, final T parameter) {
+		this.state.setExitAction(new ActionHolderParameter<TState, TEvent, T>(
+				action, parameter));
 		return this;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.asm.dsl.ExitActionSyntax#executeOnExit(java.lang.Object)
-	 */
 	@Override
 	public ExitActionSyntax<TState, TEvent> executeOnExit(final Object action) {
-		this.state.setExitAction(new ActionHolderMethodCall(MethodCallImpl
-				.pop()));
+		this.state.setExitAction(new ActionHolderMethodCall<TState, TEvent>(
+				MethodCallImpl.pop()));
 		return this;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.asm.dsl.EventActionSyntax#goTo(java.lang.Object)
-	 */
 	@Override
 	public ExecuteSyntax<TState, TEvent> goTo(final TState target) {
 		this.currentTransition.setTarget(this.stateDictionary.getState(target));
-
 		return this;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.asm.dsl.EventSyntax#on(java.lang.Object)
-	 */
 	@Override
 	public EventActionSyntax<TState, TEvent> on(final TEvent eventId) {
 		this.currentTransition = new TransitionImpl<TState, TEvent>();
-
 		this.state.getTransitions().add(eventId, this.currentTransition);
-
 		return this;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.asm.dsl.GuardSyntax#onlyIf(boolean)
-	 */
 	@Override
 	public EventSyntax<TState, TEvent> onlyIf(final boolean guard) {
-		this.currentTransition.setGuard(new MethodCallFunction(MethodCallImpl
-				.pop()));
+		this.currentTransition.setGuard(new MethodCallFunction<TState, TEvent>(
+				MethodCallImpl.pop()));
 		return this;
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.asm.dsl.GuardSyntax#onlyIf(ch.bbv.asm.Function)
-	 */
 	@Override
 	public EventSyntax<TState, TEvent> onlyIf(
-			final Function<Object[], Boolean> guard) {
+			final Function<TState, TEvent, Object[], Boolean> guard) {
 		this.currentTransition.setGuard(guard);
-
 		return this;
 	}
-
 }

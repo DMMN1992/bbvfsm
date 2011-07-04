@@ -21,9 +21,11 @@ package ch.bbv.fsm.impl.internal;
 import java.lang.reflect.InvocationTargetException;
 
 import ch.bbv.fsm.Action;
+import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.dsl.MethodCall;
 
-public class MethodCallAction implements Action {
+public class MethodCallAction<TState extends Enum<?>, TEvent extends Enum<?>>
+		implements Action<TState, TEvent> {
 
 	MethodCall methodCall;
 
@@ -32,9 +34,10 @@ public class MethodCallAction implements Action {
 	}
 
 	@Override
-	public void execute(final Object... arguments) {
-
+	public void execute(StateMachine<TState, TEvent> stateMachine,
+			final Object... arguments) {
 		try {
+			// TODO Pass state machine
 			this.methodCall.getMethod().invoke(this.methodCall.getOwner(),
 					arguments);
 		} catch (final IllegalArgumentException e) {

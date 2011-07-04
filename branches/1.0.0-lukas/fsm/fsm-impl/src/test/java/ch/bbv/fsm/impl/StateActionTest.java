@@ -37,10 +37,12 @@ public class StateActionTest {
 
 		final boolean[] entered = new boolean[1];
 
-		final Action action = new Action() {
+		final Action<States, Events> action = new Action<States, Events>() {
 
 			@Override
-			public void execute(final Object... arguments) {
+			public void execute(
+					final StateMachine<States, Events> stateMachine,
+					final Object... arguments) {
 				entered[0] = true;
 			}
 
@@ -63,10 +65,12 @@ public class StateActionTest {
 
 		final boolean[] entered = new boolean[1];
 
-		final Action action = new Action() {
+		final Action<States, Events> action = new Action<States, Events>() {
 
 			@Override
-			public void execute(final Object... arguments) {
+			public void execute(
+					final StateMachine<States, Events> stateMachine,
+					final Object... arguments) {
 				entered[0] = true;
 			}
 
@@ -93,10 +97,12 @@ public class StateActionTest {
 		final int[] argument = new int[1];
 		argument[0] = 0;
 
-		final Action action = new Action() {
+		final Action<States, Events> action = new Action<States, Events>() {
 
 			@Override
-			public void execute(final Object... arguments) {
+			public void execute(
+					final StateMachine<States, Events> stateMachine,
+					final Object... arguments) {
 				argument[0] = (Integer) arguments[0];
 			}
 
@@ -120,10 +126,12 @@ public class StateActionTest {
 		final int[] argument = new int[1];
 		argument[0] = 0;
 
-		final Action action = new Action() {
+		final Action<States, Events> action = new Action<States, Events>() {
 
 			@Override
-			public void execute(final Object... arguments) {
+			public void execute(
+					final StateMachine<States, Events> stateMachine,
+					final Object... arguments) {
 				argument[0] = (Integer) arguments[0];
 			}
 

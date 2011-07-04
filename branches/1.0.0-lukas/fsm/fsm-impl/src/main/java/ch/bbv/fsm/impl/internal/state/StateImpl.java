@@ -85,12 +85,12 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	/**
 	 * The entry action.
 	 */
-	private ActionHolder entryAction;
+	private ActionHolder<TState, TEvent> entryAction;
 
 	/**
 	 * The exit action.
 	 */
-	private ActionHolder exitAction;
+	private ActionHolder<TState, TEvent> exitAction;
 
 	/**
 	 * Initializes a new instance of the state.
@@ -246,12 +246,10 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 
 	@Override
 	public void entry(final StateContext<TState, TEvent> stateContext) {
-
 		stateContext.addRecord(this.getId(), RecordType.Enter);
-
 		if (this.entryAction != null) {
 			try {
-				this.entryAction.execute();
+				this.entryAction.execute(stateContext.getStateMachine());
 			} catch (final Exception e) {
 				handleException(e, stateContext);
 			}
@@ -262,10 +260,9 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	@Override
 	public void exit(final StateContext<TState, TEvent> stateContext) {
 		stateContext.addRecord(this.getId(), StateContext.RecordType.Exit);
-
 		if (this.exitAction != null) {
 			try {
-				this.exitAction.execute();
+				this.exitAction.execute(stateContext.getStateMachine());
 			} catch (final Exception e) {
 				handleException(e, stateContext);
 			}
@@ -308,12 +305,12 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	}
 
 	@Override
-	public ActionHolder getEntryAction() {
+	public ActionHolder<TState, TEvent> getEntryAction() {
 		return this.entryAction;
 	}
 
 	@Override
-	public ActionHolder getExitAction() {
+	public ActionHolder<TState, TEvent> getExitAction() {
 		return this.exitAction;
 	}
 
@@ -367,13 +364,13 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	}
 
 	@Override
-	public void setEntryAction(final ActionHolder action) {
+	public void setEntryAction(final ActionHolder<TState, TEvent> action) {
 		this.entryAction = action;
 
 	}
 
 	@Override
-	public void setExitAction(final ActionHolder action) {
+	public void setExitAction(final ActionHolder<TState, TEvent> action) {
 		this.exitAction = action;
 
 	}

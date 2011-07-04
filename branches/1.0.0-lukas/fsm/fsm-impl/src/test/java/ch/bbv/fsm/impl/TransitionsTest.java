@@ -52,19 +52,23 @@ public class TransitionsTest {
 	@Test
 	public void executeActions() {
 
-		final Action action1 = new Action() {
+		final Action<States, Events> action1 = new Action<States, Events>() {
 
 			@Override
-			public void execute(final Object... arguments) {
+			public void execute(
+					final StateMachine<States, Events> stateMachine,
+					final Object... arguments) {
 				TransitionsTest.this.action1Arguments = arguments;
 
 			}
 		};
 
-		final Action action2 = new Action() {
+		final Action<States, Events> action2 = new Action<States, Events>() {
 
 			@Override
-			public void execute(final Object... arguments) {
+			public void execute(
+					final StateMachine<States, Events> stateMachine,
+					final Object... arguments) {
 				TransitionsTest.this.action2Arguments = arguments;
 
 			}
@@ -94,10 +98,12 @@ public class TransitionsTest {
 	@Test
 	public void internalTransition() {
 
-		final Action action2 = new Action() {
+		final Action<States, Events> action2 = new Action<States, Events>() {
 
 			@Override
-			public void execute(final Object... arguments) {
+			public void execute(
+					final StateMachine<States, Events> stateMachine,
+					final Object... arguments) {
 				TransitionsTest.this.executed = true;
 
 			}

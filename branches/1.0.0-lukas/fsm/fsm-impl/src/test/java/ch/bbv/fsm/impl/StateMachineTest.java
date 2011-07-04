@@ -86,7 +86,7 @@ public class StateMachineTest {
 		}
 	}
 
-	private class RecordEntryAction implements Action {
+	private class RecordEntryAction implements Action<States, Events> {
 
 		private final States state;
 
@@ -95,7 +95,8 @@ public class StateMachineTest {
 		}
 
 		@Override
-		public void execute(final Object... arguments) {
+		public void execute(final StateMachine<States, Events> stateMachine,
+				final Object... arguments) {
 			final EntryRecord record = new EntryRecord();
 			record.setState(this.state);
 			StateMachineTest.this.records.add(record);
@@ -104,7 +105,7 @@ public class StateMachineTest {
 
 	}
 
-	private class RecordExitAction implements Action {
+	private class RecordExitAction implements Action<States, Events> {
 
 		private final States state;
 
@@ -113,7 +114,8 @@ public class StateMachineTest {
 		}
 
 		@Override
-		public void execute(final Object... arguments) {
+		public void execute(final StateMachine<States, Events> stateMachine,
+				final Object... arguments) {
 			final ExitRecord record = new ExitRecord();
 			record.setState(this.state);
 			StateMachineTest.this.records.add(record);

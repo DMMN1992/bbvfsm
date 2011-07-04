@@ -47,10 +47,12 @@ public class GuardTest {
 	@Test
 	public void allGuardsReturnFalse() {
 
-		final Function<Object[], Boolean> f1 = new Function<Object[], Boolean>() {
+		final Function<States, Events, Object[], Boolean> f1 = new Function<States, Events, Object[], Boolean>() {
 
 			@Override
-			public Boolean execute(final Object[] parameter) {
+			public Boolean execute(
+					final StateMachine<States, Events> stateMachine,
+					final Object[] parameter) {
 				return false;
 			}
 
@@ -82,10 +84,12 @@ public class GuardTest {
 
 		final Object[][] eventArguments = new Object[1][];
 
-		final Function<Object[], Boolean> f2 = new Function<Object[], Boolean>() {
+		final Function<States, Events, Object[], Boolean> f2 = new Function<States, Events, Object[], Boolean>() {
 
 			@Override
-			public Boolean execute(final Object[] parameter) {
+			public Boolean execute(
+					final StateMachine<States, Events> stateMachine,
+					final Object[] parameter) {
 				eventArguments[0] = parameter;
 				return true;
 			}
@@ -111,19 +115,23 @@ public class GuardTest {
 	 */
 	@Test
 	public void transitionWithGuardReturningTrueIsExecuted() {
-		final Function<Object[], Boolean> f1 = new Function<Object[], Boolean>() {
+		final Function<States, Events, Object[], Boolean> f1 = new Function<States, Events, Object[], Boolean>() {
 
 			@Override
-			public Boolean execute(final Object[] parameter) {
+			public Boolean execute(
+					final StateMachine<States, Events> stateMachine,
+					final Object[] parameter) {
 				return false;
 			}
 
 		};
 
-		final Function<Object[], Boolean> f2 = new Function<Object[], Boolean>() {
+		final Function<States, Events, Object[], Boolean> f2 = new Function<States, Events, Object[], Boolean>() {
 
 			@Override
-			public Boolean execute(final Object[] parameter) {
+			public Boolean execute(
+					final StateMachine<States, Events> stateMachine,
+					final Object[] parameter) {
 				return true;
 			}
 

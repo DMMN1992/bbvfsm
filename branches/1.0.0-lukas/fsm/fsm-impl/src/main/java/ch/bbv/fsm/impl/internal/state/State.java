@@ -104,14 +104,14 @@ public interface State<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * 
 	 * @return the entry action.
 	 */
-	ActionHolder getEntryAction();
+	ActionHolder<TState, TEvent> getEntryAction();
 
 	/**
 	 * Gets the exit action.
 	 * 
 	 * @return the exit action.
 	 */
-	ActionHolder getExitAction();
+	ActionHolder<TState, TEvent> getExitAction();
 
 	/**
 	 * Returns the history type of this state.
@@ -169,7 +169,7 @@ public interface State<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param action
 	 *            the entry action.
 	 */
-	void setEntryAction(ActionHolder action);
+	void setEntryAction(ActionHolder<TState, TEvent> action);
 
 	/**
 	 * Sets the exit action.
@@ -178,7 +178,7 @@ public interface State<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param action
 	 *            the exit action.
 	 */
-	void setExitAction(ActionHolder action);
+	void setExitAction(ActionHolder<TState, TEvent> action);
 
 	/**
 	 * Sets the history type of this state.

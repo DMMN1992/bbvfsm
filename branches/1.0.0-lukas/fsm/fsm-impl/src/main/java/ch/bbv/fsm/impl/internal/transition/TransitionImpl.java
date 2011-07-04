@@ -38,13 +38,13 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	/**
 	 * The actions that are executed when this transition is fired.
 	 */
-	private final List<Action> actions;
+	private final List<Action<TState, TEvent>> actions;
 
 	private State<TState, TEvent> source;
 
-	private State<TState, TEvent> traget;
+	private State<TState, TEvent> target;
 
-	private Function<Object[], Boolean> guard;
+	private Function<TState, TEvent, Object[], Boolean> guard;
 
 	/**
 	 * Creates a new instance.
@@ -178,7 +178,7 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 * @see ch.bbv.asm.impl.internal.transition.Transition#getActions()
 	 */
 	@Override
-	public List<Action> getActions() {
+	public List<Action<TState, TEvent>> getActions() {
 		return this.actions;
 	}
 
@@ -188,7 +188,7 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 * @see ch.bbv.asm.impl.internal.transition.Transition#getGuard()
 	 */
 	@Override
-	public Function<Object[], Boolean> getGuard() {
+	public Function<TState, TEvent, Object[], Boolean> getGuard() {
 		return this.guard;
 	}
 
@@ -209,7 +209,7 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 */
 	@Override
 	public State<TState, TEvent> getTarget() {
-		return this.traget;
+		return this.target;
 	}
 
 	/**
@@ -232,7 +232,7 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 * internal.
 	 */
 	private boolean isInternalTransition() {
-		return this.traget == null;
+		return this.target == null;
 	}
 
 	/**
@@ -245,9 +245,9 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 */
 	private void performActions(final Object[] eventArguments,
 			final TransitionContext<TState, TEvent> context) {
-		for (final Action action : this.getActions()) {
+		for (final Action<TState, TEvent> action : this.getActions()) {
 			try {
-				action.execute(eventArguments);
+				action.execute(context.getStateMachine(), eventArguments);
 			} catch (final Exception exception) {
 				LOG.error("Exception in action of transition {}: {}", this,
 						exception);
@@ -264,7 +264,7 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 * )
 	 */
 	@Override
-	public void setGuard(final Function<Object[], Boolean> guard) {
+	public void setGuard(final Function<TState, TEvent, Object[], Boolean> guard) {
 		this.guard = guard;
 	}
 
@@ -289,7 +289,7 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 */
 	@Override
 	public void setTarget(final State<TState, TEvent> target) {
-		this.traget = target;
+		this.target = target;
 	}
 
 	/*
@@ -301,7 +301,7 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 */
 	@Override
 	public void setTargetState(final State<TState, TEvent> targetState) {
-		this.traget = targetState;
+		this.target = targetState;
 	}
 
 	/**
@@ -317,7 +317,8 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 			final TransitionContext<TState, TEvent> context) {
 		try {
 			return this.getGuard() == null
-					|| this.getGuard().execute(eventArguments);
+					|| this.getGuard().execute(context.getStateMachine(),
+							eventArguments);
 		} catch (final Exception exception) {
 			LOG.error("Exception in guard of transition {}: {}", this,
 					exception);
@@ -326,11 +327,6 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
 		return String.format("Transition from state %s to state %s.",

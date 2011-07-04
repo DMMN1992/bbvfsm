@@ -19,6 +19,7 @@
 package ch.bbv.fsm.impl.internal;
 
 import ch.bbv.fsm.Function;
+import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.dsl.MethodCall;
 
 /**
@@ -26,39 +27,38 @@ import ch.bbv.fsm.dsl.MethodCall;
  * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
  */
-public class MethodCallFunction implements Function<Object[], Boolean> {
+public class MethodCallFunction<TState extends Enum<?>, TEvent extends Enum<?>>
+		implements Function<TState, TEvent, Object[], Boolean> {
 
-    private final MethodCall methodCall;
+	private final MethodCall methodCall;
 
-    /**
-     * Creates a new instance.
-     * 
-     * @param methodCall
-     *            the methodCall instance
-     */
-    public MethodCallFunction(final MethodCall methodCall) {
-        this.methodCall = methodCall;
-    }
+	/**
+	 * Creates a new instance.
+	 * 
+	 * @param methodCall
+	 *            the methodCall instance
+	 */
+	public MethodCallFunction(final MethodCall methodCall) {
+		this.methodCall = methodCall;
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see ch.bbv.asm.Function#execute(java.lang.Object)
-     */
-    @Override
-    public Boolean execute(final Object[] args) {
-        try {
-            Object[] arguments;
-            if (args.length == this.methodCall.getArguments().length) {
-                arguments = args;
-            } else {
-                arguments = this.methodCall.getArguments();
-            }
+	@Override
+	public Boolean execute(StateMachine<TState, TEvent> stateMachine,
+			final Object[] args) {
+		try {
+			// TODO Pass state machine
+			Object[] arguments;
+			if (args.length == this.methodCall.getArguments().length) {
+				arguments = args;
+			} else {
+				arguments = this.methodCall.getArguments();
+			}
 
-            return (Boolean) this.methodCall.getMethod().invoke(this.methodCall.getOwner(), arguments);
-        } catch (final Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+			return (Boolean) this.methodCall.getMethod().invoke(
+					this.methodCall.getOwner(), arguments);
+		} catch (final Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 }

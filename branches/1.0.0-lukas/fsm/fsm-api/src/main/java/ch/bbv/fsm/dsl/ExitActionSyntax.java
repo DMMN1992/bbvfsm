@@ -20,36 +20,38 @@ package ch.bbv.fsm.dsl;
 
 import ch.bbv.fsm.Action;
 
-public interface ExitActionSyntax<TState, TEvent> extends EventSyntax<TState, TEvent> {
+public interface ExitActionSyntax<TState extends Enum<?>, TEvent extends Enum<?>>
+		extends EventSyntax<TState, TEvent> {
 
-    /** 
-     * Defines an exit action.
-     * 
-     * @param action
-     *            the action.
-     * @return Event syntax.
-     */
-    EventSyntax<TState, TEvent> executeOnExit(Action action);
+	/**
+	 * Defines an exit action.
+	 * 
+	 * @param action
+	 *            the action.
+	 * @return Event syntax.
+	 */
+	EventSyntax<TState, TEvent> executeOnExit(Action<TState, TEvent> action);
 
-    /**
-     * Defines an exit action.
-     * 
-     * @param <T>
-     *            type of the parameter.
-     * @param action
-     *            the action.
-     * @param parameter
-     *            the parameter of the action.
-     * @return Exit action syntax.
-     */
-    <T> EventSyntax<TState, TEvent> executeOnExit(Action action, T parameter);
+	/**
+	 * Defines an exit action.
+	 * 
+	 * @param <T>
+	 *            type of the parameter.
+	 * @param action
+	 *            the action.
+	 * @param parameter
+	 *            the parameter of the action.
+	 * @return Exit action syntax.
+	 */
+	<T> EventSyntax<TState, TEvent> executeOnExit(
+			Action<TState, TEvent> action, T parameter);
 
-    /**
-     * Defines an exit action.
-     * 
-     * @param method
-     * @return Event syntax.
-     */
-    EventSyntax<TState, TEvent> executeOnExit(Object method);
+	/**
+	 * Defines an exit action.
+	 * 
+	 * @param method
+	 * @return Event syntax.
+	 */
+	EventSyntax<TState, TEvent> executeOnExit(Object method);
 
 }

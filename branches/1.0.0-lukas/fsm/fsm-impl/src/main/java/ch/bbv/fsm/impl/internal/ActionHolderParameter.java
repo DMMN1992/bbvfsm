@@ -19,6 +19,7 @@
 package ch.bbv.fsm.impl.internal;
 
 import ch.bbv.fsm.Action;
+import ch.bbv.fsm.StateMachine;
 
 /**
  * Wraps an action with a parameter of type T.
@@ -27,31 +28,28 @@ import ch.bbv.fsm.Action;
  * @param <T>
  *            the type of the parameter.
  */
-public class ActionHolderParameter<T> implements ActionHolder {
+public class ActionHolderParameter<TState extends Enum<?>, TEvent extends Enum<?>, T>
+		implements ActionHolder<TState, TEvent> {
 
-    private final Action action;
-    private final T parameter;
+	private final Action<TState, TEvent> action;
+	private final T parameter;
 
-    /**
-     * Initializes a new instance.
-     * 
-     * @param action
-     *            the action
-     * @param parameter
-     *            the parameter
-     */
-    public ActionHolderParameter(final Action action, final T parameter) {
-        this.action = action;
-        this.parameter = parameter;
-    }
+	/**
+	 * Initializes a new instance.
+	 * 
+	 * @param action
+	 *            the action
+	 * @param parameter
+	 *            the parameter
+	 */
+	public ActionHolderParameter(final Action<TState, TEvent> action,
+			final T parameter) {
+		this.action = action;
+		this.parameter = parameter;
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see ch.bbv.asm.impl.internal.ActionHolder#execute()
-     */
-    @Override
-    public void execute() {
-        this.action.execute(this.parameter);
-    }
+	@Override
+	public void execute(StateMachine<TState, TEvent> stateMachine) {
+		this.action.execute(stateMachine, this.parameter);
+	}
 }
