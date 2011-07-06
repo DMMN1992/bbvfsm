@@ -89,6 +89,12 @@ public class StateBuilder<TState extends Enum<?>, TEvent extends Enum<?>>
 	}
 
 	@Override
+	public ExecuteSyntax<TState, TEvent> terminate() {
+		// TODO Auto-generated method stub
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
 	public <T> ExitActionSyntax<TState, TEvent> executeOnEntry(
 			final Action<TState, TEvent> action, final T parameter) {
 		this.state.setEntryAction(new ActionHolderParameter<TState, TEvent, T>(

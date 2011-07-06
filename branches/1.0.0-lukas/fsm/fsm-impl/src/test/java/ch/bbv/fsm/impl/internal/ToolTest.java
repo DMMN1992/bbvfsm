@@ -18,7 +18,7 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl.internal;
 
-import static ch.bbv.fsm.impl.Tool.*;
+import static ch.bbv.fsm.impl.internal.aop.Tool.*;
 
 import java.util.EmptyStackException;
 

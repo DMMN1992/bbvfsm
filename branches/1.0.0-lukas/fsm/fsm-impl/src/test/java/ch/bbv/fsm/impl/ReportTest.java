@@ -18,7 +18,7 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl;
 
-import static ch.bbv.fsm.impl.Tool.from;
+import static ch.bbv.fsm.impl.internal.aop.Tool.from;
 
 import org.junit.Before;
 import org.junit.Test;

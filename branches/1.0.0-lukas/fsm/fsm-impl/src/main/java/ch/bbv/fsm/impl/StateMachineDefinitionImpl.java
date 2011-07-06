@@ -17,6 +17,8 @@ import ch.bbv.fsm.impl.internal.StateMachineImpl;
 import ch.bbv.fsm.impl.internal.events.ExceptionEventArgsImpl;
 import ch.bbv.fsm.impl.internal.events.TransitionEventArgsImpl;
 import ch.bbv.fsm.impl.internal.events.TransitionExceptionEventArgsImpl;
+import ch.bbv.fsm.impl.internal.runner.ActiveStateMachine;
+import ch.bbv.fsm.impl.internal.runner.PassiveStateMachine;
 import ch.bbv.fsm.impl.internal.state.State;
 import ch.bbv.fsm.impl.internal.state.StateContext;
 import ch.bbv.fsm.impl.internal.state.StateDictionary;
@@ -106,8 +108,14 @@ public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends E
 	}
 
 	@Override
-	public StateMachine<TState, TEvent> createActiveStateMachine(String name,
-			TState initialState) {
+	public EntryActionSyntax<TState, TEvent> fromStart() {
+		// TODO Auto-generated method stub
+		throw new RuntimeException("Not implemented");
+	}
+
+	@Override
+	public StateMachine<TState, TEvent> createActiveStateMachine(
+			final String name, final TState initialState) {
 		ActiveStateMachine<TState, TEvent> activeStateMachine = new ActiveStateMachine<TState, TEvent>(
 				name, states);
 		activeStateMachine
@@ -119,7 +127,8 @@ public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends E
 	}
 
 	@Override
-	public StateMachine<TState, TEvent> createActiveStateMachine(String name) {
+	public StateMachine<TState, TEvent> createActiveStateMachine(
+			final String name) {
 		ActiveStateMachine<TState, TEvent> activeStateMachine = new ActiveStateMachine<TState, TEvent>(
 				name, states);
 		activeStateMachine
@@ -129,8 +138,8 @@ public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends E
 	}
 
 	@Override
-	public StateMachine<TState, TEvent> createPassiveStateMachine(String name,
-			TState initialState) {
+	public StateMachine<TState, TEvent> createPassiveStateMachine(
+			final String name, final TState initialState) {
 		PassiveStateMachine<TState, TEvent> passiveStateMachine = new PassiveStateMachine<TState, TEvent>(
 				name, states);
 		passiveStateMachine
@@ -142,7 +151,8 @@ public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends E
 	}
 
 	@Override
-	public StateMachine<TState, TEvent> createPassiveStateMachine(String name) {
+	public StateMachine<TState, TEvent> createPassiveStateMachine(
+			final String name) {
 		PassiveStateMachine<TState, TEvent> passiveStateMachine = new PassiveStateMachine<TState, TEvent>(
 				name, states);
 		passiveStateMachine

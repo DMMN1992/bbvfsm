@@ -41,4 +41,6 @@ public interface EventActionSyntax<TState extends Enum<?>, TEvent extends Enum<?
 	 */
 	ExecuteSyntax<TState, TEvent> goTo(TState target);
 
+	ExecuteSyntax<TState, TEvent> terminate();
+
 }

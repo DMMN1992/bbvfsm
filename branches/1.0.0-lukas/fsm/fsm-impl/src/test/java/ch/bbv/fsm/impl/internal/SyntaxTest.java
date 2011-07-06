@@ -18,8 +18,8 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl.internal;
 
-import static ch.bbv.fsm.impl.Tool.any;
-import static ch.bbv.fsm.impl.Tool.from;
+import static ch.bbv.fsm.impl.internal.aop.Tool.any;
+import static ch.bbv.fsm.impl.internal.aop.Tool.from;
 import junit.framework.Assert;
 
 import org.junit.Before;

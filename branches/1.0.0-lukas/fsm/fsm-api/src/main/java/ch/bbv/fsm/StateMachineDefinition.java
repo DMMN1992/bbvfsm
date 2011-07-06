@@ -38,6 +38,8 @@ public interface StateMachineDefinition<TState extends Enum<?>, TEvent extends E
 	 */
 	EntryActionSyntax<TState, TEvent> in(TState state);
 
+	EntryActionSyntax<TState, TEvent> fromStart();
+
 	/**
 	 * Defines a state hierarchy.
 	 * 

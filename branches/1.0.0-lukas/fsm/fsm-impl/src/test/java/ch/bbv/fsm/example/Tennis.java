@@ -18,7 +18,7 @@
  *******************************************************************************/
 package ch.bbv.fsm.example;
 
-import static ch.bbv.fsm.impl.Tool.from;
+import static ch.bbv.fsm.impl.internal.aop.Tool.from;
 import junit.framework.Assert;
 
 import org.junit.Before;

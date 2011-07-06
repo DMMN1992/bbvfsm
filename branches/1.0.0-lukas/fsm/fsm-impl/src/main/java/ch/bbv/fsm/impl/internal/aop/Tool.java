@@ -16,10 +16,9 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.impl;
+package ch.bbv.fsm.impl.internal.aop;
 
 import net.sf.cglib.proxy.Enhancer;
-import ch.bbv.fsm.impl.internal.aop.MethodCallInterceptor;
 
 /**
  * Static helper methods used to define state machines.

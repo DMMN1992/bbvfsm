@@ -16,7 +16,7 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.impl;
+package ch.bbv.fsm.impl.internal.runner;
 
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.ExecutorService;
