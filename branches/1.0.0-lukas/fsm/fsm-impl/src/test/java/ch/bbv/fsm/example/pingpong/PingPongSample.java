@@ -1,9 +1,11 @@
 package ch.bbv.fsm.example.pingpong;
 
+import ch.bbv.fsm.impl.AbstractStateMachineDefinition;
+
 public class PingPongSample {
 
 	public static void main(final String[] args) {
-		PingPongStateMachineDefinion pingPongDefinition = new PingPongStateMachineDefinion();
+		AbstractStateMachineDefinition<PingPongStateMachine, State, Event> pingPongDefinition = new PingPongStateMachineDefinion();
 
 		PingPongStateMachine pingPongStateMachine1 = pingPongDefinition
 				.createPassiveStateMachine();
@@ -11,7 +13,7 @@ public class PingPongSample {
 		pingPongStateMachine1.setPlayer2("John");
 
 		PingPongStateMachine pingPongStateMachine2 = pingPongDefinition
-				.createActiveStateMachine();
+				.createPassiveStateMachine();
 		pingPongStateMachine2.setPlayer1("Michael");
 		pingPongStateMachine2.setPlayer2("Lucius");
 

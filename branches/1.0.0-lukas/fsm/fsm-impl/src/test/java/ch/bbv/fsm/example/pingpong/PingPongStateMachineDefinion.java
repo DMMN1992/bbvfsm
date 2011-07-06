@@ -30,14 +30,4 @@ public class PingPongStateMachineDefinion extends
 		in(State.Pong).executeOnEntry(pingPongStateMachine.sayPong());
 		in(State.Pong).on(Event.Out).terminate();
 	}
-
-	public PingPongStateMachine createPassiveStateMachine() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public PingPongStateMachine createActiveStateMachine() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

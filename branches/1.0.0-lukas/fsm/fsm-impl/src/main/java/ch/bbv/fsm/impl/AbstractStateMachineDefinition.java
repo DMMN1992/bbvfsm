@@ -91,4 +91,8 @@ public class AbstractStateMachineDefinition<TStateMachine extends StateMachine<T
 		// TODO Auto-generated method stub
 		throw new RuntimeException("Not implemented");
 	}
+
+	public TStateMachine createPassiveStateMachine() {
+		return null;
+	}
 }
