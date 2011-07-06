@@ -25,4 +25,14 @@ public class PingPongStateMachine extends AbstractStateMachine<State, Event> {
 		this.player2 = player2;
 	}
 
+	public Void sayStarted() {
+		System.out.println("Started");
+		return null;
+	}
+
+	public Void sayTerminated() {
+		System.out.println("Started");
+		return null;
+	}
+
 }

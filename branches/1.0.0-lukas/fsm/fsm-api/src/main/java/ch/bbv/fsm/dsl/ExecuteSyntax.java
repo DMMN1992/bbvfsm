@@ -40,4 +40,5 @@ public interface ExecuteSyntax<TState extends Enum<?>, TEvent extends Enum<?>>
 	 * @return Guard syntax.
 	 */
 	ExecuteSyntax<TState, TEvent> execute(Object methodCall);
+
 }
