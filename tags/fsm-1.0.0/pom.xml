@@ -132,11 +132,11 @@
 			<name>Nexus Staging Repo</name>
 			<url>http://javabuild.bbv.ch/nexus/content/repositories/snapshots</url>
 		</snapshotRepository>
-		<snapshot>
+		<repository>
 			<id>nexus-bbv-releases</id>
 			<name>Nexus Staging Repo</name>
 			<url>http://javabuild.bbv.ch/nexus/content/repositories/releases</url>
-		</snapshot>
+		</repository>
 	</distributionManagement>
 
 	<scm>
