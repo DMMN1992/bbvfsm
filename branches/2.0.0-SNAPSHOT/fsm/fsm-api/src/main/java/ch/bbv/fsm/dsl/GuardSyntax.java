@@ -28,13 +28,11 @@ import ch.bbv.fsm.Function;
  * @param <TEvent>
  *            the type of the events.
  */
-public interface GuardSyntax<TState extends Enum<?>, TEvent extends Enum<?>>
-		extends EventSyntax<TState, TEvent> {
+public interface GuardSyntax<TState extends Enum<?>, TEvent extends Enum<?>> extends EventSyntax<TState, TEvent> {
 
 	/**
-	 * Defines a guard for a transition. A boolean itself is not valid. There
-	 * needs to be a function call using from(owner).function returning a
-	 * boolean.
+	 * Defines a guard for a transition. A boolean itself is not valid. There needs to be a function call using from(owner).function
+	 * returning a boolean.
 	 * 
 	 * @param guard
 	 *            function call using the from construct.
@@ -49,6 +47,5 @@ public interface GuardSyntax<TState extends Enum<?>, TEvent extends Enum<?>>
 	 *            the guard.
 	 * @return Event syntax.
 	 */
-	EventSyntax<TState, TEvent> onlyIf(
-			Function<TState, TEvent, Object[], Boolean> guard);
+	EventSyntax<TState, TEvent> onlyIf(Function<TState, TEvent, Object[], Boolean> guard);
 }

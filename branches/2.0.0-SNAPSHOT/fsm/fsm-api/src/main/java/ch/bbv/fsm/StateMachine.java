@@ -22,9 +22,11 @@ import ch.bbv.fsm.events.StateMachineEventHandler;
 
 /**
  * Interface for all finite state machines.
- *
- * @param <TState> the state enumeration
- * @param <TEvent> the event enumeration
+ * 
+ * @param <TState>
+ *            the state enumeration
+ * @param <TEvent>
+ *            the event enumeration
  */
 public interface StateMachine<TState extends Enum<?>, TEvent extends Enum<?>> {
 
@@ -39,8 +41,7 @@ public interface StateMachine<TState extends Enum<?>, TEvent extends Enum<?>> {
 	void fire(TEvent eventId, Object... eventArguments);
 
 	/**
-	 * Fires the specified priority event. The event will be handled before any
-	 * already queued event.
+	 * Fires the specified priority event. The event will be handled before any already queued event.
 	 * 
 	 * @param eventId
 	 *            the event.
@@ -57,8 +58,7 @@ public interface StateMachine<TState extends Enum<?>, TEvent extends Enum<?>> {
 	boolean isExecuting();
 
 	/**
-	 * Gets a value indicating whether this instance is running. The state
-	 * machine is running if if was started and not yet stopped.
+	 * Gets a value indicating whether this instance is running. The state machine is running if if was started and not yet stopped.
 	 * 
 	 * @return true if this instance is running.
 	 */
@@ -72,15 +72,13 @@ public interface StateMachine<TState extends Enum<?>, TEvent extends Enum<?>> {
 	int numberOfQueuedEvents();
 
 	/**
-	 * Starts the state machine. Events will be processed. If the state machine
-	 * is not started then the events will be queued until the state machine is
-	 * started. Already queued events are processed.
+	 * Starts the state machine. Events will be processed. If the state machine is not started then the events will be queued until the
+	 * state machine is started. Already queued events are processed.
 	 */
 	void start();
 
 	/**
-	 * Stops the state machine. Events will be queued until the state machine is
-	 * started.
+	 * Stops the state machine. Events will be queued until the state machine is started.
 	 */
 	void stop();
 

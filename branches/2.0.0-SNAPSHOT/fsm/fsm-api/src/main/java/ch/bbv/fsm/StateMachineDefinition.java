@@ -52,8 +52,7 @@ public interface StateMachineDefinition<TState extends Enum<?>, TEvent extends E
 	 * @param subStateIds
 	 *            the sub state id's.
 	 */
-	void defineHierarchyOn(TState superStateId, TState initialSubStateId,
-			HistoryType historyType, TState... subStateIds);
+	void defineHierarchyOn(TState superStateId, TState initialSubStateId, HistoryType historyType, TState... subStateIds);
 
 	/**
 	 * Returns the name of this state machine.
@@ -84,12 +83,10 @@ public interface StateMachineDefinition<TState extends Enum<?>, TEvent extends E
 	 * @param initialState
 	 *            The state to which the state machine is initialized.
 	 */
-	StateMachine<TState, TEvent> createActiveStateMachine(String name,
-			TState initialState);
+	StateMachine<TState, TEvent> createActiveStateMachine(String name, TState initialState);
 
 	/**
-	 * Creates an active state-machine from this definition with the default
-	 * initial state.
+	 * Creates an active state-machine from this definition with the default initial state.
 	 * 
 	 * @param name
 	 *            the state machine's name
@@ -104,12 +101,10 @@ public interface StateMachineDefinition<TState extends Enum<?>, TEvent extends E
 	 * @param initialState
 	 *            The state to which the state machine is initialized.
 	 */
-	StateMachine<TState, TEvent> createPassiveStateMachine(String name,
-			TState initialState);
+	StateMachine<TState, TEvent> createPassiveStateMachine(String name, TState initialState);
 
 	/**
-	 * Creates an passive state-machine from this definition with the default
-	 * initial state.
+	 * Creates an passive state-machine from this definition with the default initial state.
 	 * 
 	 * @param name
 	 *            the state machine's name

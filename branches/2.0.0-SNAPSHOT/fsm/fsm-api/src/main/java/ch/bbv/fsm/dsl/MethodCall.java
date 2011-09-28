@@ -28,8 +28,7 @@ import java.lang.reflect.Method;
 public interface MethodCall {
 
 	/**
-	 * Executes the method in the owner with the arguments. A RuntimeException
-	 * is thrown if an error occurs.
+	 * Executes the method in the owner with the arguments. A RuntimeException is thrown if an error occurs.
 	 */
 	void execute();
 

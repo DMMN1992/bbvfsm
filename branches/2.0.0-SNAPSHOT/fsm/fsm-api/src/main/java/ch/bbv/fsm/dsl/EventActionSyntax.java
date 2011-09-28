@@ -28,8 +28,7 @@ import ch.bbv.fsm.Action;
  * @param <TEvent>
  *            the type of the events.
  */
-public interface EventActionSyntax<TState extends Enum<?>, TEvent extends Enum<?>>
-		extends EventSyntax<TState, TEvent> {
+public interface EventActionSyntax<TState extends Enum<?>, TEvent extends Enum<?>> extends EventSyntax<TState, TEvent> {
 
 	/**
 	 * Defines the actions to execute on a transition.

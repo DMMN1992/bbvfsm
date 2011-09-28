@@ -27,8 +27,7 @@ package ch.bbv.fsm.events;
  * @param <TEvent>
  *            the type of the events.
  */
-public interface TransitionExceptionEventArgs<TState extends Enum<?>, TEvent extends Enum<?>>
-		extends TransitionEventArgs<TState, TEvent> {
+public interface TransitionExceptionEventArgs<TState extends Enum<?>, TEvent extends Enum<?>> extends TransitionEventArgs<TState, TEvent> {
 
 	/**
 	 * Returns the exception thrown during the execution of a transition.

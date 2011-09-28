@@ -60,13 +60,11 @@ public interface StateMachineEventHandler<TState extends Enum<?>, TEvent extends
 	void onTransitionDeclined(TransitionEventArgs<TState, TEvent> arg);
 
 	/**
-	 * Occurs when an exception was thrown inside a transition of the state
-	 * machine.
+	 * Occurs when an exception was thrown inside a transition of the state machine.
 	 * 
 	 * @param arg
 	 *            the event argument.
 	 */
-	void onTransitionThrowsException(
-			TransitionExceptionEventArgs<TState, TEvent> arg);
+	void onTransitionThrowsException(TransitionExceptionEventArgs<TState, TEvent> arg);
 
 }

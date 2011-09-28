@@ -28,8 +28,7 @@ import ch.bbv.fsm.Action;
  * @param <TEvent>
  *            the type of the events.
  */
-public interface ExitActionSyntax<TState extends Enum<?>, TEvent extends Enum<?>>
-		extends EventSyntax<TState, TEvent> {
+public interface ExitActionSyntax<TState extends Enum<?>, TEvent extends Enum<?>> extends EventSyntax<TState, TEvent> {
 
 	/**
 	 * Defines an exit action.
@@ -51,8 +50,7 @@ public interface ExitActionSyntax<TState extends Enum<?>, TEvent extends Enum<?>
 	 *            the parameter of the action.
 	 * @return Exit action syntax.
 	 */
-	<T> EventSyntax<TState, TEvent> executeOnExit(
-			Action<TState, TEvent> action, T parameter);
+	<T> EventSyntax<TState, TEvent> executeOnExit(Action<TState, TEvent> action, T parameter);
 
 	/**
 	 * Defines an exit action.

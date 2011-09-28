@@ -19,8 +19,7 @@
 package ch.bbv.fsm.events;
 
 /**
- * Abstract implementation of a StateMachineEventHandler. All methods have an
- * empty body.
+ * Abstract implementation of a StateMachineEventHandler. All methods have an empty body.
  * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
  * @param <TState>
@@ -29,36 +28,36 @@ package ch.bbv.fsm.events;
  *            the type of the events.
  */
 public abstract class StateMachineEventAdapter<TState extends Enum<?>, TEvent extends Enum<?>> implements
-        StateMachineEventHandler<TState, TEvent> {
+		StateMachineEventHandler<TState, TEvent> {
 
-    @Override
-    public void onExceptionThrown(final ExceptionEventArgs<TState, TEvent> arg) {
-        // empty method body
+	@Override
+	public void onExceptionThrown(final ExceptionEventArgs<TState, TEvent> arg) {
+		// empty method body
 
-    }
+	}
 
-    @Override
-    public void onTransitionBegin(final TransitionEventArgs<TState, TEvent> args) {
-        // empty method body
+	@Override
+	public void onTransitionBegin(final TransitionEventArgs<TState, TEvent> args) {
+		// empty method body
 
-    }
+	}
 
-    @Override
-    public void onTransitionCompleted(final TransitionCompletedEventArgs<TState, TEvent> arg) {
-        // empty method body
+	@Override
+	public void onTransitionCompleted(final TransitionCompletedEventArgs<TState, TEvent> arg) {
+		// empty method body
 
-    }
+	}
 
-    @Override
-    public void onTransitionDeclined(final TransitionEventArgs<TState, TEvent> arg) {
-        // empty method body
+	@Override
+	public void onTransitionDeclined(final TransitionEventArgs<TState, TEvent> arg) {
+		// empty method body
 
-    }
+	}
 
-    @Override
-    public void onTransitionThrowsException(final TransitionExceptionEventArgs<TState, TEvent> arg) {
-        // empty method body
+	@Override
+	public void onTransitionThrowsException(final TransitionExceptionEventArgs<TState, TEvent> arg) {
+		// empty method body
 
-    }
+	}
 
 }

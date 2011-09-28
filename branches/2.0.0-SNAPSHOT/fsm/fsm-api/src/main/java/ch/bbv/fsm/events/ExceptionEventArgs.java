@@ -27,8 +27,7 @@ package ch.bbv.fsm.events;
  * @param <TEvent>
  *            the type of the events.
  */
-public interface ExceptionEventArgs<TState extends Enum<?>, TEvent extends Enum<?>>
-		extends ContextEventArgs<TState, TEvent> {
+public interface ExceptionEventArgs<TState extends Enum<?>, TEvent extends Enum<?>> extends ContextEventArgs<TState, TEvent> {
 
 	/**
 	 * Returns the exception.

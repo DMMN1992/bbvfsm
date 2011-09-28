@@ -29,8 +29,8 @@ import ch.bbv.fsm.Action;
  * @param <TEvent>
  *            the type of the events.
  */
-public interface EntryActionSyntax<TState extends Enum<?>, TEvent extends Enum<?>>
-		extends ExitActionSyntax<TState, TEvent>, EventSyntax<TState, TEvent> {
+public interface EntryActionSyntax<TState extends Enum<?>, TEvent extends Enum<?>> extends ExitActionSyntax<TState, TEvent>,
+		EventSyntax<TState, TEvent> {
 
 	/**
 	 * Defines an entry action.
@@ -39,8 +39,7 @@ public interface EntryActionSyntax<TState extends Enum<?>, TEvent extends Enum<?
 	 *            the Action
 	 * @return the ExitActionSyntax.
 	 */
-	ExitActionSyntax<TState, TEvent> executeOnEntry(
-			Action<TState, TEvent> action);
+	ExitActionSyntax<TState, TEvent> executeOnEntry(Action<TState, TEvent> action);
 
 	/**
 	 * Defines an entry action.
@@ -53,8 +52,7 @@ public interface EntryActionSyntax<TState extends Enum<?>, TEvent extends Enum<?
 	 *            (necessary?)
 	 * @return the ExitActionSyntax
 	 */
-	<T> ExitActionSyntax<TState, TEvent> executeOnEntry(
-			Action<TState, TEvent> action, T parameter);
+	<T> ExitActionSyntax<TState, TEvent> executeOnEntry(Action<TState, TEvent> action, T parameter);
 
 	/**
 	 * Defines an entry action.

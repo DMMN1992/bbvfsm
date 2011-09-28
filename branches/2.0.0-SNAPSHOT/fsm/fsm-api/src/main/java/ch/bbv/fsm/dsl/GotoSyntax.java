@@ -26,8 +26,7 @@ package ch.bbv.fsm.dsl;
  * @param <TEvent>
  *            the type of the events.
  */
-public interface GotoSyntax<TState extends Enum<?>, TEvent extends Enum<?>>
-		extends EventSyntax<TState, TEvent> {
+public interface GotoSyntax<TState extends Enum<?>, TEvent extends Enum<?>> extends EventSyntax<TState, TEvent> {
 
 	/**
 	 * Defines where to go in response to an event.

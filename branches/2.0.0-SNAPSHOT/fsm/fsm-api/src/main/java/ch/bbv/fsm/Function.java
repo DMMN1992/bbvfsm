@@ -43,7 +43,6 @@ public interface Function<TState extends Enum<?>, TEvent extends Enum<?>, Parame
 	 *            the parameter of the function.
 	 * @return the return value of the function.
 	 */
-	ReturnType execute(StateMachine<TState, TEvent> stateMachine,
-			ParameterType parameter);
+	ReturnType execute(StateMachine<TState, TEvent> stateMachine, ParameterType parameter);
 
 }
