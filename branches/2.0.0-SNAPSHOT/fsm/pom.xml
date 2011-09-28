@@ -126,10 +126,8 @@
 				</executions>
 				<configuration>
 					<includeTestSourceDirectory>true</includeTestSourceDirectory>
-					<!-- 
-					<configLocation>${basedir}/common/tmcom-cs.xml</configLocation>
+					<configLocation>${basedir}/common/bbvfsm-cs.xml</configLocation>
 					<propertiesLocation>${basedir}/common/checkstyle_maven.properties</propertiesLocation>
-					 -->
 					<failsOnError>true</failsOnError>
 					<failOnViolation>true</failOnViolation>
 					<consoleOutput>true</consoleOutput>
