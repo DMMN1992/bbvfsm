@@ -134,32 +134,6 @@
 					<violationSeverity>info</violationSeverity>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>cobertura-maven-plugin</artifactId>
-				<version>2.5.1</version>
-				<executions>
-					<execution>
-						<phase>verify</phase>
-						<goals>
-							<goal>clean</goal>
-							<goal>cobertura</goal>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<check>
-						<haltOnFailure>true</haltOnFailure>
-						<totalLineRate>80</totalLineRate>
-					</check>
-					<formats>
-						<format>html</format>
-						<format>xml</format>
-					</formats>
-				</configuration>
-			</plugin>
-
 		</plugins>
 	</build>
 
