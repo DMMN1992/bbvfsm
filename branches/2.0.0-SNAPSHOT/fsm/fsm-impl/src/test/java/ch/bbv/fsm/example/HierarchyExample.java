@@ -47,10 +47,8 @@ public class HierarchyExample {
 	public void setup() {
 		stateMachineDefinition = new StateMachineDefinitionImpl<HierarchyExample.States, HierarchyExample.Events>();
 
-		stateMachineDefinition.defineHierarchyOn(States.B, States.B_1,
-				HistoryType.NONE, States.B_1, States.B_2);
-		stateMachineDefinition.defineHierarchyOn(States.D, States.D_1,
-				HistoryType.SHALLOW, States.D_1, States.D_2);
+		stateMachineDefinition.defineHierarchyOn(States.B, States.B_1, HistoryType.NONE, States.B_1, States.B_2);
+		stateMachineDefinition.defineHierarchyOn(States.D, States.D_1, HistoryType.SHALLOW, States.D_1, States.D_2);
 
 		stateMachineDefinition.in(States.A).on(Events.toB).goTo(States.B);
 		stateMachineDefinition.in(States.B).on(Events.toB).goTo(States.B);
@@ -63,8 +61,7 @@ public class HierarchyExample {
 
 	@Test
 	public void testDeep() {
-		StateMachine<States, Events> testee = stateMachineDefinition
-				.createPassiveStateMachine("testDeep", States.A);
+		final StateMachine<States, Events> testee = stateMachineDefinition.createPassiveStateMachine("testDeep", States.A);
 		testee.start();
 
 		testee.fire(Events.toB, true);
@@ -88,9 +85,8 @@ public class HierarchyExample {
 
 	@Test
 	public void testGoDownAndEventsInSuperState() {
-		StateMachine<States, Events> testee = stateMachineDefinition
-				.createPassiveStateMachine("testGoDownAndEventsInSuperState",
-						States.A);
+		final StateMachine<States, Events> testee = stateMachineDefinition.createPassiveStateMachine("testGoDownAndEventsInSuperState",
+				States.A);
 
 		testee.start();
 		testee.fire(Events.toB, true);
@@ -106,8 +102,7 @@ public class HierarchyExample {
 
 	@Test
 	public void testShallow() {
-		StateMachine<States, Events> testee = stateMachineDefinition
-				.createPassiveStateMachine("testShallow", States.A);
+		final StateMachine<States, Events> testee = stateMachineDefinition.createPassiveStateMachine("testShallow", States.A);
 
 		testee.start();
 		testee.fire(Events.toB, true);

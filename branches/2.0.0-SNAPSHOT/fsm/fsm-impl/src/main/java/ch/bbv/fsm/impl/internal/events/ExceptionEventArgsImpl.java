@@ -29,8 +29,7 @@ import ch.bbv.fsm.impl.internal.state.StateContext;
  * @param <TEvent>
  *            the event enumeration
  */
-public class ExceptionEventArgsImpl<TState extends Enum<?>, TEvent extends Enum<?>>
-		extends ContextEventArgsImpl<TState, TEvent> implements
+public class ExceptionEventArgsImpl<TState extends Enum<?>, TEvent extends Enum<?>> extends ContextEventArgsImpl<TState, TEvent> implements
 		ExceptionEventArgs<TState, TEvent> {
 
 	/**
@@ -46,9 +45,7 @@ public class ExceptionEventArgsImpl<TState extends Enum<?>, TEvent extends Enum<
 	 * @param exception
 	 *            the exception.
 	 */
-	public ExceptionEventArgsImpl(
-			final StateContext<TState, TEvent> stateContext,
-			final Exception exception) {
+	public ExceptionEventArgsImpl(final StateContext<TState, TEvent> stateContext, final Exception exception) {
 		super(stateContext);
 		this.exception = exception;
 	}

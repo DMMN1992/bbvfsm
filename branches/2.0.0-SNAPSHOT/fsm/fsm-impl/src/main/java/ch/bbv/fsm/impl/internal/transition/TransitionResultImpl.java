@@ -30,8 +30,7 @@ import ch.bbv.fsm.impl.internal.state.State;
  * @param <TEvent>
  *            the type of events
  */
-public class TransitionResultImpl<TState extends Enum<?>, TEvent extends Enum<?>>
-		implements TransitionResult<TState, TEvent> {
+public class TransitionResultImpl<TState extends Enum<?>, TEvent extends Enum<?>> implements TransitionResult<TState, TEvent> {
 
 	/**
 	 * This value represents that no transition was fired.
@@ -50,9 +49,7 @@ public class TransitionResultImpl<TState extends Enum<?>, TEvent extends Enum<?>
 	 * @param exceptions
 	 *            the exceptions
 	 */
-	public TransitionResultImpl(final boolean fired,
-			final State<TState, TEvent> newState,
-			final List<? extends Throwable> exceptions) {
+	public TransitionResultImpl(final boolean fired, final State<TState, TEvent> newState, final List<? extends Throwable> exceptions) {
 		this.fired = fired;
 		this.newState = newState;
 		this.exceptions = exceptions;

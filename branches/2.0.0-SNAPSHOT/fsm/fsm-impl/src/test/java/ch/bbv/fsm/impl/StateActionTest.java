@@ -40,9 +40,7 @@ public class StateActionTest {
 		final Action<States, Events> action = new Action<States, Events>() {
 
 			@Override
-			public void execute(
-					final StateMachine<States, Events> stateMachine,
-					final Object... arguments) {
+			public void execute(final StateMachine<States, Events> stateMachine, final Object... arguments) {
 				entered[0] = true;
 			}
 
@@ -50,8 +48,7 @@ public class StateActionTest {
 
 		stateMachineDefinition.in(States.A).executeOnEntry(action);
 
-		stateMachineDefinition.createPassiveStateMachine("entryAction",
-				States.A);
+		stateMachineDefinition.createPassiveStateMachine("entryAction", States.A);
 
 		Assert.assertTrue(entered[0]);
 	}
@@ -68,19 +65,15 @@ public class StateActionTest {
 		final Action<States, Events> action = new Action<States, Events>() {
 
 			@Override
-			public void execute(
-					final StateMachine<States, Events> stateMachine,
-					final Object... arguments) {
+			public void execute(final StateMachine<States, Events> stateMachine, final Object... arguments) {
 				entered[0] = true;
 			}
 
 		};
 
-		stateMachineDefinition.in(States.A).executeOnExit(action).on(Events.B)
-				.goTo(States.B);
+		stateMachineDefinition.in(States.A).executeOnExit(action).on(Events.B).goTo(States.B);
 
-		StateMachine<States, Events> fsm = stateMachineDefinition
-				.createPassiveStateMachine("exitAction", States.A);
+		final StateMachine<States, Events> fsm = stateMachineDefinition.createPassiveStateMachine("exitAction", States.A);
 		fsm.start();
 		fsm.fire(Events.B);
 
@@ -100,9 +93,7 @@ public class StateActionTest {
 		final Action<States, Events> action = new Action<States, Events>() {
 
 			@Override
-			public void execute(
-					final StateMachine<States, Events> stateMachine,
-					final Object... arguments) {
+			public void execute(final StateMachine<States, Events> stateMachine, final Object... arguments) {
 				argument[0] = (Integer) arguments[0];
 			}
 
@@ -110,8 +101,7 @@ public class StateActionTest {
 
 		stateMachineDefinition.in(States.A).executeOnEntry(action, 3);
 
-		stateMachineDefinition.createPassiveStateMachine(
-				"parameterizedEntryAction", States.A);
+		stateMachineDefinition.createPassiveStateMachine("parameterizedEntryAction", States.A);
 
 		Assert.assertEquals(3, argument[0]);
 	}
@@ -120,7 +110,7 @@ public class StateActionTest {
 	 * Exit actions can be parametrized.
 	 */
 	@Test
-	public void ParametrizedExitAction() {
+	public void parametrizedExitAction() {
 		final StateMachineDefinition<States, Events> stateMachineDefinition = new StateMachineDefinitionImpl<States, Events>();
 
 		final int[] argument = new int[1];
@@ -129,19 +119,15 @@ public class StateActionTest {
 		final Action<States, Events> action = new Action<States, Events>() {
 
 			@Override
-			public void execute(
-					final StateMachine<States, Events> stateMachine,
-					final Object... arguments) {
+			public void execute(final StateMachine<States, Events> stateMachine, final Object... arguments) {
 				argument[0] = (Integer) arguments[0];
 			}
 
 		};
 
-		stateMachineDefinition.in(States.A).executeOnExit(action, 3)
-				.on(Events.B).goTo(States.B);
+		stateMachineDefinition.in(States.A).executeOnExit(action, 3).on(Events.B).goTo(States.B);
 
-		StateMachine<States, Events> fsm = stateMachineDefinition
-				.createPassiveStateMachine("exitAction", States.A);
+		final StateMachine<States, Events> fsm = stateMachineDefinition.createPassiveStateMachine("exitAction", States.A);
 		fsm.start();
 		fsm.fire(Events.B);
 

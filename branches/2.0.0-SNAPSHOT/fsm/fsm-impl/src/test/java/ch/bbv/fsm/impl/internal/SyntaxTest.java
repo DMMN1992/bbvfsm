@@ -70,17 +70,13 @@ public class SyntaxTest {
 
 	@Before
 	public void setup() {
-		this.definition = new StateMachineDefinitionImpl<States, Events>(
-				"SimpleExample");
+		this.definition = new StateMachineDefinitionImpl<States, Events>("SimpleExample");
 
-		this.definition.in(States.A)
-				.executeOnEntry(from(this).fooEntry(ENTRY_A))
-				.executeOnExit(from(this).fooExit(EXIT_A)).on(Events.toB)
+		this.definition.in(States.A).executeOnEntry(from(this).fooEntry(ENTRY_A)).executeOnExit(from(this).fooExit(EXIT_A)).on(Events.toB)
 				.goTo(States.B).onlyIf(from(this).bar(any(Boolean.class)));
 
-		this.definition.in(States.B)
-				.executeOnEntry(from(this).fooEntry(ENTRY_B)).on(Events.toB)
-				.goTo(States.B).onlyIf(from(this).bar(any(Boolean.class)));
+		this.definition.in(States.B).executeOnEntry(from(this).fooEntry(ENTRY_B)).on(Events.toB).goTo(States.B)
+				.onlyIf(from(this).bar(any(Boolean.class)));
 
 		this.definition.in(States.B).on(Events.toD).goTo(States.D);
 		this.definition.in(States.D).on(Events.toA).goTo(States.A);
@@ -91,8 +87,7 @@ public class SyntaxTest {
 	 */
 	@Test
 	public void t1() {
-		StateMachine<States, Events> testee = this.definition
-				.createPassiveStateMachine("testee", States.A);
+		final StateMachine<States, Events> testee = this.definition.createPassiveStateMachine("testee", States.A);
 		testee.start();
 		final String enterA = this.fooEntryValue;
 		testee.fire(Events.toB, true);

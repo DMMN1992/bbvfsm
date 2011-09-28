@@ -42,17 +42,13 @@ public interface State<TState extends Enum<?>, TEvent extends Enum<?>> {
 	void addSubState(State<TState, TEvent> state);
 
 	/**
-	 * Enters this state by its history depending on its
-	 * <code>HistoryType</code>. The <code>Entry</code> method has to be called
-	 * already.
+	 * Enters this state by its history depending on its <code>HistoryType</code>. The <code>Entry</code> method has to be called already.
 	 * 
 	 * @param stateContext
 	 *            the state context.
-	 * @return the active state. (depends on this states
-	 *         <code>HistoryType</code>)
+	 * @return the active state. (depends on this states <code>HistoryType</code>)
 	 */
-	State<TState, TEvent> enterByHistory(
-			StateContext<TState, TEvent> stateContext);
+	State<TState, TEvent> enterByHistory(StateContext<TState, TEvent> stateContext);
 
 	/**
 	 * Enters this state is deep mode: mode if there is one.
@@ -64,8 +60,7 @@ public interface State<TState extends Enum<?>, TEvent extends Enum<?>> {
 	State<TState, TEvent> enterDeep(StateContext<TState, TEvent> stateContext);
 
 	/**
-	 * Enters this state is shallow mode: The entry action is executed and the
-	 * initial state is entered in shallow mode if there is one.
+	 * Enters this state is shallow mode: The entry action is executed and the initial state is entered in shallow mode if there is one.
 	 * 
 	 * @param stateContext
 	 *            the event context.
@@ -96,8 +91,7 @@ public interface State<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 *            the event context.
 	 * @return the result of the transition.
 	 */
-	TransitionResult<TState, TEvent> fire(
-			TransitionContext<TState, TEvent> context);
+	TransitionResult<TState, TEvent> fire(TransitionContext<TState, TEvent> context);
 
 	/**
 	 * Returns the entry action.

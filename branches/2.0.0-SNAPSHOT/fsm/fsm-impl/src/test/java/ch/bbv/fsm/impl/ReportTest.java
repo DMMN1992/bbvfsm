@@ -46,23 +46,16 @@ public class ReportTest {
 	}
 
 	@Test
-	public void Report() {
-		this.testee.defineHierarchyOn(States.B, States.B1, HistoryType.NONE,
-				States.B1, States.B2);
-		this.testee.defineHierarchyOn(States.C, States.C1, HistoryType.SHALLOW,
-				States.C1, States.C2);
-		this.testee.defineHierarchyOn(States.C1, States.C1a,
-				HistoryType.SHALLOW, States.C1a, States.C1b);
-		this.testee.defineHierarchyOn(States.D, States.D1, HistoryType.DEEP,
-				States.D1, States.D2);
-		this.testee.defineHierarchyOn(States.D1, States.D1a, HistoryType.DEEP,
-				States.D1a, States.D1b);
+	public void report() {
+		this.testee.defineHierarchyOn(States.B, States.B1, HistoryType.NONE, States.B1, States.B2);
+		this.testee.defineHierarchyOn(States.C, States.C1, HistoryType.SHALLOW, States.C1, States.C2);
+		this.testee.defineHierarchyOn(States.C1, States.C1a, HistoryType.SHALLOW, States.C1a, States.C1b);
+		this.testee.defineHierarchyOn(States.D, States.D1, HistoryType.DEEP, States.D1, States.D2);
+		this.testee.defineHierarchyOn(States.D1, States.D1a, HistoryType.DEEP, States.D1a, States.D1b);
 
-		this.testee.in(States.A).executeOnEntry(from(this).foo())
-				.executeOnExit(from(this).foo()).on(Events.A).on(Events.B)
-				.goTo(States.B).on(Events.C).goTo(States.C1)
-				.onlyIf(from(this).onlyIfCheck(true)).on(Events.C)
-				.goTo(States.C2).onlyIf(from(this).onlyIfCheck(false));
+		this.testee.in(States.A).executeOnEntry(from(this).foo()).executeOnExit(from(this).foo()).on(Events.A).on(Events.B).goTo(States.B)
+				.on(Events.C).goTo(States.C1).onlyIf(from(this).onlyIfCheck(true)).on(Events.C).goTo(States.C2)
+				.onlyIf(from(this).onlyIfCheck(false));
 
 		this.testee.in(States.B).on(Events.A).goTo(States.A);
 
@@ -79,7 +72,7 @@ public class ReportTest {
 	 * Initialization.
 	 */
 	@Before
-	public void SetUp() {
+	public void setUp() {
 		this.testee = new StateMachineDefinitionImpl<States, Events>();
 	}
 }

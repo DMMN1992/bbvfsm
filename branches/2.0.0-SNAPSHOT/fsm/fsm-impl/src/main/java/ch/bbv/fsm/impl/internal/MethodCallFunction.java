@@ -32,8 +32,7 @@ import ch.bbv.fsm.dsl.MethodCall;
  * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
  */
-public class MethodCallFunction<TState extends Enum<?>, TEvent extends Enum<?>>
-		implements Function<TState, TEvent, Object[], Boolean> {
+public class MethodCallFunction<TState extends Enum<?>, TEvent extends Enum<?>> implements Function<TState, TEvent, Object[], Boolean> {
 
 	private final MethodCall methodCall;
 
@@ -48,8 +47,7 @@ public class MethodCallFunction<TState extends Enum<?>, TEvent extends Enum<?>>
 	}
 
 	@Override
-	public Boolean execute(final StateMachine<TState, TEvent> stateMachine,
-			final Object[] args) {
+	public Boolean execute(final StateMachine<TState, TEvent> stateMachine, final Object[] args) {
 		try {
 			Object[] arguments;
 			if (args.length == this.methodCall.getArguments().length) {
@@ -58,8 +56,7 @@ public class MethodCallFunction<TState extends Enum<?>, TEvent extends Enum<?>>
 				arguments = this.methodCall.getArguments();
 			}
 
-			return (Boolean) this.methodCall.getMethod().invoke(
-					this.methodCall.getOwner(), arguments);
+			return (Boolean) this.methodCall.getMethod().invoke(this.methodCall.getOwner(), arguments);
 		} catch (final Exception e) {
 			throw new RuntimeException(e);
 		}

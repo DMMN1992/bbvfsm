@@ -29,9 +29,8 @@ import ch.bbv.fsm.impl.internal.transition.TransitionContext;
  * @param <TEvent>
  *            the event enumeration
  */
-public class TransitionExceptionEventArgsImpl<TState extends Enum<?>, TEvent extends Enum<?>>
-		extends TransitionEventArgsImpl<TState, TEvent> implements
-		TransitionExceptionEventArgs<TState, TEvent> {
+public class TransitionExceptionEventArgsImpl<TState extends Enum<?>, TEvent extends Enum<?>> extends
+		TransitionEventArgsImpl<TState, TEvent> implements TransitionExceptionEventArgs<TState, TEvent> {
 
 	/**
 	 * The exception.
@@ -46,9 +45,7 @@ public class TransitionExceptionEventArgsImpl<TState extends Enum<?>, TEvent ext
 	 * @param exception
 	 *            the exception
 	 */
-	public TransitionExceptionEventArgsImpl(
-			final TransitionContext<TState, TEvent> context,
-			final Exception exception) {
+	public TransitionExceptionEventArgsImpl(final TransitionContext<TState, TEvent> context, final Exception exception) {
 		super(context);
 		this.exception = exception;
 	}

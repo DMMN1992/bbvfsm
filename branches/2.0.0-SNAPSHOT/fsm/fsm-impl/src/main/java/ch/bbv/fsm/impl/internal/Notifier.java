@@ -40,8 +40,7 @@ public interface Notifier<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param exception
 	 *            the exception.
 	 */
-	void onExceptionThrown(StateContext<TState, TEvent> stateContext,
-			Exception exception);
+	void onExceptionThrown(StateContext<TState, TEvent> stateContext, Exception exception);
 
 	/**
 	 * Called when an exception was thrown in a transition.
@@ -51,8 +50,7 @@ public interface Notifier<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param exception
 	 *            the exception.
 	 */
-	void onExceptionThrown(TransitionContext<TState, TEvent> context,
-			Exception exception);
+	void onExceptionThrown(TransitionContext<TState, TEvent> context, Exception exception);
 
 	/**
 	 * Called before a transition is executed.

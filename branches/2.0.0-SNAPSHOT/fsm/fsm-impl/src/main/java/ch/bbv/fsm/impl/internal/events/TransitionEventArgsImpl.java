@@ -29,8 +29,7 @@ import ch.bbv.fsm.impl.internal.transition.TransitionContext;
  * @param <TEvent>
  *            the event enumeration
  */
-public class TransitionEventArgsImpl<TState extends Enum<?>, TEvent extends Enum<?>>
-		extends ContextEventArgsImpl<TState, TEvent> implements
+public class TransitionEventArgsImpl<TState extends Enum<?>, TEvent extends Enum<?>> extends ContextEventArgsImpl<TState, TEvent> implements
 		TransitionEventArgs<TState, TEvent> {
 	/**
 	 * Initializes a new instance.
@@ -38,8 +37,7 @@ public class TransitionEventArgsImpl<TState extends Enum<?>, TEvent extends Enum
 	 * @param transitionContext
 	 *            the transition context.
 	 */
-	public TransitionEventArgsImpl(
-			final TransitionContext<TState, TEvent> transitionContext) {
+	public TransitionEventArgsImpl(final TransitionContext<TState, TEvent> transitionContext) {
 		super(transitionContext);
 	}
 
@@ -72,7 +70,6 @@ public class TransitionEventArgsImpl<TState extends Enum<?>, TEvent extends Enum
 	 */
 	@Override
 	public String toString() {
-		return String.format("Transition from state %s on event %s.",
-				this.getStateId(), this.getEventId());
+		return String.format("Transition from state %s on event %s.", this.getStateId(), this.getEventId());
 	}
 }

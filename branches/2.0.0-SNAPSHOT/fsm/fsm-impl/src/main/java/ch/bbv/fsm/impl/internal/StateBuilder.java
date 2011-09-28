@@ -41,10 +41,8 @@ import ch.bbv.fsm.impl.internal.transition.TransitionImpl;
  * @param <TEvent>
  *            the type of the events.
  */
-public class StateBuilder<TState extends Enum<?>, TEvent extends Enum<?>>
-		implements EntryActionSyntax<TState, TEvent>,
-		EventActionSyntax<TState, TEvent>, ExecuteSyntax<TState, TEvent>,
-		GotoSyntax<TState, TEvent> {
+public class StateBuilder<TState extends Enum<?>, TEvent extends Enum<?>> implements EntryActionSyntax<TState, TEvent>,
+		EventActionSyntax<TState, TEvent>, ExecuteSyntax<TState, TEvent>, GotoSyntax<TState, TEvent> {
 
 	private final State<TState, TEvent> state;
 	private final StateDictionary<TState, TEvent> stateDictionary;
@@ -58,69 +56,56 @@ public class StateBuilder<TState extends Enum<?>, TEvent extends Enum<?>>
 	 * @param stateDictionary
 	 *            the state dictionary
 	 */
-	public StateBuilder(final State<TState, TEvent> state,
-			final StateDictionary<TState, TEvent> stateDictionary) {
+	public StateBuilder(final State<TState, TEvent> state, final StateDictionary<TState, TEvent> stateDictionary) {
 		this.state = state;
 		this.stateDictionary = stateDictionary;
 	}
 
 	@Override
-	public ExecuteSyntax<TState, TEvent> execute(
-			final Action<TState, TEvent> action) {
+	public ExecuteSyntax<TState, TEvent> execute(final Action<TState, TEvent> action) {
 		this.currentTransition.getActions().add(action);
 		return this;
 	}
 
 	@Override
 	public ExecuteSyntax<TState, TEvent> execute(final Object methodCall) {
-		this.currentTransition.getActions().add(
-				new MethodCallAction<TState, TEvent>(MethodCallImpl.pop()));
+		this.currentTransition.getActions().add(new MethodCallAction<TState, TEvent>(MethodCallImpl.pop()));
 		return this;
 	}
 
 	@Override
-	public ExitActionSyntax<TState, TEvent> executeOnEntry(
-			final Action<TState, TEvent> action) {
-		this.state.setEntryAction(new ActionHolderNoParameter<TState, TEvent>(
-				action));
+	public ExitActionSyntax<TState, TEvent> executeOnEntry(final Action<TState, TEvent> action) {
+		this.state.setEntryAction(new ActionHolderNoParameter<TState, TEvent>(action));
 		return this;
 	}
 
 	@Override
-	public <T> ExitActionSyntax<TState, TEvent> executeOnEntry(
-			final Action<TState, TEvent> action, final T parameter) {
-		this.state.setEntryAction(new ActionHolderParameter<TState, TEvent, T>(
-				action, parameter));
+	public <T> ExitActionSyntax<TState, TEvent> executeOnEntry(final Action<TState, TEvent> action, final T parameter) {
+		this.state.setEntryAction(new ActionHolderParameter<TState, TEvent, T>(action, parameter));
 		return this;
 	}
 
 	@Override
 	public ExitActionSyntax<TState, TEvent> executeOnEntry(final Object action) {
-		this.state.setEntryAction(new ActionHolderMethodCall<TState, TEvent>(
-				MethodCallImpl.pop()));
+		this.state.setEntryAction(new ActionHolderMethodCall<TState, TEvent>(MethodCallImpl.pop()));
 		return this;
 	}
 
 	@Override
-	public ExitActionSyntax<TState, TEvent> executeOnExit(
-			final Action<TState, TEvent> action) {
-		this.state.setExitAction(new ActionHolderNoParameter<TState, TEvent>(
-				action));
+	public ExitActionSyntax<TState, TEvent> executeOnExit(final Action<TState, TEvent> action) {
+		this.state.setExitAction(new ActionHolderNoParameter<TState, TEvent>(action));
 		return this;
 	}
 
 	@Override
-	public <T> EventSyntax<TState, TEvent> executeOnExit(
-			final Action<TState, TEvent> action, final T parameter) {
-		this.state.setExitAction(new ActionHolderParameter<TState, TEvent, T>(
-				action, parameter));
+	public <T> EventSyntax<TState, TEvent> executeOnExit(final Action<TState, TEvent> action, final T parameter) {
+		this.state.setExitAction(new ActionHolderParameter<TState, TEvent, T>(action, parameter));
 		return this;
 	}
 
 	@Override
 	public ExitActionSyntax<TState, TEvent> executeOnExit(final Object action) {
-		this.state.setExitAction(new ActionHolderMethodCall<TState, TEvent>(
-				MethodCallImpl.pop()));
+		this.state.setExitAction(new ActionHolderMethodCall<TState, TEvent>(MethodCallImpl.pop()));
 		return this;
 	}
 
@@ -139,15 +124,13 @@ public class StateBuilder<TState extends Enum<?>, TEvent extends Enum<?>>
 
 	@Override
 	public EventSyntax<TState, TEvent> onlyIf(final boolean guard) {
-		this.currentTransition.setGuard(new MethodCallFunction<TState, TEvent>(
-				MethodCallImpl.pop()));
+		this.currentTransition.setGuard(new MethodCallFunction<TState, TEvent>(MethodCallImpl.pop()));
 		return this;
 
 	}
 
 	@Override
-	public EventSyntax<TState, TEvent> onlyIf(
-			final Function<TState, TEvent, Object[], Boolean> guard) {
+	public EventSyntax<TState, TEvent> onlyIf(final Function<TState, TEvent, Object[], Boolean> guard) {
 		this.currentTransition.setGuard(guard);
 		return this;
 	}

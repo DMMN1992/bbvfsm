@@ -39,35 +39,29 @@ import com.google.common.collect.Lists;
 /**
  * Base for state machine test fixtures.
  */
-public abstract class BaseStateMachineTest
-
-{
+public abstract class BaseStateMachineTest {
 	private class Handler extends StateMachineEventAdapter<States, Events> {
 
 		@Override
-		public void onExceptionThrown(
-				final ExceptionEventArgs<States, Events> arg) {
+		public void onExceptionThrown(final ExceptionEventArgs<States, Events> arg) {
 			BaseStateMachineTest.this.exceptions.add(arg.getException());
 
 		}
 
 		@Override
-		public void onTransitionBegin(
-				final TransitionEventArgs<States, Events> args) {
+		public void onTransitionBegin(final TransitionEventArgs<States, Events> args) {
 			BaseStateMachineTest.this.transitionBeginMessages.add(args);
 
 		}
 
 		@Override
-		public void onTransitionCompleted(
-				final TransitionCompletedEventArgs<States, Events> arg) {
+		public void onTransitionCompleted(final TransitionCompletedEventArgs<States, Events> arg) {
 			BaseStateMachineTest.this.transitionCompletedMessages.add(arg);
 
 		}
 
 		@Override
-		public void onTransitionDeclined(
-				final TransitionEventArgs<States, Events> arg) {
+		public void onTransitionDeclined(final TransitionEventArgs<States, Events> arg) {
 			BaseStateMachineTest.this.transitionDeclinedMessages.add(arg);
 
 		}
@@ -82,38 +76,32 @@ public abstract class BaseStateMachineTest
 	/**
 	 * Gets the exceptions that were notified.
 	 */
-	protected List<Exception> exceptions;
+	private List<Exception> exceptions;
 
 	/**
 	 * Gets the begin transition messages that were notified.
 	 */
-	protected List<TransitionEventArgs<States, Events>> transitionBeginMessages;
+	private List<TransitionEventArgs<States, Events>> transitionBeginMessages;
 
 	/**
 	 * Gets the transition completed messages that were notified.
 	 */
-	protected List<TransitionCompletedEventArgs<States, Events>> transitionCompletedMessages;
+	private List<TransitionCompletedEventArgs<States, Events>> transitionCompletedMessages;
 
 	/**
 	 * Gets the transition declined messages that were notified.
 	 */
-	protected List<TransitionEventArgs<States, Events>> transitionDeclinedMessages;
+	private List<TransitionEventArgs<States, Events>> transitionDeclinedMessages;
 
 	/**
 	 * Checks the begin transition message.
 	 */
-	protected void checkBeginTransitionMessage(final States origin,
-			final Events eventId, final Object[] eventArguments) {
-		Assert.assertEquals("wrong number of begin transition messages.", 1,
-				this.transitionBeginMessages.size());
-		Assert.assertEquals("wrong state in transition begin message.", origin,
-				this.transitionBeginMessages.get(0).getStateId());
-		Assert.assertEquals("wrong event in transition begin message.",
-				eventId, this.transitionBeginMessages.get(0).getEventId());
-		Assert.assertArrayEquals(
-				"wrong event arguments in transition begin message.",
-				eventArguments, this.transitionBeginMessages.get(0)
-						.getEventArguments());
+	protected void checkBeginTransitionMessage(final States origin, final Events eventId, final Object[] eventArguments) {
+		Assert.assertEquals("wrong number of begin transition messages.", 1, this.transitionBeginMessages.size());
+		Assert.assertEquals("wrong state in transition begin message.", origin, this.transitionBeginMessages.get(0).getStateId());
+		Assert.assertEquals("wrong event in transition begin message.", eventId, this.transitionBeginMessages.get(0).getEventId());
+		Assert.assertArrayEquals("wrong event arguments in transition begin message.", eventArguments, this.transitionBeginMessages.get(0)
+				.getEventArguments());
 	}
 
 	/**
@@ -133,52 +121,38 @@ public abstract class BaseStateMachineTest
 	/**
 	 * Checks the transition completed message.
 	 */
-	protected void checkTransitionCompletedMessage(
-			final Object[] eventArguments, final States origin,
-			final Events eventId, final States newState) {
+	protected void checkTransitionCompletedMessage(final Object[] eventArguments, final States origin, final Events eventId,
+			final States newState) {
 		Assert.assertEquals(1, this.transitionCompletedMessages.size());
-		Assert.assertEquals(origin, this.transitionCompletedMessages.get(0)
-				.getStateId());
-		Assert.assertEquals(eventId, this.transitionCompletedMessages.get(0)
-				.getEventId());
+		Assert.assertEquals(origin, this.transitionCompletedMessages.get(0).getStateId());
+		Assert.assertEquals(eventId, this.transitionCompletedMessages.get(0).getEventId());
 		if (eventArguments != null) {
-			Assert.assertArrayEquals(eventArguments,
-					this.transitionCompletedMessages.get(0).getEventArguments());
+			Assert.assertArrayEquals(eventArguments, this.transitionCompletedMessages.get(0).getEventArguments());
 		}
 
-		Assert.assertEquals(newState, this.transitionCompletedMessages.get(0)
-				.getNewStateId());
+		Assert.assertEquals(newState, this.transitionCompletedMessages.get(0).getNewStateId());
 	}
 
-	protected abstract StateMachine<States, Events> createTestee(
-			StateMachineDefinition<States, Events> definition,
-			States initialState);
+	protected abstract StateMachine<States, Events> createTestee(StateMachineDefinition<States, Events> definition, States initialState);
 
-	protected void initTestee(
-			final StateMachineDefinition<States, Events> definition) {
+	protected void initTestee(final StateMachineDefinition<States, Events> definition) {
 		testee = createTestee(definition, States.A);
 		testee.addEventHandler(new Handler());
 		testee.start();
 	}
 
 	/**
-	 * An event can be fired onto the state machine and all notifications are
-	 * signaled.
+	 * An event can be fired onto the state machine and all notifications are signaled.
 	 */
 	@Test
 	public void fireEvent() {
-		StateMachineDefinition<States, Events> definition = new StateMachineDefinitionImpl<StatesAndEvents.States, StatesAndEvents.Events>();
+		final StateMachineDefinition<States, Events> definition = new StateMachineDefinitionImpl<StatesAndEvents.States, StatesAndEvents.Events>();
 
-		definition.defineHierarchyOn(States.B, States.B1, HistoryType.NONE,
-				States.B1, States.B2);
-		definition.defineHierarchyOn(States.C, States.C2, HistoryType.SHALLOW,
-				States.C1, States.C2);
-		definition.defineHierarchyOn(States.C1, States.C1a,
-				HistoryType.SHALLOW, States.C1a, States.C1b);
-		definition.defineHierarchyOn(States.D, States.D1, HistoryType.DEEP,
-				States.D1, States.D2);
-		definition.defineHierarchyOn(States.D1, States.D1a, HistoryType.DEEP,
-				States.D1a, States.D1b);
+		definition.defineHierarchyOn(States.B, States.B1, HistoryType.NONE, States.B1, States.B2);
+		definition.defineHierarchyOn(States.C, States.C2, HistoryType.SHALLOW, States.C1, States.C2);
+		definition.defineHierarchyOn(States.C1, States.C1a, HistoryType.SHALLOW, States.C1a, States.C1b);
+		definition.defineHierarchyOn(States.D, States.D1, HistoryType.DEEP, States.D1, States.D2);
+		definition.defineHierarchyOn(States.D1, States.D1a, HistoryType.DEEP, States.D1a, States.D1b);
 
 		definition.in(States.A).on(Events.B).goTo(States.B);
 
@@ -186,21 +160,18 @@ public abstract class BaseStateMachineTest
 
 		initTestee(definition);
 
-		testee.fire(Events.B, eventArguments[0], eventArguments[1],
-				eventArguments[2]);
+		testee.fire(Events.B, eventArguments[0], eventArguments[1], eventArguments[2]);
 
 		waitUntilAllEventsAreProcessed();
 
 		this.checkBeginTransitionMessage(States.A, Events.B, eventArguments);
-		this.checkTransitionCompletedMessage(eventArguments, States.A,
-				Events.B, States.B1);
+		this.checkTransitionCompletedMessage(eventArguments, States.A, Events.B, States.B1);
 		this.checkNoExceptionMessage();
 		this.checkNoDeclinedTransitionMessage();
 	}
 
 	/**
-	 * With FirePriority, an event can be added to the front of the queued
-	 * events.
+	 * With FirePriority, an event can be added to the front of the queued events.
 	 */
 	@Test
 	public void priorityFire() {
@@ -209,16 +180,14 @@ public abstract class BaseStateMachineTest
 		final Action<States, Events> a = new Action<States, Events>() {
 
 			@Override
-			public void execute(
-					final StateMachine<States, Events> stateMaschine,
-					final Object... arguments) {
+			public void execute(final StateMachine<States, Events> stateMaschine, final Object... arguments) {
 				stateMaschine.fire(Events.D);
 				stateMaschine.firePriority(Events.C);
 			}
 
 		};
 
-		StateMachineDefinition<States, Events> definition = new StateMachineDefinitionImpl<StatesAndEvents.States, StatesAndEvents.Events>();
+		final StateMachineDefinition<States, Events> definition = new StateMachineDefinitionImpl<StatesAndEvents.States, StatesAndEvents.Events>();
 
 		definition.in(States.A).on(Events.B).goTo(States.B).execute(a);
 
@@ -232,28 +201,26 @@ public abstract class BaseStateMachineTest
 
 		waitUntilAllEventsAreProcessed();
 
-		Assert.assertEquals(transitions,
-				this.transitionCompletedMessages.size());
+		Assert.assertEquals(transitions, this.transitionCompletedMessages.size());
 		this.checkNoDeclinedTransitionMessage();
 		this.checkNoExceptionMessage();
 	}
 
 	@Test
 	public void startTwice() {
-		StateMachineDefinition<States, Events> definition = new StateMachineDefinitionImpl<StatesAndEvents.States, StatesAndEvents.Events>();
+		final StateMachineDefinition<States, Events> definition = new StateMachineDefinitionImpl<StatesAndEvents.States, StatesAndEvents.Events>();
 		initTestee(definition);
 		this.testee.start();
 	}
 
 	/**
-	 * When the state machine is stopped then no events are processed. All
-	 * events enqueued are processed when state machine is started.
+	 * When the state machine is stopped then no events are processed. All events enqueued are processed when state machine is started.
 	 */
 	@Test
 	public void stopAndStart() {
 		final int transitions = 2;
 
-		StateMachineDefinition<States, Events> stateMachineDefinition = new StateMachineDefinitionImpl<StatesAndEvents.States, StatesAndEvents.Events>();
+		final StateMachineDefinition<States, Events> stateMachineDefinition = new StateMachineDefinitionImpl<StatesAndEvents.States, StatesAndEvents.Events>();
 
 		stateMachineDefinition.in(States.A).on(Events.B).goTo(States.B);
 
@@ -274,8 +241,7 @@ public abstract class BaseStateMachineTest
 
 		waitUntilAllEventsAreProcessed();
 
-		Assert.assertEquals(transitions,
-				this.transitionCompletedMessages.size());
+		Assert.assertEquals(transitions, this.transitionCompletedMessages.size());
 	}
 
 	/**
@@ -298,8 +264,7 @@ public abstract class BaseStateMachineTest
 	}
 
 	private void waitUntilAllEventsAreProcessed() {
-		while (this.testee.numberOfQueuedEvents() > 0
-				|| this.testee.isExecuting()) {
+		while (this.testee.numberOfQueuedEvents() > 0 || this.testee.isExecuting()) {
 			try {
 				Thread.sleep(10);
 			} catch (final InterruptedException e) {

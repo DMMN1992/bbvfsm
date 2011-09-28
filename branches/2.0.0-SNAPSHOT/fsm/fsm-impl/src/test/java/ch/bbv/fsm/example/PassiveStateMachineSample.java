@@ -36,8 +36,7 @@ public class PassiveStateMachineSample {
 	 */
 	private final Action<States, Events> announceFloor = new Action<States, Events>() {
 		@Override
-		public void execute(StateMachine<States, Events> stateMachine,
-				final Object... arguments) {
+		public void execute(final StateMachine<States, Events> stateMachine, final Object... arguments) {
 			System.out.println("announceFloor: 1");
 		}
 	};
@@ -47,8 +46,7 @@ public class PassiveStateMachineSample {
 	 */
 	private final Action<States, Events> announceOverload = new Action<States, Events>() {
 		@Override
-		public void execute(StateMachine<States, Events> stateMachine,
-				final Object... arguments) {
+		public void execute(final StateMachine<States, Events> stateMachine, final Object... arguments) {
 			System.out.println("announceOverload...");
 		};
 	};
@@ -58,8 +56,7 @@ public class PassiveStateMachineSample {
 	 */
 	private final Function<States, Events, Object[], Boolean> checkOverload = new Function<States, Events, Object[], Boolean>() {
 		@Override
-		public Boolean execute(StateMachine<States, Events> stateMachine,
-				final Object[] arguments) {
+		public Boolean execute(final StateMachine<States, Events> stateMachine, final Object[] arguments) {
 			return true;
 		};
 	};
@@ -70,33 +67,24 @@ public class PassiveStateMachineSample {
 	@Test
 	public void sample() {
 
-		final StateMachineDefinition<States, Events> elevator = new StateMachineDefinitionImpl<States, Events>(
-				"Elevator");
+		final StateMachineDefinition<States, Events> elevator = new StateMachineDefinitionImpl<States, Events>("Elevator");
 
-		elevator.defineHierarchyOn(States.Healthy, States.OnFloor,
-				HistoryType.DEEP, States.OnFloor, States.Moving);
-		elevator.defineHierarchyOn(States.Moving, States.MovingUp,
-				HistoryType.SHALLOW, States.MovingUp, States.MovingDown);
-		elevator.defineHierarchyOn(States.OnFloor, States.DoorClosed,
-				HistoryType.NONE, States.DoorClosed, States.DoorOpen);
+		elevator.defineHierarchyOn(States.Healthy, States.OnFloor, HistoryType.DEEP, States.OnFloor, States.Moving);
+		elevator.defineHierarchyOn(States.Moving, States.MovingUp, HistoryType.SHALLOW, States.MovingUp, States.MovingDown);
+		elevator.defineHierarchyOn(States.OnFloor, States.DoorClosed, HistoryType.NONE, States.DoorClosed, States.DoorOpen);
 
 		elevator.in(States.Healthy).on(Events.ErrorOccured).goTo(States.Error);
 
 		elevator.in(States.Error).on(Events.Reset).goTo(States.Healthy);
 
-		elevator.in(States.OnFloor).executeOnEntry(this.announceFloor)
-				.on(Events.CloseDoor).goTo(States.DoorClosed)
-				.on(Events.OpenDoor).goTo(States.DoorOpen).on(Events.GoUp)
-				.goTo(States.MovingUp).onlyIf(this.checkOverload)
-				.on(Events.GoUp).execute(this.announceOverload)
-				.on(Events.GoDown).goTo(States.MovingDown)
-				.onlyIf(this.checkOverload).on(Events.GoUp)
+		elevator.in(States.OnFloor).executeOnEntry(this.announceFloor).on(Events.CloseDoor).goTo(States.DoorClosed).on(Events.OpenDoor)
+				.goTo(States.DoorOpen).on(Events.GoUp).goTo(States.MovingUp).onlyIf(this.checkOverload).on(Events.GoUp)
+				.execute(this.announceOverload).on(Events.GoDown).goTo(States.MovingDown).onlyIf(this.checkOverload).on(Events.GoUp)
 				.execute(this.announceOverload);
 
 		elevator.in(States.Moving).on(Events.Stop).goTo(States.OnFloor);
 
-		StateMachine<States, Events> testee = elevator
-				.createPassiveStateMachine("sample", States.OnFloor);
+		final StateMachine<States, Events> testee = elevator.createPassiveStateMachine("sample", States.OnFloor);
 
 		testee.fire(Events.ErrorOccured);
 		testee.fire(Events.Reset);

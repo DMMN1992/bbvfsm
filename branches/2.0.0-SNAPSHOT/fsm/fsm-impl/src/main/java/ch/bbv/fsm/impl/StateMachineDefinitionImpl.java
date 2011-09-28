@@ -32,12 +32,10 @@ import com.google.common.collect.Lists;
  * @param <TEvent>
  *            the type of the events. (Enum)
  */
-public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends Enum<?>>
-		implements StateMachineDefinition<TState, TEvent>,
+public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends Enum<?>> implements StateMachineDefinition<TState, TEvent>,
 		Notifier<TState, TEvent> {
 
-	private static final Logger LOG = LoggerFactory
-			.getLogger(StateMachineImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(StateMachineImpl.class);
 
 	/**
 	 * The dictionary of all states.
@@ -71,16 +69,13 @@ public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends E
 	}
 
 	@Override
-	public void defineHierarchyOn(final TState superStateId,
-			final TState initialSubStateId, final HistoryType historyType,
+	public void defineHierarchyOn(final TState superStateId, final TState initialSubStateId, final HistoryType historyType,
 			final TState... subStateIds) {
-		final State<TState, TEvent> superState = this.states
-				.getState(superStateId);
+		final State<TState, TEvent> superState = this.states.getState(superStateId);
 		superState.setHistoryType(historyType);
 
 		for (final TState subStateId : subStateIds) {
-			final State<TState, TEvent> subState = this.states
-					.getState(subStateId);
+			final State<TState, TEvent> subState = this.states.getState(subStateId);
 			subState.setSuperState(superState);
 			superState.addSubState(subState);
 		}
@@ -95,14 +90,12 @@ public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends E
 	}
 
 	@Override
-	public void addEventHandler(
-			final StateMachineEventHandler<TState, TEvent> handler) {
+	public void addEventHandler(final StateMachineEventHandler<TState, TEvent> handler) {
 		this.eventHandler.add(handler);
 	}
 
 	@Override
-	public void removeEventHandler(
-			final StateMachineEventHandler<TState, TEvent> handler) {
+	public void removeEventHandler(final StateMachineEventHandler<TState, TEvent> handler) {
 		this.eventHandler.remove(handler);
 	}
 
@@ -112,50 +105,34 @@ public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends E
 	}
 
 	@Override
-	public StateMachine<TState, TEvent> createActiveStateMachine(
-			final String name, final TState initialState) {
-		ActiveStateMachine<TState, TEvent> activeStateMachine = new ActiveStateMachine<TState, TEvent>(
-				name, states);
-		activeStateMachine
-				.addEventHandler(new DelegatingStateMachineEventHandler<TState, TEvent>(
-						eventHandler));
+	public StateMachine<TState, TEvent> createActiveStateMachine(final String name, final TState initialState) {
+		final ActiveStateMachine<TState, TEvent> activeStateMachine = new ActiveStateMachine<TState, TEvent>(name, states);
+		activeStateMachine.addEventHandler(new DelegatingStateMachineEventHandler<TState, TEvent>(eventHandler));
 		activeStateMachine.initialize(initialState);
 		return activeStateMachine;
 
 	}
 
 	@Override
-	public StateMachine<TState, TEvent> createActiveStateMachine(
-			final String name) {
-		ActiveStateMachine<TState, TEvent> activeStateMachine = new ActiveStateMachine<TState, TEvent>(
-				name, states);
-		activeStateMachine
-				.addEventHandler(new DelegatingStateMachineEventHandler<TState, TEvent>(
-						eventHandler));
+	public StateMachine<TState, TEvent> createActiveStateMachine(final String name) {
+		final ActiveStateMachine<TState, TEvent> activeStateMachine = new ActiveStateMachine<TState, TEvent>(name, states);
+		activeStateMachine.addEventHandler(new DelegatingStateMachineEventHandler<TState, TEvent>(eventHandler));
 		return activeStateMachine;
 	}
 
 	@Override
-	public StateMachine<TState, TEvent> createPassiveStateMachine(
-			final String name, final TState initialState) {
-		PassiveStateMachine<TState, TEvent> passiveStateMachine = new PassiveStateMachine<TState, TEvent>(
-				name, states);
-		passiveStateMachine
-				.addEventHandler(new DelegatingStateMachineEventHandler<TState, TEvent>(
-						eventHandler));
+	public StateMachine<TState, TEvent> createPassiveStateMachine(final String name, final TState initialState) {
+		final PassiveStateMachine<TState, TEvent> passiveStateMachine = new PassiveStateMachine<TState, TEvent>(name, states);
+		passiveStateMachine.addEventHandler(new DelegatingStateMachineEventHandler<TState, TEvent>(eventHandler));
 		passiveStateMachine.initialize(initialState);
 		return passiveStateMachine;
 
 	}
 
 	@Override
-	public StateMachine<TState, TEvent> createPassiveStateMachine(
-			final String name) {
-		PassiveStateMachine<TState, TEvent> passiveStateMachine = new PassiveStateMachine<TState, TEvent>(
-				name, states);
-		passiveStateMachine
-				.addEventHandler(new DelegatingStateMachineEventHandler<TState, TEvent>(
-						eventHandler));
+	public StateMachine<TState, TEvent> createPassiveStateMachine(final String name) {
+		final PassiveStateMachine<TState, TEvent> passiveStateMachine = new PassiveStateMachine<TState, TEvent>(name, states);
+		passiveStateMachine.addEventHandler(new DelegatingStateMachineEventHandler<TState, TEvent>(eventHandler));
 		return passiveStateMachine;
 	}
 
@@ -165,13 +142,10 @@ public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends E
 	}
 
 	@Override
-	public void onExceptionThrown(
-			final StateContext<TState, TEvent> stateContext,
-			final Exception exception) {
+	public void onExceptionThrown(final StateContext<TState, TEvent> stateContext, final Exception exception) {
 		try {
 			for (final StateMachineEventHandler<TState, TEvent> handler : this.eventHandler) {
-				handler.onExceptionThrown(new ExceptionEventArgsImpl<TState, TEvent>(
-						stateContext, exception));
+				handler.onExceptionThrown(new ExceptionEventArgsImpl<TState, TEvent>(stateContext, exception));
 			}
 		} catch (final Exception e) {
 			LOG.error("Exception during event handler.", e);
@@ -180,13 +154,10 @@ public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends E
 	}
 
 	@Override
-	public void onExceptionThrown(
-			final TransitionContext<TState, TEvent> transitionContext,
-			final Exception exception) {
+	public void onExceptionThrown(final TransitionContext<TState, TEvent> transitionContext, final Exception exception) {
 		try {
 			for (final StateMachineEventHandler<TState, TEvent> handler : this.eventHandler) {
-				handler.onTransitionThrowsException(new TransitionExceptionEventArgsImpl<TState, TEvent>(
-						transitionContext, exception));
+				handler.onTransitionThrowsException(new TransitionExceptionEventArgsImpl<TState, TEvent>(transitionContext, exception));
 			}
 		} catch (final Exception e) {
 			LOG.error("Exception during event handler.", e);
@@ -195,12 +166,10 @@ public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends E
 	}
 
 	@Override
-	public void onTransitionBegin(
-			final TransitionContext<TState, TEvent> transitionContext) {
+	public void onTransitionBegin(final TransitionContext<TState, TEvent> transitionContext) {
 		try {
 			for (final StateMachineEventHandler<TState, TEvent> handler : this.eventHandler) {
-				handler.onTransitionBegin(new TransitionEventArgsImpl<TState, TEvent>(
-						transitionContext));
+				handler.onTransitionBegin(new TransitionEventArgsImpl<TState, TEvent>(transitionContext));
 			}
 		} catch (final Exception e) {
 			onExceptionThrown(transitionContext, e);

@@ -38,11 +38,9 @@ import com.google.common.collect.Lists;
  * @param <TEvent>
  *            the type of the events
  */
-public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>>
-		implements Transition<TState, TEvent> {
+public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>> implements Transition<TState, TEvent> {
 
-	private static final Logger LOG = LoggerFactory
-			.getLogger(TransitionImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(TransitionImpl.class);
 
 	/**
 	 * The actions that are executed when this transition is fired.
@@ -65,29 +63,21 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	}
 
 	/**
-	 * Recursively traverses the state hierarchy, exiting states along the way,
-	 * performing the action, and entering states to the target.
+	 * Recursively traverses the state hierarchy, exiting states along the way, performing the action, and entering states to the target.
 	 * <hr>
 	 * There exist the following transition scenarios:
 	 * <ul>
-	 * <li>0. there is no target state (internal transition) --> handled outside
-	 * this method.</li>
-	 * <li>1. The source and target state are the same (self transition) -->
-	 * perform the transition directly: Exit source state, perform transition
-	 * actions and enter target state</li>
-	 * <li>2. The target state is a direct or indirect sub-state of the source
-	 * state --> perform the transition actions, then traverse the hierarchy
-	 * from the source state down to the target state, entering each state along
-	 * the way. No state is exited.
-	 * <li>3. The source state is a sub-state of the target state --> traverse
-	 * the hierarchy from the source up to the target, exiting each state along
-	 * the way. Then perform transition actions. Finally enter the target state.
-	 * </li>
+	 * <li>0. there is no target state (internal transition) --> handled outside this method.</li>
+	 * <li>1. The source and target state are the same (self transition) --> perform the transition directly: Exit source state, perform
+	 * transition actions and enter target state</li>
+	 * <li>2. The target state is a direct or indirect sub-state of the source state --> perform the transition actions, then traverse the
+	 * hierarchy from the source state down to the target state, entering each state along the way. No state is exited.
+	 * <li>3. The source state is a sub-state of the target state --> traverse the hierarchy from the source up to the target, exiting each
+	 * state along the way. Then perform transition actions. Finally enter the target state.</li>
 	 * <li>4. The source and target state share the same super-state</li>
 	 * <li>5. All other scenarios:
 	 * <ul>
-	 * <li>a. The source and target states reside at the same level in the
-	 * hierarchy but do not share the same direct super-state</li>
+	 * <li>a. The source and target states reside at the same level in the hierarchy but do not share the same direct super-state</li>
 	 * <li>b. The source state is lower in the hierarchy than the target state</li>
 	 * <li>c. The target state is lower in the hierarchy than the source state</li>
 	 * </ul>
@@ -102,8 +92,7 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 * @param context
 	 *            the state context
 	 */
-	private void fire(final State<TState, TEvent> source,
-			final State<TState, TEvent> target, final Object[] eventArguments,
+	private void fire(final State<TState, TEvent> source, final State<TState, TEvent> target, final Object[] eventArguments,
 			final TransitionContext<TState, TEvent> context) {
 		if (source == this.getTarget()) {
 			// Handles 1.
@@ -128,19 +117,16 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 			// Handles 5b.
 			if (source.getLevel() > target.getLevel()) {
 				source.exit(context);
-				this.fire(source.getSuperState(), target, eventArguments,
-						context);
+				this.fire(source.getSuperState(), target, eventArguments, context);
 			} else if (source.getLevel() < target.getLevel()) {
 				// Handles 2.
 				// Handles 5c.
-				this.fire(source, target.getSuperState(), eventArguments,
-						context);
+				this.fire(source, target.getSuperState(), eventArguments, context);
 				target.entry(context);
 			} else {
 				// Handles 5a.
 				source.exit(context);
-				this.fire(source.getSuperState(), target.getSuperState(),
-						eventArguments, context);
+				this.fire(source.getSuperState(), target.getSuperState(), eventArguments, context);
 				target.entry(context);
 			}
 		}
@@ -149,17 +135,13 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * ch.bbv.asm.impl.internal.transition.Transition#fire(ch.bbv.asm.impl.internal
-	 * .transition.TransitionContext)
+	 * @see ch.bbv.asm.impl.internal.transition.Transition#fire(ch.bbv.asm.impl.internal .transition.TransitionContext)
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public TransitionResult<TState, TEvent> fire(
-			final TransitionContext<TState, TEvent> context) {
+	public TransitionResult<TState, TEvent> fire(final TransitionContext<TState, TEvent> context) {
 		if (!this.shouldFire(context.getEventArguments(), context)) {
-			return (TransitionResult<TState, TEvent>) TransitionResultImpl
-					.getNotFired();
+			return (TransitionResult<TState, TEvent>) TransitionResultImpl.getNotFired();
 		}
 
 		context.getNotifier().onTransitionBegin(context);
@@ -169,16 +151,14 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 		if (!this.isInternalTransition()) {
 			this.unwindSubStates(context.getState(), context);
 
-			this.fire(this.getSource(), this.getTarget(),
-					context.getEventArguments(), context);
+			this.fire(this.getSource(), this.getTarget(), context.getEventArguments(), context);
 
 			newState = this.getTarget().enterByHistory(context);
 		} else {
 			this.performActions(context.getEventArguments(), context);
 		}
 
-		return new TransitionResultImpl<TState, TEvent>(true, newState,
-				context.getExceptions());
+		return new TransitionResultImpl<TState, TEvent>(true, newState, context.getExceptions());
 	}
 
 	/*
@@ -222,23 +202,20 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	}
 
 	/**
-	 * Handles an exception thrown during performing the transition or guard
-	 * evaluation.
+	 * Handles an exception thrown during performing the transition or guard evaluation.
 	 * 
 	 * @param exception
 	 *            the exception
 	 * @param context
 	 *            the transition context
 	 */
-	private void handleException(final Exception exception,
-			final TransitionContext<TState, TEvent> context) {
+	private void handleException(final Exception exception, final TransitionContext<TState, TEvent> context) {
 		context.getExceptions().add(exception);
 		context.getNotifier().onExceptionThrown(context, exception);
 	}
 
 	/**
-	 * Gets a value indicating whether this is an internal transition. true =
-	 * internal.
+	 * Gets a value indicating whether this is an internal transition. true = internal.
 	 */
 	private boolean isInternalTransition() {
 		return this.target == null;
@@ -252,14 +229,12 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 * @param context
 	 *            the transition context
 	 */
-	private void performActions(final Object[] eventArguments,
-			final TransitionContext<TState, TEvent> context) {
+	private void performActions(final Object[] eventArguments, final TransitionContext<TState, TEvent> context) {
 		for (final Action<TState, TEvent> action : this.getActions()) {
 			try {
 				action.execute(context.getStateMachine(), eventArguments);
 			} catch (final Exception exception) {
-				LOG.error("Exception in action of transition {}: {}", this,
-						exception);
+				LOG.error("Exception in action of transition {}: {}", this, exception);
 				this.handleException(exception, context);
 			}
 		}
@@ -268,9 +243,7 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * ch.bbv.asm.impl.internal.transition.Transition#setGuard(ch.bbv.asm.Function
-	 * )
+	 * @see ch.bbv.asm.impl.internal.transition.Transition#setGuard(ch.bbv.asm.Function )
 	 */
 	@Override
 	public void setGuard(final Function<TState, TEvent, Object[], Boolean> guard) {
@@ -280,9 +253,7 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * ch.bbv.asm.impl.internal.transition.Transition#setSource(ch.bbv.asm.impl
-	 * .internal.state.State)
+	 * @see ch.bbv.asm.impl.internal.transition.Transition#setSource(ch.bbv.asm.impl .internal.state.State)
 	 */
 	@Override
 	public void setSource(final State<TState, TEvent> source) {
@@ -292,9 +263,7 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * ch.bbv.asm.impl.internal.transition.Transition#setTarget(ch.bbv.asm.impl
-	 * .internal.state.State)
+	 * @see ch.bbv.asm.impl.internal.transition.Transition#setTarget(ch.bbv.asm.impl .internal.state.State)
 	 */
 	@Override
 	public void setTarget(final State<TState, TEvent> target) {
@@ -304,9 +273,7 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * ch.bbv.asm.impl.internal.transition.Transition#setTargetState(ch.bbv.
-	 * asm.impl.internal.state.State)
+	 * @see ch.bbv.asm.impl.internal.transition.Transition#setTargetState(ch.bbv. asm.impl.internal.state.State)
 	 */
 	@Override
 	public void setTargetState(final State<TState, TEvent> targetState) {
@@ -322,15 +289,11 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 *            the context
 	 * @return true if the transition should fire
 	 */
-	private boolean shouldFire(final Object[] eventArguments,
-			final TransitionContext<TState, TEvent> context) {
+	private boolean shouldFire(final Object[] eventArguments, final TransitionContext<TState, TEvent> context) {
 		try {
-			return this.getGuard() == null
-					|| this.getGuard().execute(context.getStateMachine(),
-							eventArguments);
+			return this.getGuard() == null || this.getGuard().execute(context.getStateMachine(), eventArguments);
 		} catch (final Exception exception) {
-			LOG.error("Exception in guard of transition {}: {}", this,
-					exception);
+			LOG.error("Exception in guard of transition {}: {}", this, exception);
 			this.handleException(exception, context);
 			return false;
 		}
@@ -338,8 +301,7 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 
 	@Override
 	public String toString() {
-		return String.format("Transition from state %s to state %s.",
-				this.getSource(), this.getTarget());
+		return String.format("Transition from state %s to state %s.", this.getSource(), this.getTarget());
 	}
 
 	/**
@@ -350,10 +312,8 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 * @param stateContext
 	 *            the state context
 	 */
-	private void unwindSubStates(final State<TState, TEvent> origin,
-			final StateContext<TState, TEvent> stateContext) {
-		for (State<TState, TEvent> o = origin; o != this.getSource(); o = o
-				.getSuperState()) {
+	private void unwindSubStates(final State<TState, TEvent> origin, final StateContext<TState, TEvent> stateContext) {
+		for (State<TState, TEvent> o = origin; o != this.getSource(); o = o.getSuperState()) {
 			o.exit(stateContext);
 		}
 	}

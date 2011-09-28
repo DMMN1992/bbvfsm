@@ -27,17 +27,18 @@ import ch.bbv.fsm.impl.StatesAndEvents.Events;
 import ch.bbv.fsm.impl.StatesAndEvents.States;
 import ch.bbv.fsm.impl.internal.state.State;
 import ch.bbv.fsm.impl.internal.transition.TransitionContext;
+
 public class TransitionEventArgsImplTest {
-    @Test
-    public void toStringExpectInformationAboutTheTransitionEvent() {
-        @SuppressWarnings("unchecked")
+	@Test
+	public void toStringExpectInformationAboutTheTransitionEvent() {
+		@SuppressWarnings("unchecked")
 		final State<States, Events> stateMock = Mockito.mock(State.class);
-        Mockito.when(stateMock.getId()).thenReturn(States.A);
-        @SuppressWarnings("unchecked")
+		Mockito.when(stateMock.getId()).thenReturn(States.A);
+		@SuppressWarnings("unchecked")
 		final TransitionContext<States, Events> contextMock = Mockito.mock(TransitionContext.class);
-        Mockito.when(contextMock.getEventId()).thenReturn(Events.A);
-        Mockito.when(contextMock.getState()).thenReturn(stateMock);
-        final TransitionEventArgsImpl<States, Events> testee = new TransitionEventArgsImpl<States, Events>(contextMock);
-        Assert.assertEquals("Transition from state A on event A.", testee.toString());
-    }
+		Mockito.when(contextMock.getEventId()).thenReturn(Events.A);
+		Mockito.when(contextMock.getState()).thenReturn(stateMock);
+		final TransitionEventArgsImpl<States, Events> testee = new TransitionEventArgsImpl<States, Events>(contextMock);
+		Assert.assertEquals("Transition from state A on event A.", testee.toString());
+	}
 }

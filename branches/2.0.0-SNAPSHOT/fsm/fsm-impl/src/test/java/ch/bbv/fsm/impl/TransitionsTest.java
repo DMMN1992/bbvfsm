@@ -33,21 +33,20 @@ public class TransitionsTest {
 	private class Handler extends StateMachineEventAdapter<States, Events> {
 
 		@Override
-		public void onTransitionDeclined(
-				final TransitionEventArgs<States, Events> arg) {
+		public void onTransitionDeclined(final TransitionEventArgs<States, Events> arg) {
 			TransitionsTest.this.declined = true;
 
 		}
 	}
 
-	Object[] action1Arguments = null;
-	Object[] action2Arguments = null;
-	Boolean executed = false;
+	private Object[] action1Arguments = null;
+	private Object[] action2Arguments = null;
+	private Boolean executed = false;
 
-	boolean declined = false;
+	private boolean declined = false;
 
 	/**
-	 * Actions on transitions are performed and the event arguments are passed
+	 * Actions on transitions are performed and the event arguments are passed.
 	 */
 	@Test
 	public void executeActions() {
@@ -55,9 +54,7 @@ public class TransitionsTest {
 		final Action<States, Events> action1 = new Action<States, Events>() {
 
 			@Override
-			public void execute(
-					final StateMachine<States, Events> stateMachine,
-					final Object... arguments) {
+			public void execute(final StateMachine<States, Events> stateMachine, final Object... arguments) {
 				TransitionsTest.this.action1Arguments = arguments;
 
 			}
@@ -66,9 +63,7 @@ public class TransitionsTest {
 		final Action<States, Events> action2 = new Action<States, Events>() {
 
 			@Override
-			public void execute(
-					final StateMachine<States, Events> stateMachine,
-					final Object... arguments) {
+			public void execute(final StateMachine<States, Events> stateMachine, final Object... arguments) {
 				TransitionsTest.this.action2Arguments = arguments;
 
 			}
@@ -76,11 +71,9 @@ public class TransitionsTest {
 
 		final StateMachineDefinition<States, Events> stateMachineDefinition = new StateMachineDefinitionImpl<States, Events>();
 
-		stateMachineDefinition.in(States.A).on(Events.B).goTo(States.B)
-				.execute(action1).execute(action2);
+		stateMachineDefinition.in(States.A).on(Events.B).goTo(States.B).execute(action1).execute(action2);
 
-		StateMachine<States, Events> fsm = stateMachineDefinition
-				.createPassiveStateMachine("transitionTest", States.A);
+		final StateMachine<States, Events> fsm = stateMachineDefinition.createPassiveStateMachine("transitionTest", States.A);
 		fsm.start();
 
 		final Object[] eventArguments = new Object[] { 1, 2, 3, "test" };
@@ -91,9 +84,8 @@ public class TransitionsTest {
 	}
 
 	/**
-	 * Internal transitions can be executed (internal transition = transition
-	 * that remains in the same state and does not execute exit and entry
-	 * actions.
+	 * Internal transitions can be executed (internal transition = transition that remains in the same state and does not execute exit and
+	 * entry actions.
 	 */
 	@Test
 	public void internalTransition() {
@@ -101,9 +93,7 @@ public class TransitionsTest {
 		final Action<States, Events> action2 = new Action<States, Events>() {
 
 			@Override
-			public void execute(
-					final StateMachine<States, Events> stateMachine,
-					final Object... arguments) {
+			public void execute(final StateMachine<States, Events> stateMachine, final Object... arguments) {
 				TransitionsTest.this.executed = true;
 
 			}
@@ -111,8 +101,7 @@ public class TransitionsTest {
 
 		final StateMachineDefinition<States, Events> stateMachineDefinition = new StateMachineDefinitionImpl<States, Events>();
 		stateMachineDefinition.in(States.A).on(Events.A).execute(action2);
-		StateMachine<States, Events> fsm = stateMachineDefinition
-				.createPassiveStateMachine("transitionTest", States.A);
+		final StateMachine<States, Events> fsm = stateMachineDefinition.createPassiveStateMachine("transitionTest", States.A);
 		fsm.start();
 		fsm.fire(Events.A);
 
@@ -121,8 +110,7 @@ public class TransitionsTest {
 	}
 
 	/**
-	 * When no transition for the fired event can be found in the entire
-	 * hierarchy up from the current state then
+	 * When no transition for the fired event can be found in the entire hierarchy up from the current state then.
 	 */
 	@Test
 	public void missingTransition() {
@@ -130,8 +118,7 @@ public class TransitionsTest {
 		stateMachineDefinition.in(States.A).on(Events.B).goTo(States.B);
 
 		stateMachineDefinition.addEventHandler(new Handler());
-		StateMachine<States, Events> fsm = stateMachineDefinition
-				.createPassiveStateMachine("transitionTest", States.A);
+		final StateMachine<States, Events> fsm = stateMachineDefinition.createPassiveStateMachine("transitionTest", States.A);
 		fsm.start();
 
 		fsm.fire(Events.C);

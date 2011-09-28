@@ -21,10 +21,11 @@ package ch.bbv.fsm.impl.internal;
 import org.junit.Test;
 
 import ch.bbv.fsm.impl.internal.aop.MethodCallImpl;
+
 public class MethodCallImplTest {
-    @Test(expected = RuntimeException.class)
-    public void test() {
-        final MethodCallImpl methodCall = new MethodCallImpl(null, null, null);
-        methodCall.execute();
-    }
+	@Test(expected = RuntimeException.class)
+	public void test() {
+		final MethodCallImpl methodCall = new MethodCallImpl(null, null, null);
+		methodCall.execute();
+	}
 }

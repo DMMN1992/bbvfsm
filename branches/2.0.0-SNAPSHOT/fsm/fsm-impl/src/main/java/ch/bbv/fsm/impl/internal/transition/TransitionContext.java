@@ -31,8 +31,7 @@ import ch.bbv.fsm.impl.internal.state.StateContext;
  * @param <TEvent>
  *            the type of the events
  */
-public class TransitionContext<TState extends Enum<?>, TEvent extends Enum<?>>
-		extends StateContext<TState, TEvent> {
+public class TransitionContext<TState extends Enum<?>, TEvent extends Enum<?>> extends StateContext<TState, TEvent> {
 
 	/**
 	 * The event that causes the transition.
@@ -58,10 +57,8 @@ public class TransitionContext<TState extends Enum<?>, TEvent extends Enum<?>>
 	 * @param notifier
 	 *            the notifier
 	 */
-	public TransitionContext(final State<TState, TEvent> state,
-			final TEvent eventId, final Object[] eventArguments,
-			final StateMachineImpl<TState, TEvent> stateMachine,
-			final Notifier<TState, TEvent> notifier) {
+	public TransitionContext(final State<TState, TEvent> state, final TEvent eventId, final Object[] eventArguments,
+			final StateMachineImpl<TState, TEvent> stateMachine, final Notifier<TState, TEvent> notifier) {
 		super(state, stateMachine, notifier);
 		this.eventId = eventId;
 		this.eventArguments = eventArguments;

@@ -53,8 +53,7 @@ public class StateDictionary<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 */
 	public State<TState, TEvent> getState(final TState stateId) {
 		if (!this.dictionary.containsKey(stateId)) {
-			this.dictionary.putIfAbsent(stateId, new StateImpl<TState, TEvent>(
-					stateId));
+			this.dictionary.putIfAbsent(stateId, new StateImpl<TState, TEvent>(stateId));
 		}
 
 		return this.dictionary.get(stateId);

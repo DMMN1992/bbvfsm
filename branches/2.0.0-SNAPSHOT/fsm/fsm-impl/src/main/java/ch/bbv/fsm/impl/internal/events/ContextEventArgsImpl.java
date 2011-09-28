@@ -30,8 +30,7 @@ import ch.bbv.fsm.impl.internal.state.StateContext;
  * @param <TEvent>
  *            the event enumeration
  */
-public class ContextEventArgsImpl<TState extends Enum<?>, TEvent extends Enum<?>>
-		implements ContextEventArgs<TState, TEvent> {
+public class ContextEventArgsImpl<TState extends Enum<?>, TEvent extends Enum<?>> implements ContextEventArgs<TState, TEvent> {
 
 	/**
 	 * The context.

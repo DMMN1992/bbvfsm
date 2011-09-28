@@ -72,8 +72,7 @@ public class MethodCallImpl implements MethodCall {
 	 * @param args
 	 *            the arguments of the method.
 	 */
-	public MethodCallImpl(final Object owner, final Method method,
-			final Object[] args) {
+	public MethodCallImpl(final Object owner, final Method method, final Object[] args) {
 		this.owner = owner;
 		this.method = method;
 		this.args = args;

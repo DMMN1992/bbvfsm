@@ -27,8 +27,7 @@ import ch.bbv.fsm.impl.StatesAndEvents.States;
 public class ActiveStateMachineTest extends BaseStateMachineTest {
 
 	@Override
-	protected StateMachine<States, Events> createTestee(
-			StateMachineDefinition<States, Events> definition, States states) {
+	protected StateMachine<States, Events> createTestee(final StateMachineDefinition<States, Events> definition, final States states) {
 		return definition.createActiveStateMachine("Testee", states);
 	}
 }

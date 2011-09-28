@@ -42,8 +42,7 @@ public interface Transition<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 *            the event context.
 	 * @return The result of the transition.
 	 */
-	TransitionResult<TState, TEvent> fire(
-			TransitionContext<TState, TEvent> context);
+	TransitionResult<TState, TEvent> fire(TransitionContext<TState, TEvent> context);
 
 	/**
 	 * Gets the actions of this transition.

@@ -33,8 +33,7 @@ import ch.bbv.fsm.StateMachine;
  * @param <T>
  *            the type of the parameter.
  */
-public class ActionHolderParameter<TState extends Enum<?>, TEvent extends Enum<?>, T>
-		implements ActionHolder<TState, TEvent> {
+public class ActionHolderParameter<TState extends Enum<?>, TEvent extends Enum<?>, T> implements ActionHolder<TState, TEvent> {
 
 	private final Action<TState, TEvent> action;
 	private final T parameter;
@@ -47,8 +46,7 @@ public class ActionHolderParameter<TState extends Enum<?>, TEvent extends Enum<?
 	 * @param parameter
 	 *            the parameter
 	 */
-	public ActionHolderParameter(final Action<TState, TEvent> action,
-			final T parameter) {
+	public ActionHolderParameter(final Action<TState, TEvent> action, final T parameter) {
 		this.action = action;
 		this.parameter = parameter;
 	}

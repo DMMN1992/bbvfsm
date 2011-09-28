@@ -32,8 +32,7 @@ import ch.bbv.fsm.dsl.MethodCall;
  * @param <TEvent>
  *            the type of the events
  */
-public class MethodCallAction<TState extends Enum<?>, TEvent extends Enum<?>>
-		implements Action<TState, TEvent> {
+public class MethodCallAction<TState extends Enum<?>, TEvent extends Enum<?>> implements Action<TState, TEvent> {
 
 	private final MethodCall methodCall;
 
@@ -48,11 +47,9 @@ public class MethodCallAction<TState extends Enum<?>, TEvent extends Enum<?>>
 	}
 
 	@Override
-	public void execute(final StateMachine<TState, TEvent> stateMachine,
-			final Object... arguments) {
+	public void execute(final StateMachine<TState, TEvent> stateMachine, final Object... arguments) {
 		try {
-			this.methodCall.getMethod().invoke(this.methodCall.getOwner(),
-					arguments);
+			this.methodCall.getMethod().invoke(this.methodCall.getOwner(), arguments);
 		} catch (final IllegalArgumentException e) {
 			throw new RuntimeException(e);
 		} catch (final IllegalAccessException e) {

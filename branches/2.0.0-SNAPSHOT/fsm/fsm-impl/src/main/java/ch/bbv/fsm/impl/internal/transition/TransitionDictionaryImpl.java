@@ -37,8 +37,7 @@ import com.google.common.collect.Multimap;
  * @param <TEvent>
  *            the type of events
  */
-public class TransitionDictionaryImpl<TState extends Enum<?>, TEvent extends Enum<?>>
-		implements TransitionDictionary<TState, TEvent> {
+public class TransitionDictionaryImpl<TState extends Enum<?>, TEvent extends Enum<?>> implements TransitionDictionary<TState, TEvent> {
 
 	/**
 	 * The state this transitions belong to.
@@ -59,8 +58,7 @@ public class TransitionDictionaryImpl<TState extends Enum<?>, TEvent extends Enu
 	}
 
 	@Override
-	public void add(final TEvent eventId,
-			final Transition<TState, TEvent> transition) {
+	public void add(final TEvent eventId, final Transition<TState, TEvent> transition) {
 		transition.setSource(this.state);
 		this.transitions.put(eventId, transition);
 	}
@@ -88,14 +86,10 @@ public class TransitionDictionaryImpl<TState extends Enum<?>, TEvent extends Enu
 	 * @param list
 	 *            the list of transitions
 	 */
-	private void getTransitionsOfEvent(final TEvent eventId,
-			final List<TransitionInfo<TState, TEvent>> list) {
-		for (final Transition<TState, TEvent> transition : this.transitions
-				.get(eventId)) {
-			list.add(new TransitionInfo<TState, TEvent>(eventId, transition
-					.getSource(), transition.getTarget(),
-					transition.getGuard() != null, transition.getActions()
-							.size()));
+	private void getTransitionsOfEvent(final TEvent eventId, final List<TransitionInfo<TState, TEvent>> list) {
+		for (final Transition<TState, TEvent> transition : this.transitions.get(eventId)) {
+			list.add(new TransitionInfo<TState, TEvent>(eventId, transition.getSource(), transition.getTarget(),
+					transition.getGuard() != null, transition.getActions().size()));
 		}
 	}
 }

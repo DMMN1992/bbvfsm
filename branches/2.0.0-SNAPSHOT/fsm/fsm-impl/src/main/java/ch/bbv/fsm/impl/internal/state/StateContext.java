@@ -36,8 +36,7 @@ import com.google.common.collect.Lists;
 public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
 
 	/**
-	 * A record of a state exit or entry. Used to log the way taken by
-	 * transitions and initialization.
+	 * A record of a state exit or entry. Used to log the way taken by transitions and initialization.
 	 */
 	public class Record {
 		private TState stateId;
@@ -147,8 +146,7 @@ public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param notifier
 	 *            the notifier
 	 */
-	public StateContext(final State<TState, TEvent> sourceState,
-			final StateMachineImpl<TState, TEvent> stateMachineImpl,
+	public StateContext(final State<TState, TEvent> sourceState, final StateMachineImpl<TState, TEvent> stateMachineImpl,
 			final Notifier<TState, TEvent> notifier) {
 		this.sourceState = sourceState;
 		this.stateMachineImpl = stateMachineImpl;
@@ -229,8 +227,7 @@ public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param superState
 	 *            the super state
 	 */
-	public State<TState, TEvent> getLastActiveSubState(
-			final State<TState, TEvent> superState) {
+	public State<TState, TEvent> getLastActiveSubState(final State<TState, TEvent> superState) {
 		State<TState, TEvent> result = null;
 		if (superState != null) {
 			result = stateMachineImpl.getLastActiveSubState(superState);
@@ -249,8 +246,7 @@ public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param subState
 	 *            the last active sub state
 	 */
-	public void setLastActiveSubState(final State<TState, TEvent> superState,
-			final State<TState, TEvent> subState) {
+	public void setLastActiveSubState(final State<TState, TEvent> superState, final State<TState, TEvent> subState) {
 		stateMachineImpl.setLastActiveSubState(superState, subState);
 	}
 

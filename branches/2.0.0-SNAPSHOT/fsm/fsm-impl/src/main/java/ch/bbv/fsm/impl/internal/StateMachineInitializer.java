@@ -46,22 +46,18 @@ public class StateMachineInitializer<TState extends Enum<?>, TEvent extends Enum
 	 * @param stateContext
 	 *            the state context.
 	 */
-	public StateMachineInitializer(final State<TState, TEvent> initialState,
-			final StateContext<TState, TEvent> stateContext) {
+	public StateMachineInitializer(final State<TState, TEvent> initialState, final StateContext<TState, TEvent> stateContext) {
 		this.initialState = initialState;
 		this.stateContext = stateContext;
 	}
 
 	/**
-	 * Enters the initial state by entering all states further up in the
-	 * hierarchy.
+	 * Enters the initial state by entering all states further up in the hierarchy.
 	 * 
-	 * @return The entered state. The initial state or a sub state of the
-	 *         initial state.
+	 * @return The entered state. The initial state or a sub state of the initial state.
 	 */
 	public State<TState, TEvent> enterInitialState() {
-		final Stack<State<TState, TEvent>> stack = this
-				.traverseUpTheStateHierarchy();
+		final Stack<State<TState, TEvent>> stack = this.traverseUpTheStateHierarchy();
 		this.traverseDownTheStateHierarchyAndEnterStates(stack);
 		return this.initialState.enterByHistory(this.stateContext);
 	}
@@ -72,8 +68,7 @@ public class StateMachineInitializer<TState extends Enum<?>, TEvent extends Enum
 	 * @param stack
 	 *            The stack containing the state hierarchy.
 	 */
-	private void traverseDownTheStateHierarchyAndEnterStates(
-			final Stack<State<TState, TEvent>> stack) {
+	private void traverseDownTheStateHierarchyAndEnterStates(final Stack<State<TState, TEvent>> stack) {
 		State<TState, TEvent> state;
 		while (stack.size() > 0) {
 			state = stack.pop();

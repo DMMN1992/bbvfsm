@@ -50,10 +50,8 @@ public class TransitionInfo<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param actions
 	 *            the number of actions
 	 */
-	public TransitionInfo(final TEvent eventId,
-			final State<TState, TEvent> source,
-			final State<TState, TEvent> target, final boolean hasGuard,
-			final int actions) {
+	public TransitionInfo(final TEvent eventId, final State<TState, TEvent> source, final State<TState, TEvent> target,
+			final boolean hasGuard, final int actions) {
 		this.eventId = eventId;
 		this.source = source;
 		this.target = target;

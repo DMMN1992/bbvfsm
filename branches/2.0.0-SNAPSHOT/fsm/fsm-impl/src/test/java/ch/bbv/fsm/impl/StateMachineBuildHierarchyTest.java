@@ -36,24 +36,21 @@ public class StateMachineBuildHierarchyTest {
 	private StateMachineDefinition<States, Events> testee;
 
 	/**
-	 * If a state is specified as the inital sub state that is not in the list
-	 * of sub states then an {@link IllegalArgumentException} is thrown.
+	 * If a state is specified as the inital sub state that is not in the list of sub states then an {@link IllegalArgumentException} is
+	 * thrown.
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void addHierarchicalStatesInitialStateIsNotASubState() {
-		this.testee.defineHierarchyOn(States.B, States.A, HistoryType.NONE,
-				States.B1, States.B2);
+		this.testee.defineHierarchyOn(States.B, States.A, HistoryType.NONE, States.B1, States.B2);
 
 	}
 
 	/**
-	 * If the super-state is specified as the initial state of its sub-states
-	 * then an {@link IllegalArgumentException} is thrown.
+	 * If the super-state is specified as the initial state of its sub-states then an {@link IllegalArgumentException} is thrown.
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void addHierarchicalStatesInitialStateIsSuperStateItself() {
-		this.testee.defineHierarchyOn(States.B, States.B, HistoryType.NONE,
-				States.B1, States.B2);
+		this.testee.defineHierarchyOn(States.B, States.B, HistoryType.NONE, States.B1, States.B2);
 	}
 
 	/**

@@ -25,27 +25,27 @@ package ch.bbv.fsm.example;
  * 
  */
 enum States {
-    // / <summary>Elevator has an Error</summary>
-    Error,
+	// / <summary>Elevator has an Error</summary>
+	Error,
 
-    // / <summary>Elevator is healthy, i.e. no error</summary>
-    Healthy,
+	// / <summary>Elevator is healthy, i.e. no error</summary>
+	Healthy,
 
-    // / <summary>The elevator is moving (either up or down)</summary>
-    Moving,
+	// / <summary>The elevator is moving (either up or down)</summary>
+	Moving,
 
-    // / <summary>The elevator is moving down.</summary>
-    MovingUp,
+	// / <summary>The elevator is moving down.</summary>
+	MovingUp,
 
-    // / <summary>The elevator is moving down.</summary>
-    MovingDown,
+	// / <summary>The elevator is moving down.</summary>
+	MovingDown,
 
-    // / <summary>The elevator is standing on a floor.</summary>
-    OnFloor,
+	// / <summary>The elevator is standing on a floor.</summary>
+	OnFloor,
 
-    // / <summary>The door is closed while standing still.</summary>
-    DoorClosed,
+	// / <summary>The door is closed while standing still.</summary>
+	DoorClosed,
 
-    // / <summary>The dor is open while standing still.</summary>
-    DoorOpen
+	// / <summary>The dor is open while standing still.</summary>
+	DoorOpen
 }

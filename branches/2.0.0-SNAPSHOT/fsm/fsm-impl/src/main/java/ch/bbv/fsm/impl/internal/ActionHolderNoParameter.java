@@ -31,8 +31,7 @@ import ch.bbv.fsm.StateMachine;
  * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
  */
-public class ActionHolderNoParameter<TState extends Enum<?>, TEvent extends Enum<?>>
-		implements ActionHolder<TState, TEvent> {
+public class ActionHolderNoParameter<TState extends Enum<?>, TEvent extends Enum<?>> implements ActionHolder<TState, TEvent> {
 
 	/**
 	 * the wrapped action.

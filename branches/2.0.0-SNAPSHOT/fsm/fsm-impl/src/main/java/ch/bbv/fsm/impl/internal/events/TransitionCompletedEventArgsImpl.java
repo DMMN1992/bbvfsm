@@ -29,9 +29,8 @@ import ch.bbv.fsm.impl.internal.transition.TransitionContext;
  * @param <TEvent>
  *            the event enumeration
  */
-public class TransitionCompletedEventArgsImpl<TState extends Enum<?>, TEvent extends Enum<?>>
-		extends TransitionEventArgsImpl<TState, TEvent> implements
-		TransitionCompletedEventArgs<TState, TEvent> {
+public class TransitionCompletedEventArgsImpl<TState extends Enum<?>, TEvent extends Enum<?>> extends
+		TransitionEventArgsImpl<TState, TEvent> implements TransitionCompletedEventArgs<TState, TEvent> {
 
 	/**
 	 * The new state the state machine is in after the transition.
@@ -46,8 +45,7 @@ public class TransitionCompletedEventArgsImpl<TState extends Enum<?>, TEvent ext
 	 * @param context
 	 *            the current context
 	 */
-	public TransitionCompletedEventArgsImpl(final TState newStateId,
-			final TransitionContext<TState, TEvent> context) {
+	public TransitionCompletedEventArgsImpl(final TState newStateId, final TransitionContext<TState, TEvent> context) {
 		super(context);
 		this.newStateId = newStateId;
 	}

@@ -31,8 +31,8 @@ import ch.bbv.fsm.impl.StatesAndEvents.States;
 
 public class NewSyntaxTest {
 
-	String testString;
-	int testNumber;
+	private String testString;
+	private int testNumber;
 
 	public Void actionMethod(final String a, final Integer b) {
 		this.testString = a;
@@ -42,18 +42,11 @@ public class NewSyntaxTest {
 
 	@Test
 	public void transitionTest() {
-		StateMachineDefinition<States, Events> stateMachineDefinition = new StateMachineDefinitionImpl<States, Events>();
+		final StateMachineDefinition<States, Events> stateMachineDefinition = new StateMachineDefinitionImpl<States, Events>();
 
-		stateMachineDefinition
-				.in(States.A)
-				.on(Events.B)
-				.goTo(States.B)
-				.execute(
-						from(this).actionMethod(any(String.class),
-								any(int.class)));
+		stateMachineDefinition.in(States.A).on(Events.B).goTo(States.B).execute(from(this).actionMethod(any(String.class), any(int.class)));
 
-		StateMachine<States, Events> fsm = stateMachineDefinition
-				.createPassiveStateMachine("transitionTest", States.A);
+		final StateMachine<States, Events> fsm = stateMachineDefinition.createPassiveStateMachine("transitionTest", States.A);
 		fsm.start();
 
 		fsm.fire(Events.B, "testString", 77);

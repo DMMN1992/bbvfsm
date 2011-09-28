@@ -30,8 +30,7 @@ import ch.bbv.fsm.dsl.MethodCall;
  *            the type of the events
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
  */
-public class ActionHolderMethodCall<TState extends Enum<?>, TEvent extends Enum<?>>
-		implements ActionHolder<TState, TEvent> {
+public class ActionHolderMethodCall<TState extends Enum<?>, TEvent extends Enum<?>> implements ActionHolder<TState, TEvent> {
 
 	private final MethodCall methodCall;
 

@@ -31,8 +31,7 @@ import ch.bbv.fsm.impl.internal.StateMachineImpl;
 import ch.bbv.fsm.impl.internal.state.StateDictionary;
 
 /**
- * An active state machine. This state machine reacts to events on a separate
- * worker thread.
+ * An active state machine. This state machine reacts to events on a separate worker thread.
  * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
  * @param <TState>
@@ -40,8 +39,7 @@ import ch.bbv.fsm.impl.internal.state.StateDictionary;
  * @param <TEvent>
  *            the type of the events. (Enum)
  */
-public class ActiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>>
-		implements StateMachine<TState, TEvent> {
+public class ActiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>> implements StateMachine<TState, TEvent> {
 
 	private static final int WAIT_FOR_TERMINATION_MS = 10000;
 
@@ -58,8 +56,7 @@ public class ActiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>>
 	private ExecutorService executorService;
 
 	/**
-	 * Whether this state machine is executing an event. Allows that events can
-	 * be added while executing.
+	 * Whether this state machine is executing an event. Allows that events can be added while executing.
 	 */
 	private volatile boolean executing;
 
@@ -83,10 +80,8 @@ public class ActiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>>
 	 * @param states
 	 *            the states
 	 */
-	public ActiveStateMachine(final String name,
-			final StateDictionary<TState, TEvent> states) {
-		this.stateMachine = new StateMachineImpl<TState, TEvent>(this, name,
-				states);
+	public ActiveStateMachine(final String name, final StateDictionary<TState, TEvent> states) {
+		this.stateMachine = new StateMachineImpl<TState, TEvent>(this, name, states);
 		this.events = new LinkedBlockingDeque<EventInformation<TEvent>>();
 		this.executorService = Executors.newFixedThreadPool(1);
 	}
@@ -104,13 +99,10 @@ public class ActiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>>
 				/**
 				 * FIXME kuu
 				 * <p>
-				 * this implementation is not thread safe. this.executing should
-				 * be true before fetching the next event. after switching the
-				 * lines, the machine is "always" executing and it could not be
-				 * interrupted.
+				 * this implementation is not thread safe. this.executing should be true before fetching the next event. after switching the
+				 * lines, the machine is "always" executing and it could not be interrupted.
 				 */
-				final EventInformation<TEvent> eventToProcess = this
-						.getNextEventToProcess();
+				final EventInformation<TEvent> eventToProcess = this.getNextEventToProcess();
 				this.executing = true;
 				if (eventToProcess != null) {
 					this.fireEventOnStateMachine(eventToProcess);
@@ -124,8 +116,7 @@ public class ActiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>>
 
 	@Override
 	public void fire(final TEvent eventId, final Object... eventArguments) {
-		this.events.addLast(new EventInformation<TEvent>(eventId,
-				eventArguments));
+		this.events.addLast(new EventInformation<TEvent>(eventId, eventArguments));
 
 	}
 
@@ -140,10 +131,8 @@ public class ActiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>>
 	}
 
 	@Override
-	public void firePriority(final TEvent eventId,
-			final Object... eventArguments) {
-		this.events.addFirst(new EventInformation<TEvent>(eventId,
-				eventArguments));
+	public void firePriority(final TEvent eventId, final Object... eventArguments) {
+		this.events.addFirst(new EventInformation<TEvent>(eventId, eventArguments));
 
 	}
 
@@ -154,8 +143,7 @@ public class ActiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>>
 	 */
 	private EventInformation<TEvent> getNextEventToProcess() {
 		try {
-			final EventInformation<TEvent> e = this.events.pollFirst(10,
-					TimeUnit.MILLISECONDS);
+			final EventInformation<TEvent> e = this.events.pollFirst(10, TimeUnit.MILLISECONDS);
 			return e;
 		} catch (final Exception e) {
 			return null;
@@ -195,8 +183,7 @@ public class ActiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>>
 	}
 
 	/**
-	 * This method blocks until the termination of the worker thread. After a
-	 * timeout of 10 seconds the thread is interrupted.
+	 * This method blocks until the termination of the worker thread. After a timeout of 10 seconds the thread is interrupted.
 	 * 
 	 * @see ch.bbv.fsm.StateMachineDefinition#stop()
 	 */
@@ -217,14 +204,12 @@ public class ActiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>>
 	}
 
 	@Override
-	public void addEventHandler(
-			final StateMachineEventHandler<TState, TEvent> handler) {
+	public void addEventHandler(final StateMachineEventHandler<TState, TEvent> handler) {
 		stateMachine.addEventHandler(handler);
 	}
 
 	@Override
-	public void removeEventHandler(
-			final StateMachineEventHandler<TState, TEvent> handler) {
+	public void removeEventHandler(final StateMachineEventHandler<TState, TEvent> handler) {
 		stateMachine.removeEventHandler(handler);
 	}
 

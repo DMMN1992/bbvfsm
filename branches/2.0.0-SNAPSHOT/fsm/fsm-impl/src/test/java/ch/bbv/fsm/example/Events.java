@@ -24,24 +24,24 @@ package ch.bbv.fsm.example;
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
  */
 enum Events {
-    // / <summary>An error occurred.</summary>
-    ErrorOccured,
+	// / <summary>An error occurred.</summary>
+	ErrorOccured,
 
-    // / <summary>Reset after error.</summary>
-    Reset,
+	// / <summary>Reset after error.</summary>
+	Reset,
 
-    // / <summary>Open the door.</summary>
-    OpenDoor,
+	// / <summary>Open the door.</summary>
+	OpenDoor,
 
-    // / <summary>Close the door.</summary>
-    CloseDoor,
+	// / <summary>Close the door.</summary>
+	CloseDoor,
 
-    // / <summary>Move elevator up.</summary>
-    GoUp,
+	// / <summary>Move elevator up.</summary>
+	GoUp,
 
-    // / <summary>Move elevator down.</summary>
-    GoDown,
+	// / <summary>Move elevator down.</summary>
+	GoDown,
 
-    // / <summary>Stop the elevator.</summary>
-    Stop
+	// / <summary>Stop the elevator.</summary>
+	Stop
 }

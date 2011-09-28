@@ -47,15 +47,12 @@ public class StateMachineReport<TState extends Enum<?>, TEvent extends Enum<?>> 
 	 *            the initial state
 	 * @return description of the state machine.
 	 */
-	public String report(final String name,
-			final List<State<TState, TEvent>> states,
-			final TState initialStateId) {
+	public String report(final String name, final List<State<TState, TEvent>> states, final TState initialStateId) {
 		final StringBuilder report = new StringBuilder();
 
 		final String indentation = INDENTATION;
 
-		report.append(String.format("%s: initial state = %s%s", name,
-				initialStateId.toString(), NEWLINE));
+		report.append(String.format("%s: initial state = %s%s", name, initialStateId.toString(), NEWLINE));
 
 		// write states
 		for (final State<TState, TEvent> state : states) {
@@ -77,15 +74,12 @@ public class StateMachineReport<TState extends Enum<?>, TEvent extends Enum<?>> 
 	 * @param indentation
 	 *            the current indentation level.
 	 */
-	private void reportState(final State<TState, TEvent> state,
-			final StringBuilder report, final String indentation) {
-		this.reportStateNameInitialStateHistoryTypeEntryAndExitAction(report,
-				indentation, state);
+	private void reportState(final State<TState, TEvent> state, final StringBuilder report, final String indentation) {
+		this.reportStateNameInitialStateHistoryTypeEntryAndExitAction(report, indentation, state);
 
-		String nextIndentation = indentation + INDENTATION;
+		final String nextIndentation = indentation + INDENTATION;
 
-		for (final TransitionInfo<TState, TEvent> transition : state
-				.getTransitions().getTransitions()) {
+		for (final TransitionInfo<TState, TEvent> transition : state.getTransitions().getTransitions()) {
 			this.reportTransition(report, nextIndentation, transition);
 		}
 
@@ -95,8 +89,7 @@ public class StateMachineReport<TState extends Enum<?>, TEvent extends Enum<?>> 
 	}
 
 	/**
-	 * Reports the state name, initial state, history type, entry and exit
-	 * action.
+	 * Reports the state name, initial state, history type, entry and exit action.
 	 * 
 	 * @param report
 	 *            the report.
@@ -105,19 +98,13 @@ public class StateMachineReport<TState extends Enum<?>, TEvent extends Enum<?>> 
 	 * @param state
 	 *            the state
 	 */
-	private void reportStateNameInitialStateHistoryTypeEntryAndExitAction(
-			final StringBuilder report, final String indentation,
+	private void reportStateNameInitialStateHistoryTypeEntryAndExitAction(final StringBuilder report, final String indentation,
 			final State<TState, TEvent> state) {
-		report.append(String.format(
-				"%s %s: initial state = %s history type = %s %s", indentation,
-				state, state.getInitialState() != null ? state
-						.getInitialState().toString() : "None", state
-						.getHistoryType(), NEWLINE));
-		String newIndentation = indentation + INDENTATION;
-		report.append(String.format("%s entry action: %s %s", newIndentation,
-				state.getEntryAction() != null, NEWLINE));
-		report.append(String.format("%s exit action: %s %s", newIndentation,
-				state.getExitAction() != null, NEWLINE));
+		report.append(String.format("%s %s: initial state = %s history type = %s %s", indentation, state,
+				state.getInitialState() != null ? state.getInitialState().toString() : "None", state.getHistoryType(), NEWLINE));
+		final String newIndentation = indentation + INDENTATION;
+		report.append(String.format("%s entry action: %s %s", newIndentation, state.getEntryAction() != null, NEWLINE));
+		report.append(String.format("%s exit action: %s %s", newIndentation, state.getExitAction() != null, NEWLINE));
 	}
 
 	/**
@@ -130,13 +117,9 @@ public class StateMachineReport<TState extends Enum<?>, TEvent extends Enum<?>> 
 	 * @param transition
 	 *            the transition.
 	 */
-	private void reportTransition(final StringBuilder report,
-			final String indentation,
-			final TransitionInfo<TState, TEvent> transition) {
-		report.append(String.format("%s%s -> %s actions: %s guard:%s%s",
-				indentation, transition.getEventId(),
-				transition.getTarget() != null ? transition.getTarget()
-						.toString() : "internal", transition.getActions(),
+	private void reportTransition(final StringBuilder report, final String indentation, final TransitionInfo<TState, TEvent> transition) {
+		report.append(String.format("%s%s -> %s actions: %s guard:%s%s", indentation, transition.getEventId(),
+				transition.getTarget() != null ? transition.getTarget().toString() : "internal", transition.getActions(),
 				transition.hasGuard(), NEWLINE));
 	}
 }

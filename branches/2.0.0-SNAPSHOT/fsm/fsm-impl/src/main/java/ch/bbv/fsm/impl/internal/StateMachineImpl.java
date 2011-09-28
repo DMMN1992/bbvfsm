@@ -48,11 +48,9 @@ import com.google.common.collect.Maps;
  * @param <TEvent>
  *            the type of the events.
  */
-public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>>
-		implements Notifier<TState, TEvent> {
+public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>> implements Notifier<TState, TEvent> {
 
-	private static final Logger LOG = LoggerFactory
-			.getLogger(StateMachineImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(StateMachineImpl.class);
 
 	/**
 	 * Name of this state machine used in log messages.
@@ -64,8 +62,7 @@ public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 */
 	private State<TState, TEvent> currentState;
 
-	private final Map<State<TState, TEvent>, State<TState, TEvent>> superToSubState = Maps
-			.newHashMap();
+	private final Map<State<TState, TEvent>, State<TState, TEvent>> superToSubState = Maps.newHashMap();
 
 	/**
 	 * The initial state of the state machine.
@@ -93,8 +90,7 @@ public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 * @param states
 	 *            the states
 	 */
-	public StateMachineImpl(final StateMachine<TState, TEvent> stateMachine,
-			final String name, final StateDictionary<TState, TEvent> states) {
+	public StateMachineImpl(final StateMachine<TState, TEvent> stateMachine, final String name, final StateDictionary<TState, TEvent> states) {
 		this.name = name;
 		this.states = states;
 		this.stateMachine = stateMachine;
@@ -121,16 +117,13 @@ public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 */
 	public void fire(final TEvent eventId, final Object[] eventArguments) {
 		if (LOG.isDebugEnabled()) {
-			LOG.info(
-					"Fire event {} on state machine {} with current state {} and event arguments {}.",
-					new Object[] { eventId, this.getName(),
-							this.getCurrentStateId(), eventArguments });
+			LOG.info("Fire event {} on state machine {} with current state {} and event arguments {}.",
+					new Object[] { eventId, this.getName(), this.getCurrentStateId(), eventArguments });
 		}
 
-		final TransitionContext<TState, TEvent> context = new TransitionContext<TState, TEvent>(
-				getCurrentState(), eventId, eventArguments, this, this);
-		final TransitionResult<TState, TEvent> result = this.currentState
-				.fire(context);
+		final TransitionContext<TState, TEvent> context = new TransitionContext<TState, TEvent>(getCurrentState(), eventId, eventArguments,
+				this, this);
+		final TransitionResult<TState, TEvent> result = this.currentState.fire(context);
 
 		if (!result.isFired()) {
 			LOG.info("No transition possible.");
@@ -184,17 +177,14 @@ public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 * @param stateContext
 	 *            the state context
 	 */
-	private void initialize(final State<TState, TEvent> initialState,
-			final StateContext<TState, TEvent> stateContext) {
+	private void initialize(final State<TState, TEvent> initialState, final StateContext<TState, TEvent> stateContext) {
 		if (initialState == null) {
-			throw new IllegalArgumentException(
-					"initialState; The initial state must not be null.");
+			throw new IllegalArgumentException("initialState; The initial state must not be null.");
 		}
 
 		this.initialStateId = initialState.getId();
 
-		final StateMachineInitializer<TState, TEvent> initializer = new StateMachineInitializer<TState, TEvent>(
-				initialState, stateContext);
+		final StateMachineInitializer<TState, TEvent> initializer = new StateMachineInitializer<TState, TEvent>(initialState, stateContext);
 		this.setCurrentState(initializer.enterInitialState());
 	}
 
@@ -205,15 +195,12 @@ public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 *            the initial state.
 	 */
 	public void initialize(final TState initialState) {
-		LOG.info("State machine {} initializes to state {}.", this,
-				initialState);
+		LOG.info("State machine {} initializes to state {}.", this, initialState);
 
-		final StateContext<TState, TEvent> stateContext = new StateContext<TState, TEvent>(
-				null, this, this);
+		final StateContext<TState, TEvent> stateContext = new StateContext<TState, TEvent>(null, this, this);
 		this.initialize(this.states.getState(initialState), stateContext);
 
-		LOG.info("State machine {} performed {}.", this,
-				stateContext.getRecords());
+		LOG.info("State machine {} performed {}.", this, stateContext.getRecords());
 	}
 
 	/**
@@ -222,8 +209,7 @@ public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 * @param handler
 	 *            the event handler.
 	 */
-	public void addEventHandler(
-			final StateMachineEventHandler<TState, TEvent> handler) {
+	public void addEventHandler(final StateMachineEventHandler<TState, TEvent> handler) {
 		this.eventHandler.add(handler);
 	}
 
@@ -233,38 +219,29 @@ public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 * @param handler
 	 *            the event handle to be removed.
 	 */
-	public void removeEventHandler(
-			final StateMachineEventHandler<TState, TEvent> handler) {
+	public void removeEventHandler(final StateMachineEventHandler<TState, TEvent> handler) {
 		this.eventHandler.remove(handler);
 	}
 
 	@Override
-	public void onExceptionThrown(
-			final StateContext<TState, TEvent> stateContext,
-			final Exception exception) {
+	public void onExceptionThrown(final StateContext<TState, TEvent> stateContext, final Exception exception) {
 		for (final StateMachineEventHandler<TState, TEvent> handler : this.eventHandler) {
-			handler.onExceptionThrown(new ExceptionEventArgsImpl<TState, TEvent>(
-					stateContext, exception));
+			handler.onExceptionThrown(new ExceptionEventArgsImpl<TState, TEvent>(stateContext, exception));
 		}
 	}
 
 	@Override
-	public void onExceptionThrown(
-			final TransitionContext<TState, TEvent> transitionContext,
-			final Exception exception) {
+	public void onExceptionThrown(final TransitionContext<TState, TEvent> transitionContext, final Exception exception) {
 		for (final StateMachineEventHandler<TState, TEvent> handler : this.eventHandler) {
-			handler.onTransitionThrowsException(new TransitionExceptionEventArgsImpl<TState, TEvent>(
-					transitionContext, exception));
+			handler.onTransitionThrowsException(new TransitionExceptionEventArgsImpl<TState, TEvent>(transitionContext, exception));
 		}
 	}
 
 	@Override
-	public void onTransitionBegin(
-			final TransitionContext<TState, TEvent> transitionContext) {
+	public void onTransitionBegin(final TransitionContext<TState, TEvent> transitionContext) {
 		try {
 			for (final StateMachineEventHandler<TState, TEvent> handler : this.eventHandler) {
-				handler.onTransitionBegin(new TransitionEventArgsImpl<TState, TEvent>(
-						transitionContext));
+				handler.onTransitionBegin(new TransitionEventArgsImpl<TState, TEvent>(transitionContext));
 			}
 		} catch (final Exception e) {
 			onExceptionThrown(transitionContext, e);
@@ -277,12 +254,11 @@ public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 * @param transitionContext
 	 *            the transition context
 	 */
-	protected void onTransitionCompleted(
-			final TransitionContext<TState, TEvent> transitionContext) {
+	protected void onTransitionCompleted(final TransitionContext<TState, TEvent> transitionContext) {
 		try {
 			for (final StateMachineEventHandler<TState, TEvent> handler : this.eventHandler) {
-				handler.onTransitionCompleted(new TransitionCompletedEventArgsImpl<TState, TEvent>(
-						this.getCurrentStateId(), transitionContext));
+				handler.onTransitionCompleted(new TransitionCompletedEventArgsImpl<TState, TEvent>(this.getCurrentStateId(),
+						transitionContext));
 			}
 		} catch (final Exception e) {
 			onExceptionThrown(transitionContext, e);
@@ -295,12 +271,10 @@ public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 * @param transitionContext
 	 *            the transition context.
 	 */
-	protected void onTransitionDeclined(
-			final TransitionContext<TState, TEvent> transitionContext) {
+	protected void onTransitionDeclined(final TransitionContext<TState, TEvent> transitionContext) {
 		try {
 			for (final StateMachineEventHandler<TState, TEvent> handler : this.eventHandler) {
-				handler.onTransitionDeclined(new TransitionEventArgsImpl<TState, TEvent>(
-						transitionContext));
+				handler.onTransitionDeclined(new TransitionEventArgsImpl<TState, TEvent>(transitionContext));
 			}
 		} catch (final Exception e) {
 			onExceptionThrown(transitionContext, e);
@@ -328,8 +302,7 @@ public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 *            the current state.
 	 */
 	private void setCurrentState(final State<TState, TEvent> state) {
-		LOG.info("State machine {} switched to state {}.", this.getName(),
-				state.getId());
+		LOG.info("State machine {} switched to state {}.", this.getName(), state.getId());
 		this.currentState = state;
 	}
 
@@ -339,8 +312,7 @@ public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 * @param superState
 	 *            the super state
 	 */
-	public State<TState, TEvent> getLastActiveSubState(
-			final State<TState, TEvent> superState) {
+	public State<TState, TEvent> getLastActiveSubState(final State<TState, TEvent> superState) {
 		return superToSubState.get(superState);
 	}
 
@@ -352,8 +324,7 @@ public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 * @param subState
 	 *            the last active sub state
 	 */
-	public void setLastActiveSubState(final State<TState, TEvent> superState,
-			final State<TState, TEvent> subState) {
+	public void setLastActiveSubState(final State<TState, TEvent> superState, final State<TState, TEvent> subState) {
 		superToSubState.put(superState, subState);
 	}
 

@@ -18,7 +18,8 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl.internal;
 
-import static ch.bbv.fsm.impl.Tool.*;
+import static ch.bbv.fsm.impl.Tool.any;
+import static ch.bbv.fsm.impl.Tool.from;
 
 import java.util.EmptyStackException;
 
@@ -32,54 +33,54 @@ import ch.bbv.fsm.impl.internal.aop.MethodCallImpl;
 
 public class ToolTest {
 
-    private boolean isFooExecuted;
-    private String p1;
-    private Integer p2;
+	private boolean isFooExecuted;
+	private String p1;
+	private Integer p2;
 
-    public Void foo(final String p1, final Integer p2) {
-        this.isFooExecuted = true;
-        this.p1 = p1;
-        this.p2 = p2;
-        return null;
-    }
+	public Void foo(final String p1, final Integer p2) {
+		this.isFooExecuted = true;
+		this.p1 = p1;
+		this.p2 = p2;
+		return null;
+	}
 
-    @Before
-    public void setup() {
-        this.isFooExecuted = false;
-    }
+	@Before
+	public void setup() {
+		this.isFooExecuted = false;
+	}
 
-    @Test
-    public void testAny() {
+	@Test
+	public void testAny() {
 
-        Assert.assertEquals(null, any(String.class));
-    }
+		Assert.assertEquals(null, any(String.class));
+	}
 
-    @Test
-    public void testFromExecution() {
-        from(this).foo("String1", new Integer(99));
-        final MethodCall methodCall = MethodCallImpl.pop();
-        methodCall.execute();
+	@Test
+	public void testFromExecution() {
+		from(this).foo("String1", new Integer(99));
+		final MethodCall methodCall = MethodCallImpl.pop();
+		methodCall.execute();
 
-        Assert.assertEquals("String1", this.p1);
-        Assert.assertEquals(new Integer(99), this.p2);
-        Assert.assertTrue(this.isFooExecuted);
-    }
+		Assert.assertEquals("String1", this.p1);
+		Assert.assertEquals(new Integer(99), this.p2);
+		Assert.assertTrue(this.isFooExecuted);
+	}
 
-    @Test
-    public void testFromMethodCallInstance() {
-        from(this).foo("String1", new Integer(99));
-        final MethodCall methodCall = MethodCallImpl.pop();
+	@Test
+	public void testFromMethodCallInstance() {
+		from(this).foo("String1", new Integer(99));
+		final MethodCall methodCall = MethodCallImpl.pop();
 
-        Assert.assertEquals("String1", methodCall.getArguments()[0]);
-        Assert.assertEquals(new Integer(99), methodCall.getArguments()[1]);
-        Assert.assertEquals("foo", methodCall.getMethod().getName());
-    }
+		Assert.assertEquals("String1", methodCall.getArguments()[0]);
+		Assert.assertEquals(new Integer(99), methodCall.getArguments()[1]);
+		Assert.assertEquals("foo", methodCall.getMethod().getName());
+	}
 
-    @Test(expected = EmptyStackException.class)
-    public void testFromStack() {
-        from(this).foo("String1", new Integer(99));
-        MethodCallImpl.pop();
-        MethodCallImpl.pop();
-    }
+	@Test(expected = EmptyStackException.class)
+	public void testFromStack() {
+		from(this).foo("String1", new Integer(99));
+		MethodCallImpl.pop();
+		MethodCallImpl.pop();
+	}
 
 }

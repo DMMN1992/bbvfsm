@@ -26,57 +26,57 @@ package ch.bbv.fsm.impl.internal;
  *            the type of the event.
  */
 public class EventInformation<TEvent> {
-    private TEvent eventId;
-    private Object[] eventArguments;
+	private TEvent eventId;
+	private Object[] eventArguments;
 
-    /**
-     * Initializes a new instance.
-     * 
-     * @param eventId
-     *            the event id.
-     * @param eventArguments
-     *            the event arguments.
-     */
-    public EventInformation(final TEvent eventId, final Object[] eventArguments) {
-        this.eventId = eventId;
-        this.eventArguments = eventArguments;
-    }
+	/**
+	 * Initializes a new instance.
+	 * 
+	 * @param eventId
+	 *            the event id.
+	 * @param eventArguments
+	 *            the event arguments.
+	 */
+	public EventInformation(final TEvent eventId, final Object[] eventArguments) {
+		this.eventId = eventId;
+		this.eventArguments = eventArguments;
+	}
 
-    /**
-     * Returns the event arguments.
-     * 
-     * @return the event arguments.
-     */
-    public Object[] getEventArguments() {
-        return this.eventArguments;
-    }
+	/**
+	 * Returns the event arguments.
+	 * 
+	 * @return the event arguments.
+	 */
+	public Object[] getEventArguments() {
+		return this.eventArguments;
+	}
 
-    /**
-     * Returns the event id.
-     * 
-     * @return the event id.
-     */
-    public TEvent getEventId() {
-        return this.eventId;
-    }
+	/**
+	 * Returns the event id.
+	 * 
+	 * @return the event id.
+	 */
+	public TEvent getEventId() {
+		return this.eventId;
+	}
 
-    /**
-     * Sets the event arguments.
-     * 
-     * @param eventArguments
-     *            the event arguments.
-     */
-    public void setEventArguments(final Object[] eventArguments) {
-        this.eventArguments = eventArguments;
-    }
+	/**
+	 * Sets the event arguments.
+	 * 
+	 * @param eventArguments
+	 *            the event arguments.
+	 */
+	public void setEventArguments(final Object[] eventArguments) {
+		this.eventArguments = eventArguments;
+	}
 
-    /**
-     * Sets the event id.
-     * 
-     * @param eventId
-     *            the event id.
-     */
-    public void setEventId(final TEvent eventId) {
-        this.eventId = eventId;
-    }
+	/**
+	 * Sets the event id.
+	 * 
+	 * @param eventId
+	 *            the event id.
+	 */
+	public void setEventId(final TEvent eventId) {
+		this.eventId = eventId;
+	}
 }

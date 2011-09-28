@@ -43,14 +43,11 @@ public class MethodCallInterceptor implements MethodInterceptor {
 	}
 
 	@Override
-	public Object intercept(final Object object, final Method method,
-			final Object[] args, final MethodProxy methodProxy)
-			throws Throwable {
+	public Object intercept(final Object object, final Method method, final Object[] args, final MethodProxy methodProxy) throws Throwable {
 		if (!method.isAccessible()) {
 			method.setAccessible(true);
 		}
-		final MethodCall methodCall = new MethodCallImpl(this.owner, method,
-				args);
+		final MethodCall methodCall = new MethodCallImpl(this.owner, method, args);
 		MethodCallImpl.push(methodCall);
 		return null;
 	}
