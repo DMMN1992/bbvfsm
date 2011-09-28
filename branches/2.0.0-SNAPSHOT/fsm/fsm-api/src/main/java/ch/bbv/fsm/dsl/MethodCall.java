@@ -27,31 +27,31 @@ import java.lang.reflect.Method;
  */
 public interface MethodCall {
 
-    /**
-     * Executes the method in the owner with the arguments. A RuntimeException
-     * is thrown if an error occurs.
-     */
-    public void execute();
+	/**
+	 * Executes the method in the owner with the arguments. A RuntimeException
+	 * is thrown if an error occurs.
+	 */
+	void execute();
 
-    /**
-     * Returns an array of arguments of the method.
-     * 
-     * @return an array of arguments.
-     */
-    public Object[] getArguments();
+	/**
+	 * Returns an array of arguments of the method.
+	 * 
+	 * @return an array of arguments.
+	 */
+	Object[] getArguments();
 
-    /**
-     * Returns the method definition.
-     * 
-     * @return the method definition.
-     */
-    public Method getMethod();
+	/**
+	 * Returns the method definition.
+	 * 
+	 * @return the method definition.
+	 */
+	Method getMethod();
 
-    /**
-     * Returns the owner instance of the method.
-     * 
-     * @return the owner instance of the method.
-     */
-    public Object getOwner();
+	/**
+	 * Returns the owner instance of the method.
+	 * 
+	 * @return the owner instance of the method.
+	 */
+	Object getOwner();
 
 }

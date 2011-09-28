@@ -35,20 +35,20 @@ public interface TransitionEventArgs<TState extends Enum<?>, TEvent extends Enum
 	 * 
 	 * @return the event arguments.
 	 */
-	public abstract Object[] getEventArguments();
+	Object[] getEventArguments();
 
 	/**
 	 * Returns the event id of the transition.
 	 * 
 	 * @return the event id of the transition.
 	 */
-	public abstract TEvent getEventId();
+	TEvent getEventId();
 
 	/**
 	 * Returns the id of the source state of the transition.
 	 * 
 	 * @return the id of the source state of the transition.
 	 */
-	public abstract TState getStateId();
+	TState getStateId();
 
 }

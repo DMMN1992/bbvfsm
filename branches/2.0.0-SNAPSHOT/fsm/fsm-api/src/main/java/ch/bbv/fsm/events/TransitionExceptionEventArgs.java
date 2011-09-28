@@ -35,6 +35,6 @@ public interface TransitionExceptionEventArgs<TState extends Enum<?>, TEvent ext
 	 * 
 	 * @return the exception.
 	 */
-	public abstract Exception getException();
+	Exception getException();
 
 }

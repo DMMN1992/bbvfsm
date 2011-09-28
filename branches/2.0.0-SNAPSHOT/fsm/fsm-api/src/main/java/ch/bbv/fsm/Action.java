@@ -20,6 +20,10 @@ package ch.bbv.fsm;
 
 /**
  * @author Ueli Kurmann (bbv Software Services AG)
+ * @param <TState>
+ *            the state enumeration
+ * @param <TEvent>
+ *            the event enumeration
  */
 public interface Action<TState extends Enum<?>, TEvent extends Enum<?>> {
 

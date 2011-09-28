@@ -20,14 +20,22 @@ package ch.bbv.fsm.dsl;
 
 import ch.bbv.fsm.Action;
 
+/**
+ * Possibilities to do with a transition.
+ * 
+ * @param <TState>
+ *            the type of the states.
+ * @param <TEvent>
+ *            the type of the events.
+ */
 public interface EventActionSyntax<TState extends Enum<?>, TEvent extends Enum<?>>
 		extends EventSyntax<TState, TEvent> {
 
 	/**
 	 * Defines the actions to execute on a transition.
 	 * 
-	 * @param actions
-	 *            The actions.
+	 * @param action
+	 *            The action.
 	 * @return Guard syntax.
 	 */
 	GuardSyntax<TState, TEvent> execute(Action<TState, TEvent> action);

@@ -20,6 +20,12 @@ package ch.bbv.fsm;
 
 import ch.bbv.fsm.events.StateMachineEventHandler;
 
+/**
+ * Interface for all finite state machines.
+ *
+ * @param <TState> the state enumeration
+ * @param <TEvent> the event enumeration
+ */
 public interface StateMachine<TState extends Enum<?>, TEvent extends Enum<?>> {
 
 	/**
@@ -84,7 +90,7 @@ public interface StateMachine<TState extends Enum<?>, TEvent extends Enum<?>> {
 	TState getCurrentState();
 
 	/**
-	 * Adds an event handler
+	 * Adds an event handler.
 	 * 
 	 * @param handler
 	 *            the event handler

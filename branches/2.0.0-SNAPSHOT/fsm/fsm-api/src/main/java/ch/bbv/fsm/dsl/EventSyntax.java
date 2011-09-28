@@ -18,6 +18,14 @@
  *******************************************************************************/
 package ch.bbv.fsm.dsl;
 
+/**
+ * Define an event on a state.
+ * 
+ * @param <TState>
+ *            the type of the states.
+ * @param <TEvent>
+ *            the type of the events.
+ */
 public interface EventSyntax<TState extends Enum<?>, TEvent extends Enum<?>> {
 
 	/**

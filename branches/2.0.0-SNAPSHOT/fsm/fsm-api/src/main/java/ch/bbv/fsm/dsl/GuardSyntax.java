@@ -20,6 +20,14 @@ package ch.bbv.fsm.dsl;
 
 import ch.bbv.fsm.Function;
 
+/**
+ * Guard a transition.
+ * 
+ * @param <TState>
+ *            the type of the states.
+ * @param <TEvent>
+ *            the type of the events.
+ */
 public interface GuardSyntax<TState extends Enum<?>, TEvent extends Enum<?>>
 		extends EventSyntax<TState, TEvent> {
 
@@ -28,7 +36,7 @@ public interface GuardSyntax<TState extends Enum<?>, TEvent extends Enum<?>>
 	 * needs to be a function call using from(owner).function returning a
 	 * boolean.
 	 * 
-	 * @param a
+	 * @param guard
 	 *            function call using the from construct.
 	 * @return the event syntax.
 	 */

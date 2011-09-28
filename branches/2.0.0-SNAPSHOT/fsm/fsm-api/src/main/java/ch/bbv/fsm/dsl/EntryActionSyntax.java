@@ -60,7 +60,7 @@ public interface EntryActionSyntax<TState extends Enum<?>, TEvent extends Enum<?
 	 * Defines an entry action.
 	 * 
 	 * @param methodCall
-	 * @return
+	 *            the method called on entry.
 	 */
 	ExitActionSyntax<TState, TEvent> executeOnEntry(Object methodCall);
 }

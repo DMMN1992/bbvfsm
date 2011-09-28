@@ -18,6 +18,14 @@
  *******************************************************************************/
 package ch.bbv.fsm.dsl;
 
+/**
+ * Define a target state.
+ * 
+ * @param <TState>
+ *            the type of the states.
+ * @param <TEvent>
+ *            the type of the events.
+ */
 public interface GotoSyntax<TState extends Enum<?>, TEvent extends Enum<?>>
 		extends EventSyntax<TState, TEvent> {
 

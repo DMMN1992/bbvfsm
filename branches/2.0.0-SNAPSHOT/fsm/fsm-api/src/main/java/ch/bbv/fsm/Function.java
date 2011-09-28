@@ -26,7 +26,12 @@ package ch.bbv.fsm;
  *            parameter type
  * @param <ReturnType>
  *            return type
+ * @param <TState>
+ *            the state enumeration
+ * @param <TEvent>
+ *            the event enumeration
  */
+
 public interface Function<TState extends Enum<?>, TEvent extends Enum<?>, ParameterType, ReturnType> {
 
 	/**

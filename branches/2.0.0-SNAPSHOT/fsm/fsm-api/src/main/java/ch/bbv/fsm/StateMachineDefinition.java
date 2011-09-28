@@ -33,8 +33,10 @@ import ch.bbv.fsm.events.StateMachineEventHandler;
 public interface StateMachineDefinition<TState extends Enum<?>, TEvent extends Enum<?>> {
 
 	/**
+	 * Defines behavior of a state.
+	 * 
 	 * @param state
-	 * @return
+	 *            the state
 	 */
 	EntryActionSyntax<TState, TEvent> in(TState state);
 
@@ -59,7 +61,7 @@ public interface StateMachineDefinition<TState extends Enum<?>, TEvent extends E
 	String getName();
 
 	/**
-	 * Adds an event handler
+	 * Adds an event handler.
 	 * 
 	 * @param handler
 	 *            the event handler
@@ -77,6 +79,8 @@ public interface StateMachineDefinition<TState extends Enum<?>, TEvent extends E
 	/**
 	 * Creates an active state-machine from this definition.
 	 * 
+	 * @param name
+	 *            the state machine's name
 	 * @param initialState
 	 *            The state to which the state machine is initialized.
 	 */
@@ -84,23 +88,32 @@ public interface StateMachineDefinition<TState extends Enum<?>, TEvent extends E
 			TState initialState);
 
 	/**
-	 * Creates an active state-machine from this definition with the default intial state.
-	 */ 
+	 * Creates an active state-machine from this definition with the default
+	 * initial state.
+	 * 
+	 * @param name
+	 *            the state machine's name
+	 */
 	StateMachine<TState, TEvent> createActiveStateMachine(String name);
 
 	/**
 	 * Creates an passive state-machine from this definition.
 	 * 
+	 * @param name
+	 *            the state machine's name
 	 * @param initialState
 	 *            The state to which the state machine is initialized.
 	 */
 	StateMachine<TState, TEvent> createPassiveStateMachine(String name,
 			TState initialState);
 
-
 	/**
-	 * Creates an passive state-machine from this definition with the default intial state.
-	 */ 
+	 * Creates an passive state-machine from this definition with the default
+	 * initial state.
+	 * 
+	 * @param name
+	 *            the state machine's name
+	 */
 	StateMachine<TState, TEvent> createPassiveStateMachine(String name);
 
 	/**

@@ -35,6 +35,6 @@ public interface TransitionCompletedEventArgs<TState extends Enum<?>, TEvent ext
 	 * 
 	 * @return The new state id the state machine is in after the transition.
 	 */
-	public abstract TState getNewStateId();
+	TState getNewStateId();
 
 }

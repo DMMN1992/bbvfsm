@@ -20,6 +20,14 @@ package ch.bbv.fsm.dsl;
 
 import ch.bbv.fsm.Action;
 
+/**
+ * Possibilities to execute an action on exit.
+ * 
+ * @param <TState>
+ *            the type of the states.
+ * @param <TEvent>
+ *            the type of the events.
+ */
 public interface ExitActionSyntax<TState extends Enum<?>, TEvent extends Enum<?>>
 		extends EventSyntax<TState, TEvent> {
 
@@ -50,6 +58,7 @@ public interface ExitActionSyntax<TState extends Enum<?>, TEvent extends Enum<?>
 	 * Defines an exit action.
 	 * 
 	 * @param method
+	 *            the method to call
 	 * @return Event syntax.
 	 */
 	EventSyntax<TState, TEvent> executeOnExit(Object method);

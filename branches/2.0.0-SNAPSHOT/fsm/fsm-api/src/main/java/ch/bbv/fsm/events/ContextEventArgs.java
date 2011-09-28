@@ -31,5 +31,8 @@ import ch.bbv.fsm.StateMachine;
  */
 public interface ContextEventArgs<TState extends Enum<?>, TEvent extends Enum<?>> {
 
+	/**
+	 * The source context.
+	 */
 	StateMachine<TState, TEvent> getSource();
 }
