@@ -24,20 +24,33 @@ import ch.bbv.fsm.Action;
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.dsl.MethodCall;
 
+/**
+ * Calls a method.
+ * 
+ * @param <TState>
+ *            the type of the states
+ * @param <TEvent>
+ *            the type of the events
+ */
 public class MethodCallAction<TState extends Enum<?>, TEvent extends Enum<?>>
 		implements Action<TState, TEvent> {
 
-	MethodCall methodCall;
+	private final MethodCall methodCall;
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param methodCall
+	 *            the method to call
+	 */
 	public MethodCallAction(final MethodCall methodCall) {
 		this.methodCall = methodCall;
 	}
 
 	@Override
-	public void execute(StateMachine<TState, TEvent> stateMachine,
+	public void execute(final StateMachine<TState, TEvent> stateMachine,
 			final Object... arguments) {
 		try {
-			// TODO Pass state machine
 			this.methodCall.getMethod().invoke(this.methodCall.getOwner(),
 					arguments);
 		} catch (final IllegalArgumentException e) {
@@ -48,5 +61,4 @@ public class MethodCallAction<TState extends Enum<?>, TEvent extends Enum<?>>
 			throw new RuntimeException(e);
 		}
 	}
-
 }

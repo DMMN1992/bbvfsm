@@ -21,6 +21,14 @@ package ch.bbv.fsm.impl.internal.events;
 import ch.bbv.fsm.events.ExceptionEventArgs;
 import ch.bbv.fsm.impl.internal.state.StateContext;
 
+/**
+ * See {@link ExceptionEventArgs}.
+ * 
+ * @param <TState>
+ *            the state enumeration
+ * @param <TEvent>
+ *            the event enumeration
+ */
 public class ExceptionEventArgsImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 		extends ContextEventArgsImpl<TState, TEvent> implements
 		ExceptionEventArgs<TState, TEvent> {

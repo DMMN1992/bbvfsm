@@ -46,10 +46,10 @@ import com.google.common.collect.Lists;
 public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 		implements State<TState, TEvent> {
 
-	private static Logger LOG = LoggerFactory.getLogger(StateImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(StateImpl.class);
 
 	/**
-	 * The level of this state within the state hierarchy [1..maxLevel]
+	 * The level of this state within the state hierarchy [1..maxLevel].
 	 */
 	private int level;
 
@@ -97,10 +97,7 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 * 
 	 * @param id
 	 *            the unique id of the state.
-	 * @param notifier
-	 *            the notifier used to notify events.
 	 */
-
 	public StateImpl(final TState id) {
 		this.id = id;
 		this.level = 1;
@@ -176,6 +173,9 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 		case DEEP:
 			result = enterHistoryDeep(stateContext);
 			break;
+		default:
+			throw new IllegalArgumentException("Unknown HistoryType : "
+					+ historyType);
 		}
 
 		return result;

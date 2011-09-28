@@ -24,11 +24,20 @@ import ch.bbv.fsm.impl.internal.transition.TransitionContext;
 
 import com.google.common.collect.Lists;
 
+/**
+ * Implementation of the definition of the finite state machine.
+ * 
+ * @param <TState>
+ *            the type of the states. (Enum)
+ * @param <TEvent>
+ *            the type of the events. (Enum)
+ */
 public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 		implements StateMachineDefinition<TState, TEvent>,
 		Notifier<TState, TEvent> {
 
-	private static Logger LOG = LoggerFactory.getLogger(StateMachineImpl.class);
+	private static final Logger LOG = LoggerFactory
+			.getLogger(StateMachineImpl.class);
 
 	/**
 	 * The dictionary of all states.
@@ -40,9 +49,6 @@ public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends E
 	 */
 	private String name;
 
-	/**
-	 * List of Listeners informed by the {link
-	 */
 	private final List<StateMachineEventHandler<TState, TEvent>> eventHandler;
 
 	/**
@@ -106,8 +112,8 @@ public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends E
 	}
 
 	@Override
-	public StateMachine<TState, TEvent> createActiveStateMachine(String name,
-			TState initialState) {
+	public StateMachine<TState, TEvent> createActiveStateMachine(
+			final String name, final TState initialState) {
 		ActiveStateMachine<TState, TEvent> activeStateMachine = new ActiveStateMachine<TState, TEvent>(
 				name, states);
 		activeStateMachine
@@ -119,7 +125,8 @@ public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends E
 	}
 
 	@Override
-	public StateMachine<TState, TEvent> createActiveStateMachine(String name) {
+	public StateMachine<TState, TEvent> createActiveStateMachine(
+			final String name) {
 		ActiveStateMachine<TState, TEvent> activeStateMachine = new ActiveStateMachine<TState, TEvent>(
 				name, states);
 		activeStateMachine
@@ -129,8 +136,8 @@ public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends E
 	}
 
 	@Override
-	public StateMachine<TState, TEvent> createPassiveStateMachine(String name,
-			TState initialState) {
+	public StateMachine<TState, TEvent> createPassiveStateMachine(
+			final String name, final TState initialState) {
 		PassiveStateMachine<TState, TEvent> passiveStateMachine = new PassiveStateMachine<TState, TEvent>(
 				name, states);
 		passiveStateMachine
@@ -142,7 +149,8 @@ public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends E
 	}
 
 	@Override
-	public StateMachine<TState, TEvent> createPassiveStateMachine(String name) {
+	public StateMachine<TState, TEvent> createPassiveStateMachine(
+			final String name) {
 		PassiveStateMachine<TState, TEvent> passiveStateMachine = new PassiveStateMachine<TState, TEvent>(
 				name, states);
 		passiveStateMachine
@@ -153,7 +161,6 @@ public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends E
 
 	@Override
 	public String report() {
-		// TODO Implement reporting
 		return "";
 	}
 
@@ -199,5 +206,4 @@ public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends E
 			onExceptionThrown(transitionContext, e);
 		}
 	}
-
 }

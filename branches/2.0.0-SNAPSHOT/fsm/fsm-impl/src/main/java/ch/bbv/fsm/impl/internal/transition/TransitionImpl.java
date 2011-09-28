@@ -30,10 +30,19 @@ import ch.bbv.fsm.impl.internal.state.StateContext;
 
 import com.google.common.collect.Lists;
 
+/**
+ * The implementation of a transition.
+ * 
+ * @param <TState>
+ *            the type of the states
+ * @param <TEvent>
+ *            the type of the events
+ */
 public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 		implements Transition<TState, TEvent> {
 
-	private static Logger LOG = LoggerFactory.getLogger(TransitionImpl.class);
+	private static final Logger LOG = LoggerFactory
+			.getLogger(TransitionImpl.class);
 
 	/**
 	 * The actions that are executed when this transition is fired.

@@ -59,7 +59,7 @@ public class StateMachineInitializer<TState extends Enum<?>, TEvent extends Enum
 	 * @return The entered state. The initial state or a sub state of the
 	 *         initial state.
 	 */
-	public State<TState, TEvent> EnterInitialState() {
+	public State<TState, TEvent> enterInitialState() {
 		final Stack<State<TState, TEvent>> stack = this
 				.traverseUpTheStateHierarchy();
 		this.traverseDownTheStateHierarchyAndEnterStates(stack);

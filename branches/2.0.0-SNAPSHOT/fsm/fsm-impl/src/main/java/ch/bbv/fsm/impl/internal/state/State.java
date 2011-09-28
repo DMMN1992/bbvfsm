@@ -200,6 +200,7 @@ public interface State<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * Sets the level in the hierarchy.
 	 * 
 	 * @param level
+	 *            the level
 	 */
 	void setLevel(int level);
 

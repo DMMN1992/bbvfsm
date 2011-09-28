@@ -21,37 +21,37 @@ package ch.bbv.fsm.impl.internal.events;
 import ch.bbv.fsm.events.TransitionCompletedEventArgs;
 import ch.bbv.fsm.impl.internal.transition.TransitionContext;
 
+/**
+ * See {@link TransitionEventArgsImpl}.
+ * 
+ * @param <TState>
+ *            the state enumeration
+ * @param <TEvent>
+ *            the event enumeration
+ */
 public class TransitionCompletedEventArgsImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 		extends TransitionEventArgsImpl<TState, TEvent> implements
 		TransitionCompletedEventArgs<TState, TEvent> {
 
-	// / <summary>
-	// / The new state the state machine is in after the transition.
-	// / </summary>
+	/**
+	 * The new state the state machine is in after the transition.
+	 */
 	private final TState newStateId;
 
-	// / <summary>
-	// / Initializes a new instance of the <see
-	// cref="TransitionCompletedEventArgs&lt;TState, TEvent&gt;"/> class.
-	// / </summary>
-	// / <param name="newStateId">The new state id.</param>
-	// / <param name="context">The context.</param>
+	/**
+	 * Constructor.
+	 * 
+	 * @param newStateId
+	 *            the new state's id
+	 * @param context
+	 *            the current context
+	 */
 	public TransitionCompletedEventArgsImpl(final TState newStateId,
 			final TransitionContext<TState, TEvent> context) {
 		super(context);
 		this.newStateId = newStateId;
 	}
 
-	// / <summary>
-	// / Gets the new state id the state machine is in after the transition.
-	// / </summary>
-	// / <value>The new state id the state machine is in after the
-	// transition.</value>
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.asm.impl.ITransitionCompletedEventArgs#getNewStateId()
-	 */
 	@Override
 	public TState getNewStateId() {
 		return this.newStateId;

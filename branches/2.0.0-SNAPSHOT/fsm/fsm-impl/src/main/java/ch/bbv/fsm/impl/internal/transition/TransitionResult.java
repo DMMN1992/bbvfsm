@@ -20,6 +20,14 @@ package ch.bbv.fsm.impl.internal.transition;
 
 import ch.bbv.fsm.impl.internal.state.State;
 
+/**
+ * The result of a transition.
+ * 
+ * @param <TState>
+ *            the type of states
+ * @param <TEvent>
+ *            the type of events
+ */
 public interface TransitionResult<TState extends Enum<?>, TEvent extends Enum<?>> {
 
 	/**

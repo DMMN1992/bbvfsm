@@ -23,6 +23,14 @@ import ch.bbv.fsm.impl.internal.StateMachineImpl;
 import ch.bbv.fsm.impl.internal.state.State;
 import ch.bbv.fsm.impl.internal.state.StateContext;
 
+/**
+ * Context during a transition.
+ * 
+ * @param <TState>
+ *            the type of the states
+ * @param <TEvent>
+ *            the type of the events
+ */
 public class TransitionContext<TState extends Enum<?>, TEvent extends Enum<?>>
 		extends StateContext<TState, TEvent> {
 
@@ -45,6 +53,10 @@ public class TransitionContext<TState extends Enum<?>, TEvent extends Enum<?>>
 	 *            the event id
 	 * @param eventArguments
 	 *            the event arguments
+	 * @param stateMachine
+	 *            the state machine
+	 * @param notifier
+	 *            the notifier
 	 */
 	public TransitionContext(final State<TState, TEvent> state,
 			final TEvent eventId, final Object[] eventArguments,

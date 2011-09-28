@@ -57,8 +57,6 @@ public class StateBuilder<TState extends Enum<?>, TEvent extends Enum<?>>
 	 *            the state
 	 * @param stateDictionary
 	 *            the state dictionary
-	 * @param notifier
-	 *            the notifier
 	 */
 	public StateBuilder(final State<TState, TEvent> state,
 			final StateDictionary<TState, TEvent> stateDictionary) {

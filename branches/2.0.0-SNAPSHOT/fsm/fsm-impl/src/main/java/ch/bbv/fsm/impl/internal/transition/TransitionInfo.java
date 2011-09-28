@@ -130,6 +130,7 @@ public class TransitionInfo<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * Sets the guard flag.
 	 * 
 	 * @param guard
+	 *            true if has a guard
 	 */
 	public void setGuard(final boolean guard) {
 		this.hasGuard = guard;

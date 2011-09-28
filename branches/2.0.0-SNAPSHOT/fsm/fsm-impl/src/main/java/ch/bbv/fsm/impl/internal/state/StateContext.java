@@ -129,7 +129,7 @@ public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
 	private final List<Exception> exceptions;
 
 	/**
-	 * The list of records (state exits, entries)
+	 * The list of records (state exits, entries).
 	 */
 	private final List<Record> records;
 
@@ -142,6 +142,10 @@ public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * 
 	 * @param sourceState
 	 *            the source state of the transition.
+	 * @param stateMachineImpl
+	 *            the state machine
+	 * @param notifier
+	 *            the notifier
 	 */
 	public StateContext(final State<TState, TEvent> sourceState,
 			final StateMachineImpl<TState, TEvent> stateMachineImpl,
@@ -198,31 +202,55 @@ public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
 		return this.sourceState;
 	}
 
+	/**
+	 * Returns the state machine's implementation.
+	 */
 	public StateMachineImpl<TState, TEvent> getStateMachineImpl() {
 		return stateMachineImpl;
 	}
 
+	/**
+	 * Returns the state machine.
+	 */
 	public StateMachine<TState, TEvent> getStateMachine() {
 		return stateMachineImpl.getStateMachine();
 	}
 
+	/**
+	 * Returns the notifier.
+	 */
 	public Notifier<TState, TEvent> getNotifier() {
 		return notifier;
 	}
 
+	/**
+	 * Returns the last active sub state for the given composite state.
+	 * 
+	 * @param superState
+	 *            the super state
+	 */
 	public State<TState, TEvent> getLastActiveSubState(
-			State<TState, TEvent> superState) {
+			final State<TState, TEvent> superState) {
 		State<TState, TEvent> result = null;
 		if (superState != null) {
 			result = stateMachineImpl.getLastActiveSubState(superState);
-			if (result == null)
+			if (result == null) {
 				result = superState.getInitialState();
+			}
 		}
 		return result;
 	}
 
-	public void setLastActiveSubState(State<TState, TEvent> superState,
-			State<TState, TEvent> subState) {
+	/**
+	 * Sets the last active sub state for the given composite state.
+	 * 
+	 * @param superState
+	 *            the super state
+	 * @param subState
+	 *            the last active sub state
+	 */
+	public void setLastActiveSubState(final State<TState, TEvent> superState,
+			final State<TState, TEvent> subState) {
 		stateMachineImpl.setLastActiveSubState(superState, subState);
 	}
 

@@ -24,6 +24,10 @@ import ch.bbv.fsm.StateMachine;
  * Action Holder. A wrapper class for different action types. It allows to
  * execute all actions with the same method call.
  * 
+ * @param <TState>
+ *            the type of the states
+ * @param <TEvent>
+ *            the type of the events
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
  */
 public interface ActionHolder<TState extends Enum<?>, TEvent extends Enum<?>> {
@@ -34,5 +38,5 @@ public interface ActionHolder<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param stateMachine
 	 *            the calling state machine
 	 */
-	public void execute(StateMachine<TState, TEvent> stateMachine);
+	void execute(StateMachine<TState, TEvent> stateMachine);
 }

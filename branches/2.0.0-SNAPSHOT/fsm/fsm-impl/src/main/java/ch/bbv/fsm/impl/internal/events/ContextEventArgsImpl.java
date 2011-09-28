@@ -22,6 +22,14 @@ import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.events.ContextEventArgs;
 import ch.bbv.fsm.impl.internal.state.StateContext;
 
+/**
+ * See {@link ContextEventArgs}.
+ * 
+ * @param <TState>
+ *            the state enumeration
+ * @param <TEvent>
+ *            the event enumeration
+ */
 public class ContextEventArgsImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 		implements ContextEventArgs<TState, TEvent> {
 
@@ -51,7 +59,6 @@ public class ContextEventArgsImpl<TState extends Enum<?>, TEvent extends Enum<?>
 
 	@Override
 	public StateMachine<TState, TEvent> getSource() {
-		// TODO Implement context
-		return null;// this.stateContext.getStateMachine();
+		return this.stateContext.getStateMachine();
 	}
 }

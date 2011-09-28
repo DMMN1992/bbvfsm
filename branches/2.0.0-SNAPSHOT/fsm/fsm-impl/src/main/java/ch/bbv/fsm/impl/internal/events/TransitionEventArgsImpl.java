@@ -21,6 +21,14 @@ package ch.bbv.fsm.impl.internal.events;
 import ch.bbv.fsm.events.TransitionEventArgs;
 import ch.bbv.fsm.impl.internal.transition.TransitionContext;
 
+/**
+ * See {@link ContextEventArgsImpl}.
+ * 
+ * @param <TState>
+ *            the state enumeration
+ * @param <TEvent>
+ *            the event enumeration
+ */
 public class TransitionEventArgsImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 		extends ContextEventArgsImpl<TState, TEvent> implements
 		TransitionEventArgs<TState, TEvent> {
@@ -35,31 +43,16 @@ public class TransitionEventArgsImpl<TState extends Enum<?>, TEvent extends Enum
 		super(transitionContext);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.asm.ITransitionEventArgs#getEventArguments()
-	 */
 	@Override
 	public Object[] getEventArguments() {
 		return this.getTransitionContext().getEventArguments();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.asm.ITransitionEventArgs#getEventId()
-	 */
 	@Override
 	public TEvent getEventId() {
 		return this.getTransitionContext().getEventId();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.asm.ITransitionEventArgs#getStateId()
-	 */
 	@Override
 	public TState getStateId() {
 		return this.getTransitionContext().getState().getId();

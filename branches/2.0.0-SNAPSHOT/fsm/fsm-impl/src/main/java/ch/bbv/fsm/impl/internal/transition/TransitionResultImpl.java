@@ -22,6 +22,14 @@ import java.util.List;
 
 import ch.bbv.fsm.impl.internal.state.State;
 
+/**
+ * The implementation of {@link TransitionResult}.
+ * 
+ * @param <TState>
+ *            the type of states
+ * @param <TEvent>
+ *            the type of events
+ */
 public class TransitionResultImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 		implements TransitionResult<TState, TEvent> {
 
@@ -79,6 +87,14 @@ public class TransitionResultImpl<TState extends Enum<?>, TEvent extends Enum<?>
 		return this.fired;
 	}
 
+	/**
+	 * Creates a not fired result.
+	 * 
+	 * @param <TState>
+	 *            the type of states
+	 * @param <TEvent>
+	 *            the type of events
+	 */
 	public static <TState extends Enum<?>, TEvent extends Enum<?>> TransitionResult<TState, TEvent> getNotFired() {
 		return new TransitionResultImpl<TState, TEvent>(false, null, null);
 

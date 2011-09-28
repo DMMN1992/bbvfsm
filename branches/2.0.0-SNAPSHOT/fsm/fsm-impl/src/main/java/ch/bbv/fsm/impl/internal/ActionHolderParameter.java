@@ -24,6 +24,11 @@ import ch.bbv.fsm.StateMachine;
 /**
  * Wraps an action with a parameter of type T.
  * 
+ * @param <TState>
+ *            the type of the states
+ * @param <TEvent>
+ *            the type of the events
+ * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
  * @param <T>
  *            the type of the parameter.
@@ -49,7 +54,7 @@ public class ActionHolderParameter<TState extends Enum<?>, TEvent extends Enum<?
 	}
 
 	@Override
-	public void execute(StateMachine<TState, TEvent> stateMachine) {
+	public void execute(final StateMachine<TState, TEvent> stateMachine) {
 		this.action.execute(stateMachine, this.parameter);
 	}
 }

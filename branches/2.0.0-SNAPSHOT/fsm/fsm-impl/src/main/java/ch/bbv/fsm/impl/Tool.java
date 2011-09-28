@@ -26,35 +26,44 @@ import ch.bbv.fsm.impl.internal.aop.MethodCallInterceptor;
  * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
  */
-public class Tool {
+public final class Tool {
 
-    public static <T> T any(final Class<T> type) {
-        return null;
-    }
+	/**
+	 * Define parameters.
+	 * 
+	 * @param type
+	 *            the type class
+	 * @param <T>
+	 *            the type
+	 */
+	public static <T> T any(final Class<T> type) {
+		return null;
+	}
 
-    /**
-     * Intercepts a type to simulate delegates.
-     * 
-     * @param <T>
-     * @param obj
-     * @return
-     */
-    @SuppressWarnings("unchecked")
-    public static <T> T from(final T obj) {
-        final MethodCallInterceptor interceptor = new MethodCallInterceptor(obj);
-        final Class<?> clazz = obj.getClass();
-        final Enhancer enhancer = new Enhancer();
-        enhancer.setSuperclass(clazz);
-        enhancer.setCallback(interceptor);
-        final T instance = (T) enhancer.create();
-        return instance;
-    }
+	/**
+	 * Intercepts a type to simulate delegates.
+	 * 
+	 * @param <T>
+	 *            the type
+	 * @param obj
+	 *            the instance to call
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T from(final T obj) {
+		final MethodCallInterceptor interceptor = new MethodCallInterceptor(obj);
+		final Class<?> clazz = obj.getClass();
+		final Enhancer enhancer = new Enhancer();
+		enhancer.setSuperclass(clazz);
+		enhancer.setCallback(interceptor);
+		final T instance = (T) enhancer.create();
+		return instance;
+	}
 
-    /**
-     * Private constructor to prevent the creation of an instance.
-     */
-    private Tool() {
-        // empty body
-    }
+	/**
+	 * Private constructor to prevent the creation of an instance.
+	 */
+	private Tool() {
+		// empty body
+	}
 
 }

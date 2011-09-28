@@ -21,21 +21,31 @@ package ch.bbv.fsm.impl.internal.events;
 import ch.bbv.fsm.events.TransitionExceptionEventArgs;
 import ch.bbv.fsm.impl.internal.transition.TransitionContext;
 
+/**
+ * See {@link TransitionExceptionEventArgs}.
+ * 
+ * @param <TState>
+ *            the state enumeration
+ * @param <TEvent>
+ *            the event enumeration
+ */
 public class TransitionExceptionEventArgsImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 		extends TransitionEventArgsImpl<TState, TEvent> implements
 		TransitionExceptionEventArgs<TState, TEvent> {
 
-	// / <summary>
-	// / The exception.
-	// / </summary>
+	/**
+	 * The exception.
+	 */
 	private final Exception exception;
 
-	// / <summary>
-	// / Initializes a new instance of the <see
-	// cref="TransitionExceptionEventArgs&lt;TState, TEvent&gt;"/> class.
-	// / </summary>
-	// / <param name="context">The event context.</param>
-	// / <param name="exception">The exception.</param>
+	/**
+	 * Constructor.
+	 * 
+	 * @param context
+	 *            the event context
+	 * @param exception
+	 *            the exception
+	 */
 	public TransitionExceptionEventArgsImpl(
 			final TransitionContext<TState, TEvent> context,
 			final Exception exception) {
@@ -43,18 +53,8 @@ public class TransitionExceptionEventArgsImpl<TState extends Enum<?>, TEvent ext
 		this.exception = exception;
 	}
 
-	// / <summary>
-	// / Gets the exception.
-	// / </summary>
-	// / <value>The exception.</value>
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.asm.impl.ITransitionExceptionEventArgs#getException()
-	 */
 	@Override
 	public Exception getException() {
 		return this.exception;
 	}
-
 }

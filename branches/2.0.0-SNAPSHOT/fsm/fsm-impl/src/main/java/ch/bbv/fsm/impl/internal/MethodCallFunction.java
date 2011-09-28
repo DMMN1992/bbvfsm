@@ -25,6 +25,11 @@ import ch.bbv.fsm.dsl.MethodCall;
 /**
  * Implementation of a function that wraps a MethodCall.
  * 
+ * @param <TState>
+ *            the type of the states.
+ * @param <TEvent>
+ *            the type of the events.
+ * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
  */
 public class MethodCallFunction<TState extends Enum<?>, TEvent extends Enum<?>>
@@ -43,10 +48,9 @@ public class MethodCallFunction<TState extends Enum<?>, TEvent extends Enum<?>>
 	}
 
 	@Override
-	public Boolean execute(StateMachine<TState, TEvent> stateMachine,
+	public Boolean execute(final StateMachine<TState, TEvent> stateMachine,
 			final Object[] args) {
 		try {
-			// TODO Pass state machine
 			Object[] arguments;
 			if (args.length == this.methodCall.getArguments().length) {
 				arguments = args;

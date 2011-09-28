@@ -43,6 +43,8 @@ import ch.bbv.fsm.impl.internal.state.StateDictionary;
 public class ActiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>>
 		implements StateMachine<TState, TEvent> {
 
+	private static final int WAIT_FOR_TERMINATION_MS = 10000;
+
 	/**
 	 * The internal state machine.
 	 */
@@ -66,7 +68,7 @@ public class ActiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>>
 	 */
 	private volatile boolean isRunning;
 
-	Runnable worker = new Runnable() {
+	private final Runnable worker = new Runnable() {
 		@Override
 		public void run() {
 			ActiveStateMachine.this.execute();
@@ -78,9 +80,11 @@ public class ActiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>>
 	 * 
 	 * @param name
 	 *            the name of the state machine used in the logs.
+	 * @param states
+	 *            the states
 	 */
-	public ActiveStateMachine(String name,
-			StateDictionary<TState, TEvent> states) {
+	public ActiveStateMachine(final String name,
+			final StateDictionary<TState, TEvent> states) {
 		this.stateMachine = new StateMachineImpl<TState, TEvent>(this, name,
 				states);
 		this.events = new LinkedBlockingDeque<EventInformation<TEvent>>();
@@ -118,15 +122,8 @@ public class ActiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>>
 
 	}
 
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.fsm.StateMachineDefinition#fire(java.lang.Object,
-	 *      java.lang.Object[])
-	 */
 	@Override
 	public void fire(final TEvent eventId, final Object... eventArguments) {
-
 		this.events.addLast(new EventInformation<TEvent>(eventId,
 				eventArguments));
 
@@ -142,12 +139,6 @@ public class ActiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>>
 		this.stateMachine.fire(e.getEventId(), e.getEventArguments());
 	}
 
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.fsm.StateMachineDefinition#firePriority(java.lang.Object,
-	 *      java.lang.Object[])
-	 */
 	@Override
 	public void firePriority(final TEvent eventId,
 			final Object... eventArguments) {
@@ -172,49 +163,30 @@ public class ActiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>>
 	}
 
 	/**
-	 * (non-Javadoc)
+	 * Initializes the state machine.
 	 * 
-	 * @see ch.bbv.fsm.StateMachineDefinition#initialize(java.lang.Object)
+	 * @param initialState
+	 *            the initial state to use
 	 */
 	public void initialize(final TState initialState) {
 		this.stateMachine.initialize(initialState);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.asm.StateMachine#isExecuting()
-	 */
 	@Override
 	public boolean isExecuting() {
 		return this.executing;
 	}
 
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.fsm.StateMachineDefinition#isRunning()
-	 */
 	@Override
 	public boolean isRunning() {
 		return this.isRunning;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.asm.StateMachine#numberOfQueuedEvents()
-	 */
 	@Override
 	public int numberOfQueuedEvents() {
 		return this.events.size();
 	}
 
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.fsm.StateMachineDefinition#start()
-	 */
 	@Override
 	public void start() {
 		this.isRunning = true;
@@ -223,8 +195,8 @@ public class ActiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>>
 	}
 
 	/**
-	 * (non-Javadoc) This method blocks until the termination of the worker
-	 * thread. After a timeout of 10 seconds the thread is interrupted.
+	 * This method blocks until the termination of the worker thread. After a
+	 * timeout of 10 seconds the thread is interrupted.
 	 * 
 	 * @see ch.bbv.fsm.StateMachineDefinition#stop()
 	 */
@@ -233,7 +205,7 @@ public class ActiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>>
 		this.isRunning = false;
 		this.executorService.shutdown();
 		try {
-			this.executorService.awaitTermination(10000, TimeUnit.MILLISECONDS);
+			this.executorService.awaitTermination(WAIT_FOR_TERMINATION_MS, TimeUnit.MILLISECONDS);
 		} catch (final InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -245,13 +217,14 @@ public class ActiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>>
 	}
 
 	@Override
-	public void addEventHandler(StateMachineEventHandler<TState, TEvent> handler) {
+	public void addEventHandler(
+			final StateMachineEventHandler<TState, TEvent> handler) {
 		stateMachine.addEventHandler(handler);
 	}
 
 	@Override
 	public void removeEventHandler(
-			StateMachineEventHandler<TState, TEvent> handler) {
+			final StateMachineEventHandler<TState, TEvent> handler) {
 		stateMachine.removeEventHandler(handler);
 	}
 

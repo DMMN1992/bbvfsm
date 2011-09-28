@@ -65,9 +65,12 @@ public class PassiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>>
 	 * 
 	 * @param name
 	 *            the name of the state machine used in the logs.
+	 * 
+	 * @param states
+	 *            the states
 	 */
 	public PassiveStateMachine(final String name,
-			StateDictionary<TState, TEvent> states) {
+			final StateDictionary<TState, TEvent> states) {
 		this.stateMachine = new StateMachineImpl<TState, TEvent>(this, name,
 				states);
 		this.events = new LinkedList<EventInformation<TEvent>>();
@@ -115,6 +118,12 @@ public class PassiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>>
 		this.isRunning = false;
 	}
 
+	/**
+	 * Initializes the state machine.
+	 * 
+	 * @param initialState
+	 *            the initial state to use
+	 */
 	public void initialize(final TState initialState) {
 		this.stateMachine.initialize(initialState);
 	}
@@ -178,13 +187,14 @@ public class PassiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>>
 	}
 
 	@Override
-	public void addEventHandler(StateMachineEventHandler<TState, TEvent> handler) {
+	public void addEventHandler(
+			final StateMachineEventHandler<TState, TEvent> handler) {
 		stateMachine.addEventHandler(handler);
 	}
 
 	@Override
 	public void removeEventHandler(
-			StateMachineEventHandler<TState, TEvent> handler) {
+			final StateMachineEventHandler<TState, TEvent> handler) {
 		stateMachine.removeEventHandler(handler);
 	}
 }

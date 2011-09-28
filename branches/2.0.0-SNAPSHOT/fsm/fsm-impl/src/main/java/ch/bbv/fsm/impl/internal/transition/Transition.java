@@ -31,6 +31,7 @@ import ch.bbv.fsm.impl.internal.state.State;
  * @param <TState>
  *            the type of the states
  * @param <TEvent>
+ *            the type of the events
  */
 public interface Transition<TState extends Enum<?>, TEvent extends Enum<?>> {
 

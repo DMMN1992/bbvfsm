@@ -24,6 +24,10 @@ import ch.bbv.fsm.dsl.MethodCall;
 /**
  * Wraps a MethodCall instance as an ActionHolder.
  * 
+ * @param <TState>
+ *            the type of the states
+ * @param <TEvent>
+ *            the type of the events
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
  */
 public class ActionHolderMethodCall<TState extends Enum<?>, TEvent extends Enum<?>>
@@ -42,7 +46,7 @@ public class ActionHolderMethodCall<TState extends Enum<?>, TEvent extends Enum<
 	}
 
 	@Override
-	public void execute(StateMachine<TState, TEvent> stateMachine) {
+	public void execute(final StateMachine<TState, TEvent> stateMachine) {
 		this.methodCall.execute();
 	}
 }

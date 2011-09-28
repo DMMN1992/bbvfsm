@@ -8,25 +8,39 @@ import ch.bbv.fsm.events.TransitionCompletedEventArgs;
 import ch.bbv.fsm.events.TransitionEventArgs;
 import ch.bbv.fsm.events.TransitionExceptionEventArgs;
 
+/**
+ * Delegates events to a list of listeners.
+ * 
+ * @param <TState>
+ *            the type of the states
+ * @param <TEvent>
+ *            the type of the events
+ */
 public class DelegatingStateMachineEventHandler<TState extends Enum<?>, TEvent extends Enum<?>>
 		implements StateMachineEventHandler<TState, TEvent> {
 
 	private final List<StateMachineEventHandler<TState, TEvent>> eventHandlers;
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param eventHandlers
+	 *            the handlers
+	 */
 	public DelegatingStateMachineEventHandler(
-			List<StateMachineEventHandler<TState, TEvent>> eventHandler) {
-		this.eventHandlers = eventHandler;
+			final List<StateMachineEventHandler<TState, TEvent>> eventHandlers) {
+		this.eventHandlers = eventHandlers;
 	}
 
 	@Override
-	public void onExceptionThrown(ExceptionEventArgs<TState, TEvent> arg) {
+	public void onExceptionThrown(final ExceptionEventArgs<TState, TEvent> arg) {
 		for (StateMachineEventHandler<TState, TEvent> handler : eventHandlers) {
 			handler.onExceptionThrown(arg);
 		}
 	}
 
 	@Override
-	public void onTransitionBegin(TransitionEventArgs<TState, TEvent> args) {
+	public void onTransitionBegin(final TransitionEventArgs<TState, TEvent> args) {
 		for (StateMachineEventHandler<TState, TEvent> handler : eventHandlers) {
 			handler.onTransitionBegin(args);
 		}
@@ -34,14 +48,15 @@ public class DelegatingStateMachineEventHandler<TState extends Enum<?>, TEvent e
 
 	@Override
 	public void onTransitionCompleted(
-			TransitionCompletedEventArgs<TState, TEvent> arg) {
+			final TransitionCompletedEventArgs<TState, TEvent> arg) {
 		for (StateMachineEventHandler<TState, TEvent> handler : eventHandlers) {
 			handler.onTransitionCompleted(arg);
 		}
 	}
 
 	@Override
-	public void onTransitionDeclined(TransitionEventArgs<TState, TEvent> arg) {
+	public void onTransitionDeclined(
+			final TransitionEventArgs<TState, TEvent> arg) {
 		for (StateMachineEventHandler<TState, TEvent> handler : eventHandlers) {
 			handler.onTransitionDeclined(arg);
 		}
@@ -49,7 +64,7 @@ public class DelegatingStateMachineEventHandler<TState extends Enum<?>, TEvent e
 
 	@Override
 	public void onTransitionThrowsException(
-			TransitionExceptionEventArgs<TState, TEvent> arg) {
+			final TransitionExceptionEventArgs<TState, TEvent> arg) {
 		for (StateMachineEventHandler<TState, TEvent> handler : eventHandlers) {
 			handler.onTransitionThrowsException(arg);
 		}

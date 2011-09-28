@@ -24,7 +24,7 @@ import ch.bbv.fsm.impl.internal.state.State;
 import ch.bbv.fsm.impl.internal.transition.TransitionInfo;
 
 /**
- * State Machine Report
+ * State Machine Report.
  * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
  * @param <TState>
@@ -52,7 +52,7 @@ public class StateMachineReport<TState extends Enum<?>, TEvent extends Enum<?>> 
 			final TState initialStateId) {
 		final StringBuilder report = new StringBuilder();
 
-		final String Indentation = INDENTATION;
+		final String indentation = INDENTATION;
 
 		report.append(String.format("%s: initial state = %s%s", name,
 				initialStateId.toString(), NEWLINE));
@@ -60,7 +60,7 @@ public class StateMachineReport<TState extends Enum<?>, TEvent extends Enum<?>> 
 		// write states
 		for (final State<TState, TEvent> state : states) {
 			if (state.getSuperState() == null) {
-				this.reportState(state, report, Indentation);
+				this.reportState(state, report, indentation);
 			}
 		}
 
@@ -78,19 +78,19 @@ public class StateMachineReport<TState extends Enum<?>, TEvent extends Enum<?>> 
 	 *            the current indentation level.
 	 */
 	private void reportState(final State<TState, TEvent> state,
-			final StringBuilder report, String indentation) {
+			final StringBuilder report, final String indentation) {
 		this.reportStateNameInitialStateHistoryTypeEntryAndExitAction(report,
 				indentation, state);
 
-		indentation += INDENTATION;
+		String nextIndentation = indentation + INDENTATION;
 
 		for (final TransitionInfo<TState, TEvent> transition : state
 				.getTransitions().getTransitions()) {
-			this.reportTransition(report, indentation, transition);
+			this.reportTransition(report, nextIndentation, transition);
 		}
 
 		for (final State<TState, TEvent> subState : state.getSubStates()) {
-			this.reportState(subState, report, indentation);
+			this.reportState(subState, report, nextIndentation);
 		}
 	}
 
@@ -106,17 +106,17 @@ public class StateMachineReport<TState extends Enum<?>, TEvent extends Enum<?>> 
 	 *            the state
 	 */
 	private void reportStateNameInitialStateHistoryTypeEntryAndExitAction(
-			final StringBuilder report, String indentation,
+			final StringBuilder report, final String indentation,
 			final State<TState, TEvent> state) {
 		report.append(String.format(
 				"%s %s: initial state = %s history type = %s %s", indentation,
 				state, state.getInitialState() != null ? state
 						.getInitialState().toString() : "None", state
 						.getHistoryType(), NEWLINE));
-		indentation += INDENTATION;
-		report.append(String.format("%s entry action: %s %s", indentation,
+		String newIndentation = indentation + INDENTATION;
+		report.append(String.format("%s entry action: %s %s", newIndentation,
 				state.getEntryAction() != null, NEWLINE));
-		report.append(String.format("%s exit action: %s %s", indentation,
+		report.append(String.format("%s exit action: %s %s", newIndentation,
 				state.getExitAction() != null, NEWLINE));
 	}
 

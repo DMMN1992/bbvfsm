@@ -33,7 +33,9 @@ import com.google.common.collect.Multimap;
  * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
  * @param <TState>
+ *            the type of states
  * @param <TEvent>
+ *            the type of events
  */
 public class TransitionDictionaryImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 		implements TransitionDictionary<TState, TEvent> {
@@ -41,9 +43,9 @@ public class TransitionDictionaryImpl<TState extends Enum<?>, TEvent extends Enu
 	/**
 	 * The state this transitions belong to.
 	 */
-	State<TState, TEvent> state;
+	private final State<TState, TEvent> state;
 
-	Multimap<TEvent, Transition<TState, TEvent>> transitions;
+	private final Multimap<TEvent, Transition<TState, TEvent>> transitions;
 
 	/**
 	 * Creates a new instance.
@@ -56,13 +58,6 @@ public class TransitionDictionaryImpl<TState extends Enum<?>, TEvent extends Enu
 		this.transitions = HashMultimap.create();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * ch.bbv.asm.impl.internal.transition.TransitionDictionary#add(java.lang
-	 * .Object, ch.bbv.asm.impl.internal.transition.Transition)
-	 */
 	@Override
 	public void add(final TEvent eventId,
 			final Transition<TState, TEvent> transition) {
@@ -70,12 +65,6 @@ public class TransitionDictionaryImpl<TState extends Enum<?>, TEvent extends Enu
 		this.transitions.put(eventId, transition);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * ch.bbv.asm.impl.internal.transition.TransitionDictionary#getTransitions()
-	 */
 	@Override
 	public List<TransitionInfo<TState, TEvent>> getTransitions() {
 		final List<TransitionInfo<TState, TEvent>> list = Lists.newArrayList();
@@ -86,13 +75,6 @@ public class TransitionDictionaryImpl<TState extends Enum<?>, TEvent extends Enu
 		return list;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * ch.bbv.asm.impl.internal.transition.TransitionDictionary#getTransitions
-	 * (java.lang.Object)
-	 */
 	@Override
 	public List<Transition<TState, TEvent>> getTransitions(final TEvent eventId) {
 		return ImmutableList.copyOf(this.transitions.get(eventId));
@@ -110,11 +92,10 @@ public class TransitionDictionaryImpl<TState extends Enum<?>, TEvent extends Enu
 			final List<TransitionInfo<TState, TEvent>> list) {
 		for (final Transition<TState, TEvent> transition : this.transitions
 				.get(eventId)) {
-			{
-				list.add(new TransitionInfo<TState, TEvent>(eventId, transition
-						.getSource(), transition.getTarget(), transition
-						.getGuard() != null, transition.getActions().size()));
-			}
+			list.add(new TransitionInfo<TState, TEvent>(eventId, transition
+					.getSource(), transition.getTarget(),
+					transition.getGuard() != null, transition.getActions()
+							.size()));
 		}
 	}
 }

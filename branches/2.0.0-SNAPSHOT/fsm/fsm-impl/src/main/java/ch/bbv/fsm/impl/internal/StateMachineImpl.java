@@ -51,7 +51,8 @@ import com.google.common.collect.Maps;
 public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 		implements Notifier<TState, TEvent> {
 
-	private static Logger LOG = LoggerFactory.getLogger(StateMachineImpl.class);
+	private static final Logger LOG = LoggerFactory
+			.getLogger(StateMachineImpl.class);
 
 	/**
 	 * Name of this state machine used in log messages.
@@ -69,7 +70,8 @@ public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	/**
 	 * The initial state of the state machine.
 	 */
-	@SuppressWarnings("unused") // Used in reporting
+	@SuppressWarnings("unused")
+	// Used in reporting
 	private TState initialStateId;
 
 	/**
@@ -77,9 +79,6 @@ public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	 */
 	private final StateDictionary<TState, TEvent> states;
 
-	/**
-	 * List of Listeners informed by the {link
-	 */
 	private final List<StateMachineEventHandler<TState, TEvent>> eventHandler;
 
 	private final StateMachine<TState, TEvent> stateMachine;
@@ -87,11 +86,15 @@ public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	/**
 	 * Initializes a new instance of the StateMachineImpl<TState,TEvent> class.
 	 * 
+	 * @param stateMachine
+	 *            the state machine
 	 * @param name
 	 *            The name of this state machine used in log messages.
+	 * @param states
+	 *            the states
 	 */
 	public StateMachineImpl(final StateMachine<TState, TEvent> stateMachine,
-			final String name, StateDictionary<TState, TEvent> states) {
+			final String name, final StateDictionary<TState, TEvent> states) {
 		this.name = name;
 		this.states = states;
 		this.stateMachine = stateMachine;
@@ -192,7 +195,7 @@ public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 
 		final StateMachineInitializer<TState, TEvent> initializer = new StateMachineInitializer<TState, TEvent>(
 				initialState, stateContext);
-		this.setCurrentState(initializer.EnterInitialState());
+		this.setCurrentState(initializer.enterInitialState());
 	}
 
 	/**
@@ -315,7 +318,6 @@ public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 		// StateMachineReport<TState, TEvent>();
 		// return report.report(this.toString(), this.states.getStates(),
 		// this.initialStateId);
-		// TODO Implement reporting
 		return "";
 	}
 
@@ -331,28 +333,39 @@ public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 		this.currentState = state;
 	}
 
+	/**
+	 * Returns the last active substate for the given composite state.
+	 * 
+	 * @param superState
+	 *            the super state
+	 */
 	public State<TState, TEvent> getLastActiveSubState(
-			State<TState, TEvent> superState) {
+			final State<TState, TEvent> superState) {
 		return superToSubState.get(superState);
 	}
 
-	public void setLastActiveSubState(State<TState, TEvent> superState,
-			State<TState, TEvent> subState) {
+	/**
+	 * Sets the last active sub state for the given composite state.
+	 * 
+	 * @param superState
+	 *            the super state
+	 * @param subState
+	 *            the last active sub state
+	 */
+	public void setLastActiveSubState(final State<TState, TEvent> superState,
+			final State<TState, TEvent> subState) {
 		superToSubState.put(superState, subState);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
 		return this.name;
 	}
 
+	/**
+	 * Returns the state machine.
+	 */
 	public StateMachine<TState, TEvent> getStateMachine() {
 		return stateMachine;
 	}
-
 }
