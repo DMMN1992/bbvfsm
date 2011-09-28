@@ -69,6 +69,7 @@ public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>>
 	/**
 	 * The initial state of the state machine.
 	 */
+	@SuppressWarnings("unused") // Used in reporting
 	private TState initialStateId;
 
 	/**

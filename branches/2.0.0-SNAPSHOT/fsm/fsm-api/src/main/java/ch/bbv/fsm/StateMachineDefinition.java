@@ -84,6 +84,11 @@ public interface StateMachineDefinition<TState extends Enum<?>, TEvent extends E
 			TState initialState);
 
 	/**
+	 * Creates an active state-machine from this definition with the default intial state.
+	 */ 
+	StateMachine<TState, TEvent> createActiveStateMachine(String name);
+
+	/**
 	 * Creates an passive state-machine from this definition.
 	 * 
 	 * @param initialState
@@ -92,13 +97,14 @@ public interface StateMachineDefinition<TState extends Enum<?>, TEvent extends E
 	StateMachine<TState, TEvent> createPassiveStateMachine(String name,
 			TState initialState);
 
+
+	/**
+	 * Creates an passive state-machine from this definition with the default intial state.
+	 */ 
+	StateMachine<TState, TEvent> createPassiveStateMachine(String name);
+
 	/**
 	 * Returns a report of this state machine with all states and transitions.
 	 */
 	String report();
-
-	StateMachine<TState, TEvent> createActiveStateMachine(String name);
-
-	StateMachine<TState, TEvent> createPassiveStateMachine(String name);
-
 }
