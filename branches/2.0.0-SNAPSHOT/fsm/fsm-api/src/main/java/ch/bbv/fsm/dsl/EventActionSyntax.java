@@ -18,7 +18,7 @@
  *******************************************************************************/
 package ch.bbv.fsm.dsl;
 
-import ch.bbv.fsm.Action;
+import ch.bbv.fsm.action.Action;
 
 /**
  * Possibilities to do with a transition.

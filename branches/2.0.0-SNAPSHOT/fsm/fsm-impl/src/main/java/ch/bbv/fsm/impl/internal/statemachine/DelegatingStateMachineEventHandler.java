@@ -1,4 +1,4 @@
-package ch.bbv.fsm.impl.internal;
+package ch.bbv.fsm.impl.internal.statemachine;
 
 import java.util.List;
 

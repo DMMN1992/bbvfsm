@@ -27,7 +27,7 @@ import org.junit.Test;
 
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.StateMachineDefinition;
-import ch.bbv.fsm.impl.StateMachineDefinitionImpl;
+import ch.bbv.fsm.impl.AbstractStateMachineDefinition;
 
 /**
  * Sample showing usage of state machine.
@@ -70,7 +70,7 @@ public class SyntaxTest {
 
 	@Before
 	public void setup() {
-		this.definition = new StateMachineDefinitionImpl<States, Events>("SimpleExample");
+		this.definition = new AbstractStateMachineDefinition<States, Events>("SimpleExample");
 
 		this.definition.in(States.A).executeOnEntry(from(this).fooEntry(ENTRY_A)).executeOnExit(from(this).fooExit(EXIT_A)).on(Events.toB)
 				.goTo(States.B).onlyIf(from(this).bar(any(Boolean.class)));

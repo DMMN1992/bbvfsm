@@ -16,16 +16,21 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.impl.internal;
+package ch.bbv.fsm.impl.internal.dsl;
 
-import ch.bbv.fsm.Action;
-import ch.bbv.fsm.Function;
+import ch.bbv.fsm.action.Action;
 import ch.bbv.fsm.dsl.EntryActionSyntax;
 import ch.bbv.fsm.dsl.EventActionSyntax;
 import ch.bbv.fsm.dsl.EventSyntax;
 import ch.bbv.fsm.dsl.ExecuteSyntax;
 import ch.bbv.fsm.dsl.ExitActionSyntax;
 import ch.bbv.fsm.dsl.GotoSyntax;
+import ch.bbv.fsm.guard.Function;
+import ch.bbv.fsm.impl.internal.action.ActionHolderMethodCall;
+import ch.bbv.fsm.impl.internal.action.ActionHolderNoParameter;
+import ch.bbv.fsm.impl.internal.action.ActionHolderParameter;
+import ch.bbv.fsm.impl.internal.action.MethodCallAction;
+import ch.bbv.fsm.impl.internal.action.MethodCallFunction;
 import ch.bbv.fsm.impl.internal.aop.MethodCallImpl;
 import ch.bbv.fsm.impl.internal.state.State;
 import ch.bbv.fsm.impl.internal.state.StateDictionary;

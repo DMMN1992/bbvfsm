@@ -21,14 +21,14 @@ package ch.bbv.fsm.impl;
 import org.junit.Assert;
 import org.junit.Test;
 
-import ch.bbv.fsm.Action;
-import ch.bbv.fsm.Function;
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.StateMachineDefinition;
+import ch.bbv.fsm.action.Action;
 import ch.bbv.fsm.events.ExceptionEventArgs;
 import ch.bbv.fsm.events.StateMachineEventAdapter;
 import ch.bbv.fsm.events.TransitionEventArgs;
 import ch.bbv.fsm.events.TransitionExceptionEventArgs;
+import ch.bbv.fsm.guard.Function;
 import ch.bbv.fsm.impl.StatesAndEvents.Events;
 import ch.bbv.fsm.impl.StatesAndEvents.States;
 
@@ -114,7 +114,7 @@ public class ExceptionCasesTest {
 			}
 		};
 
-		final StateMachineDefinition<States, Events> def = new StateMachineDefinitionImpl<States, Events>();
+		final StateMachineDefinition<States, Events> def = new AbstractStateMachineDefinition<States, Events>();
 
 		def.in(States.A).on(Events.B).goTo(States.B).execute(throwException);
 		def.addEventHandler(new Handler());
@@ -143,7 +143,7 @@ public class ExceptionCasesTest {
 			}
 		};
 
-		final StateMachineDefinition<States, Events> def = new StateMachineDefinitionImpl<States, Events>();
+		final StateMachineDefinition<States, Events> def = new AbstractStateMachineDefinition<States, Events>();
 		def.addEventHandler(new Handler());
 		def.in(States.A).on(Events.B).goTo(States.B);
 
@@ -173,7 +173,7 @@ public class ExceptionCasesTest {
 			}
 		};
 
-		final StateMachineDefinition<States, Events> def = new StateMachineDefinitionImpl<States, Events>();
+		final StateMachineDefinition<States, Events> def = new AbstractStateMachineDefinition<States, Events>();
 		def.addEventHandler(new Handler());
 		def.in(States.A).executeOnExit(throwException).on(Events.B).goTo(States.B);
 
@@ -202,7 +202,7 @@ public class ExceptionCasesTest {
 			}
 		};
 
-		final StateMachineDefinition<States, Events> def = new StateMachineDefinitionImpl<States, Events>();
+		final StateMachineDefinition<States, Events> def = new AbstractStateMachineDefinition<States, Events>();
 		def.in(States.A).on(Events.B).goTo(States.B).onlyIf(f1);
 
 		def.addEventHandler(new Handler());

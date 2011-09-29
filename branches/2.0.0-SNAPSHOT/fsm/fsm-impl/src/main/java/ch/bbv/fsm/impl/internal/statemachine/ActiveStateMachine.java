@@ -16,7 +16,7 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.impl;
+package ch.bbv.fsm.impl.internal.statemachine;
 
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.ExecutorService;
@@ -26,8 +26,8 @@ import java.util.concurrent.TimeUnit;
 
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.events.StateMachineEventHandler;
-import ch.bbv.fsm.impl.internal.EventInformation;
-import ch.bbv.fsm.impl.internal.StateMachineImpl;
+import ch.bbv.fsm.impl.internal.driver.StateMachineDriver;
+import ch.bbv.fsm.impl.internal.report.EventInformation;
 import ch.bbv.fsm.impl.internal.state.StateDictionary;
 
 /**
@@ -35,9 +35,9 @@ import ch.bbv.fsm.impl.internal.state.StateDictionary;
  * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
  * @param <TState>
- *            the type of the states. (Enum)
+ *            the type of the states.
  * @param <TEvent>
- *            the type of the events. (Enum)
+ *            the type of the events.
  */
 public class ActiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>> implements StateMachine<TState, TEvent> {
 
@@ -46,7 +46,7 @@ public class ActiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>> 
 	/**
 	 * The internal state machine.
 	 */
-	private final StateMachineImpl<TState, TEvent> stateMachine;
+	private final StateMachineDriver<TState, TEvent> stateMachine;
 
 	/**
 	 * List of all queued events.
@@ -81,7 +81,7 @@ public class ActiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>> 
 	 *            the states
 	 */
 	public ActiveStateMachine(final String name, final StateDictionary<TState, TEvent> states) {
-		this.stateMachine = new StateMachineImpl<TState, TEvent>(this, name, states);
+		this.stateMachine = new StateMachineDriver<TState, TEvent>(this, name, states);
 		this.events = new LinkedBlockingDeque<EventInformation<TEvent>>();
 		this.executorService = Executors.newFixedThreadPool(1);
 	}

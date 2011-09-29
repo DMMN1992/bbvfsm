@@ -20,8 +20,8 @@ package ch.bbv.fsm.impl.internal.transition;
 
 import java.util.List;
 
-import ch.bbv.fsm.Action;
-import ch.bbv.fsm.Function;
+import ch.bbv.fsm.action.Action;
+import ch.bbv.fsm.guard.Function;
 import ch.bbv.fsm.impl.internal.state.State;
 
 /**

@@ -26,7 +26,7 @@ import org.junit.Test;
 
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.StateMachineDefinition;
-import ch.bbv.fsm.impl.StateMachineDefinitionImpl;
+import ch.bbv.fsm.impl.AbstractStateMachineDefinition;
 
 /**
  * Example: Tennis Scorer.
@@ -50,7 +50,8 @@ public class Tennis {
 
 	@Before
 	public void setup() {
-		this.scorer = new StateMachineDefinitionImpl<States, Events>("Tennis");
+		this.scorer = new AbstractStateMachineDefinition<States, Events>("Tennis") {
+		};
 
 		this.scorer.in(States._0_0).executeOnEntry(from(this).setCurrentState(States._0_0));
 		this.scorer.in(States._0_0).on(Events.A_Scores).goTo(States._15_0);

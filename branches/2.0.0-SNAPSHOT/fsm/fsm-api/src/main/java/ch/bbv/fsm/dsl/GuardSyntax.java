@@ -18,7 +18,7 @@
  *******************************************************************************/
 package ch.bbv.fsm.dsl;
 
-import ch.bbv.fsm.Function;
+import ch.bbv.fsm.guard.Function;
 
 /**
  * Guard a transition.

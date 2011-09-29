@@ -16,46 +16,43 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.impl.internal;
+package ch.bbv.fsm.impl.internal.action;
 
-import java.lang.reflect.InvocationTargetException;
-
-import ch.bbv.fsm.Action;
-import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.dsl.MethodCall;
+import ch.bbv.fsm.action.Action;
+import ch.bbv.fsm.impl.internal.state.StateContext;
 
 /**
- * Calls a method.
+ * Wraps an action with a parameter of type T.
  * 
  * @param <TState>
  *            the type of the states
  * @param <TEvent>
  *            the type of the events
+ * 
+ * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
+ * @param <T>
+ *            the type of the parameter.
  */
-public class MethodCallAction<TState extends Enum<?>, TEvent extends Enum<?>> implements Action<TState, TEvent> {
+public class ActionHolderParameter<TState extends Enum<?>, TEvent extends Enum<?>, T> implements ActionHolder<TState, TEvent> {
 
-	private final MethodCall methodCall;
+	private final Action<TState, TEvent> action;
+	private final T parameter;
 
 	/**
-	 * Constructor.
+	 * Initializes a new instance.
 	 * 
-	 * @param methodCall
-	 *            the method to call
+	 * @param action
+	 *            the action
+	 * @param parameter
+	 *            the parameter
 	 */
-	public MethodCallAction(final MethodCall methodCall) {
-		this.methodCall = methodCall;
+	public ActionHolderParameter(final Action<TState, TEvent> action, final T parameter) {
+		this.action = action;
+		this.parameter = parameter;
 	}
 
 	@Override
-	public void execute(final StateMachine<TState, TEvent> stateMachine, final Object... arguments) {
-		try {
-			this.methodCall.getMethod().invoke(this.methodCall.getOwner(), arguments);
-		} catch (final IllegalArgumentException e) {
-			throw new RuntimeException(e);
-		} catch (final IllegalAccessException e) {
-			throw new RuntimeException(e);
-		} catch (final InvocationTargetException e) {
-			throw new RuntimeException(e);
-		}
+	public void execute(final StateContext<TState, TEvent> stateContext) {
+		this.action.execute(stateContext.getStateMachine(), this.parameter);
 	}
 }

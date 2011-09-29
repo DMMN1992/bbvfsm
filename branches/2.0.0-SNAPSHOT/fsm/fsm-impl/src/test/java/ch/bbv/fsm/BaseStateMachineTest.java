@@ -25,11 +25,12 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import ch.bbv.fsm.action.Action;
 import ch.bbv.fsm.events.ExceptionEventArgs;
 import ch.bbv.fsm.events.StateMachineEventAdapter;
 import ch.bbv.fsm.events.TransitionCompletedEventArgs;
 import ch.bbv.fsm.events.TransitionEventArgs;
-import ch.bbv.fsm.impl.StateMachineDefinitionImpl;
+import ch.bbv.fsm.impl.AbstractStateMachineDefinition;
 import ch.bbv.fsm.impl.StatesAndEvents;
 import ch.bbv.fsm.impl.StatesAndEvents.Events;
 import ch.bbv.fsm.impl.StatesAndEvents.States;
@@ -146,7 +147,7 @@ public abstract class BaseStateMachineTest {
 	 */
 	@Test
 	public void fireEvent() {
-		final StateMachineDefinition<States, Events> definition = new StateMachineDefinitionImpl<StatesAndEvents.States, StatesAndEvents.Events>();
+		final StateMachineDefinition<States, Events> definition = new AbstractStateMachineDefinition<StatesAndEvents.States, StatesAndEvents.Events>();
 
 		definition.defineHierarchyOn(States.B, States.B1, HistoryType.NONE, States.B1, States.B2);
 		definition.defineHierarchyOn(States.C, States.C2, HistoryType.SHALLOW, States.C1, States.C2);
@@ -187,7 +188,7 @@ public abstract class BaseStateMachineTest {
 
 		};
 
-		final StateMachineDefinition<States, Events> definition = new StateMachineDefinitionImpl<StatesAndEvents.States, StatesAndEvents.Events>();
+		final StateMachineDefinition<States, Events> definition = new AbstractStateMachineDefinition<StatesAndEvents.States, StatesAndEvents.Events>();
 
 		definition.in(States.A).on(Events.B).goTo(States.B).execute(a);
 
@@ -208,7 +209,7 @@ public abstract class BaseStateMachineTest {
 
 	@Test
 	public void startTwice() {
-		final StateMachineDefinition<States, Events> definition = new StateMachineDefinitionImpl<StatesAndEvents.States, StatesAndEvents.Events>();
+		final StateMachineDefinition<States, Events> definition = new AbstractStateMachineDefinition<StatesAndEvents.States, StatesAndEvents.Events>();
 		initTestee(definition);
 		this.testee.start();
 	}
@@ -220,7 +221,7 @@ public abstract class BaseStateMachineTest {
 	public void stopAndStart() {
 		final int transitions = 2;
 
-		final StateMachineDefinition<States, Events> stateMachineDefinition = new StateMachineDefinitionImpl<StatesAndEvents.States, StatesAndEvents.Events>();
+		final StateMachineDefinition<States, Events> stateMachineDefinition = new AbstractStateMachineDefinition<StatesAndEvents.States, StatesAndEvents.Events>();
 
 		stateMachineDefinition.in(States.A).on(Events.B).goTo(States.B);
 

@@ -16,10 +16,10 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.impl.internal;
+package ch.bbv.fsm.impl.internal.action;
 
-import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.dsl.MethodCall;
+import ch.bbv.fsm.action.MethodCall;
+import ch.bbv.fsm.impl.internal.state.StateContext;
 
 /**
  * Wraps a MethodCall instance as an ActionHolder.
@@ -45,7 +45,7 @@ public class ActionHolderMethodCall<TState extends Enum<?>, TEvent extends Enum<
 	}
 
 	@Override
-	public void execute(final StateMachine<TState, TEvent> stateMachine) {
+	public void execute(final StateContext<TState, TEvent> stateContext) {
 		this.methodCall.execute();
 	}
 }

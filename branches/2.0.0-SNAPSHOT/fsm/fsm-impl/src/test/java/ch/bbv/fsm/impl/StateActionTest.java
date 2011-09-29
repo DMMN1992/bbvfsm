@@ -21,9 +21,9 @@ package ch.bbv.fsm.impl;
 import org.junit.Assert;
 import org.junit.Test;
 
-import ch.bbv.fsm.Action;
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.StateMachineDefinition;
+import ch.bbv.fsm.action.Action;
 import ch.bbv.fsm.impl.StatesAndEvents.Events;
 import ch.bbv.fsm.impl.StatesAndEvents.States;
 
@@ -33,7 +33,7 @@ public class StateActionTest {
 	 */
 	@Test
 	public void entryAction() {
-		final StateMachineDefinition<States, Events> stateMachineDefinition = new StateMachineDefinitionImpl<States, Events>();
+		final StateMachineDefinition<States, Events> stateMachineDefinition = new AbstractStateMachineDefinition<States, Events>();
 
 		final boolean[] entered = new boolean[1];
 
@@ -58,7 +58,7 @@ public class StateActionTest {
 	 */
 	@Test
 	public void exitAction() {
-		final StateMachineDefinition<States, Events> stateMachineDefinition = new StateMachineDefinitionImpl<States, Events>();
+		final StateMachineDefinition<States, Events> stateMachineDefinition = new AbstractStateMachineDefinition<States, Events>();
 
 		final boolean[] entered = new boolean[1];
 
@@ -85,7 +85,7 @@ public class StateActionTest {
 	 */
 	@Test
 	public void parameterizedEntryAction() {
-		final StateMachineDefinition<States, Events> stateMachineDefinition = new StateMachineDefinitionImpl<States, Events>();
+		final StateMachineDefinition<States, Events> stateMachineDefinition = new AbstractStateMachineDefinition<States, Events>();
 
 		final int[] argument = new int[1];
 		argument[0] = 0;
@@ -111,7 +111,7 @@ public class StateActionTest {
 	 */
 	@Test
 	public void parametrizedExitAction() {
-		final StateMachineDefinition<States, Events> stateMachineDefinition = new StateMachineDefinitionImpl<States, Events>();
+		final StateMachineDefinition<States, Events> stateMachineDefinition = new AbstractStateMachineDefinition<States, Events>();
 
 		final int[] argument = new int[1];
 		argument[0] = 0;

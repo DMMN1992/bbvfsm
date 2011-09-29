@@ -20,12 +20,12 @@ package ch.bbv.fsm.example;
 
 import org.junit.Test;
 
-import ch.bbv.fsm.Action;
-import ch.bbv.fsm.Function;
 import ch.bbv.fsm.HistoryType;
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.StateMachineDefinition;
-import ch.bbv.fsm.impl.StateMachineDefinitionImpl;
+import ch.bbv.fsm.action.Action;
+import ch.bbv.fsm.guard.Function;
+import ch.bbv.fsm.impl.AbstractStateMachineDefinition;
 
 /**
  * Sample showing usage of state machine.
@@ -67,7 +67,7 @@ public class PassiveStateMachineSample {
 	@Test
 	public void sample() {
 
-		final StateMachineDefinition<States, Events> elevator = new StateMachineDefinitionImpl<States, Events>("Elevator");
+		final StateMachineDefinition<States, Events> elevator = new AbstractStateMachineDefinition<States, Events>("Elevator");
 
 		elevator.defineHierarchyOn(States.Healthy, States.OnFloor, HistoryType.DEEP, States.OnFloor, States.Moving);
 		elevator.defineHierarchyOn(States.Moving, States.MovingUp, HistoryType.SHALLOW, States.MovingUp, States.MovingDown);

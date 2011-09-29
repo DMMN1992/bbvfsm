@@ -16,7 +16,7 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.impl.internal;
+package ch.bbv.fsm.impl.internal.driver;
 
 import java.util.Stack;
 
@@ -32,7 +32,7 @@ import ch.bbv.fsm.impl.internal.state.StateContext;
  * @param <TEvent>
  *            the event type.
  */
-public class StateMachineInitializer<TState extends Enum<?>, TEvent extends Enum<?>> {
+class StateMachineInitializer<TState extends Enum<?>, TEvent extends Enum<?>> {
 
 	private final State<TState, TEvent> initialState;
 

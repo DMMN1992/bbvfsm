@@ -24,10 +24,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import ch.bbv.fsm.Action;
 import ch.bbv.fsm.HistoryType;
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.StateMachineDefinition;
+import ch.bbv.fsm.action.Action;
 import ch.bbv.fsm.impl.StatesAndEvents.Events;
 import ch.bbv.fsm.impl.StatesAndEvents.States;
 
@@ -446,7 +446,7 @@ public class StateMachineTest {
 	public void setUp() {
 		this.records = Lists.newArrayList();
 
-		stateMachineDefinition = new StateMachineDefinitionImpl<States, Events>();
+		stateMachineDefinition = new AbstractStateMachineDefinition<States, Events>();
 
 		stateMachineDefinition.defineHierarchyOn(States.B, States.B1, HistoryType.NONE, States.B1, States.B2);
 		stateMachineDefinition.defineHierarchyOn(States.C, States.C2, HistoryType.SHALLOW, States.C1, States.C2);

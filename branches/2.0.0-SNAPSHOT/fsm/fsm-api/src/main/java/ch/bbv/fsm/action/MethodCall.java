@@ -16,7 +16,7 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.dsl;
+package ch.bbv.fsm.action;
 
 import java.lang.reflect.Method;
 

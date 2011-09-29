@@ -28,7 +28,7 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import ch.bbv.fsm.dsl.MethodCall;
+import ch.bbv.fsm.action.MethodCall;
 import ch.bbv.fsm.impl.internal.aop.MethodCallImpl;
 
 public class ToolTest {

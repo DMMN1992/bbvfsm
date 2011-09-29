@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ch.bbv.fsm.HistoryType;
-import ch.bbv.fsm.impl.internal.ActionHolder;
+import ch.bbv.fsm.impl.internal.action.ActionHolder;
 import ch.bbv.fsm.impl.internal.state.StateContext.RecordType;
 import ch.bbv.fsm.impl.internal.transition.Transition;
 import ch.bbv.fsm.impl.internal.transition.TransitionContext;
@@ -224,7 +224,7 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>> implement
 		stateContext.addRecord(this.getId(), RecordType.Enter);
 		if (this.entryAction != null) {
 			try {
-				this.entryAction.execute(stateContext.getStateMachine());
+				this.entryAction.execute(stateContext);
 			} catch (final Exception e) {
 				handleException(e, stateContext);
 			}
@@ -237,7 +237,7 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>> implement
 		stateContext.addRecord(this.getId(), StateContext.RecordType.Exit);
 		if (this.exitAction != null) {
 			try {
-				this.exitAction.execute(stateContext.getStateMachine());
+				this.exitAction.execute(stateContext);
 			} catch (final Exception e) {
 				handleException(e, stateContext);
 			}

@@ -22,7 +22,7 @@ import java.lang.reflect.Method;
 
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
-import ch.bbv.fsm.dsl.MethodCall;
+import ch.bbv.fsm.action.MethodCall;
 
 /**
  * The method call interceptor.

@@ -58,6 +58,6 @@ public class StateMachineBuildHierarchyTest {
 	 */
 	@Before
 	public void setUp() {
-		this.testee = new StateMachineDefinitionImpl<States, Events>();
+		this.testee = new AbstractStateMachineDefinition<States, Events>();
 	}
 }

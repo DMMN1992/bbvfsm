@@ -21,8 +21,8 @@ package ch.bbv.fsm.impl.internal.state;
 import java.util.List;
 
 import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.impl.internal.Notifier;
-import ch.bbv.fsm.impl.internal.StateMachineImpl;
+import ch.bbv.fsm.impl.internal.driver.StateMachineDriver;
+import ch.bbv.fsm.impl.internal.statemachine.Notifier;
 
 import com.google.common.collect.Lists;
 
@@ -132,7 +132,7 @@ public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 */
 	private final List<Record> records;
 
-	private final StateMachineImpl<TState, TEvent> stateMachineImpl;
+	private final StateMachineDriver<TState, TEvent> stateMachineImpl;
 
 	private final Notifier<TState, TEvent> notifier;
 
@@ -146,7 +146,7 @@ public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param notifier
 	 *            the notifier
 	 */
-	public StateContext(final State<TState, TEvent> sourceState, final StateMachineImpl<TState, TEvent> stateMachineImpl,
+	public StateContext(final State<TState, TEvent> sourceState, final StateMachineDriver<TState, TEvent> stateMachineImpl,
 			final Notifier<TState, TEvent> notifier) {
 		this.sourceState = sourceState;
 		this.stateMachineImpl = stateMachineImpl;
@@ -203,7 +203,7 @@ public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
 	/**
 	 * Returns the state machine's implementation.
 	 */
-	public StateMachineImpl<TState, TEvent> getStateMachineImpl() {
+	public StateMachineDriver<TState, TEvent> getStateMachineImpl() {
 		return stateMachineImpl;
 	}
 

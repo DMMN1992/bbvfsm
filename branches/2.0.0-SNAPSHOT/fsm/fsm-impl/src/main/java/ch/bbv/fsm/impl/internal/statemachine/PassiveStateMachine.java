@@ -16,14 +16,14 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.impl;
+package ch.bbv.fsm.impl.internal.statemachine;
 
 import java.util.LinkedList;
 
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.events.StateMachineEventHandler;
-import ch.bbv.fsm.impl.internal.EventInformation;
-import ch.bbv.fsm.impl.internal.StateMachineImpl;
+import ch.bbv.fsm.impl.internal.driver.StateMachineDriver;
+import ch.bbv.fsm.impl.internal.report.EventInformation;
 import ch.bbv.fsm.impl.internal.state.StateDictionary;
 
 /**
@@ -40,7 +40,7 @@ public class PassiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>>
 	/**
 	 * The internal state machine.
 	 */
-	private final StateMachineImpl<TState, TEvent> stateMachine;
+	private final StateMachineDriver<TState, TEvent> stateMachine;
 
 	/**
 	 * List of all queued events.
@@ -67,7 +67,7 @@ public class PassiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>>
 	 *            the states
 	 */
 	public PassiveStateMachine(final String name, final StateDictionary<TState, TEvent> states) {
-		this.stateMachine = new StateMachineImpl<TState, TEvent>(this, name, states);
+		this.stateMachine = new StateMachineDriver<TState, TEvent>(this, name, states);
 		this.events = new LinkedList<EventInformation<TEvent>>();
 	}
 

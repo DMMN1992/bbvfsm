@@ -16,50 +16,40 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.impl.internal;
+package ch.bbv.fsm.impl.internal.action;
 
-import ch.bbv.fsm.Function;
-import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.dsl.MethodCall;
+import ch.bbv.fsm.action.Action;
+import ch.bbv.fsm.impl.internal.state.StateContext;
 
 /**
- * Implementation of a function that wraps a MethodCall.
+ * Wraps an action without parameters.
  * 
  * @param <TState>
- *            the type of the states.
+ *            the type of the states
  * @param <TEvent>
- *            the type of the events.
+ *            the type of the events
  * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
  */
-public class MethodCallFunction<TState extends Enum<?>, TEvent extends Enum<?>> implements Function<TState, TEvent, Object[], Boolean> {
-
-	private final MethodCall methodCall;
+public class ActionHolderNoParameter<TState extends Enum<?>, TEvent extends Enum<?>> implements ActionHolder<TState, TEvent> {
 
 	/**
-	 * Creates a new instance.
-	 * 
-	 * @param methodCall
-	 *            the methodCall instance
+	 * the wrapped action.
 	 */
-	public MethodCallFunction(final MethodCall methodCall) {
-		this.methodCall = methodCall;
+	private final Action<TState, TEvent> action;
+
+	/**
+	 * Initializes a new instance.
+	 * 
+	 * @param action
+	 *            the action to wrap.
+	 */
+	public ActionHolderNoParameter(final Action<TState, TEvent> action) {
+		this.action = action;
 	}
 
 	@Override
-	public Boolean execute(final StateMachine<TState, TEvent> stateMachine, final Object[] args) {
-		try {
-			Object[] arguments;
-			if (args.length == this.methodCall.getArguments().length) {
-				arguments = args;
-			} else {
-				arguments = this.methodCall.getArguments();
-			}
-
-			return (Boolean) this.methodCall.getMethod().invoke(this.methodCall.getOwner(), arguments);
-		} catch (final Exception e) {
-			throw new RuntimeException(e);
-		}
+	public void execute(final StateContext<TState, TEvent> stateContext) {
+		this.action.execute(stateContext.getStateMachine());
 	}
-
 }

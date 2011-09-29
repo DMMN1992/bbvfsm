@@ -16,40 +16,26 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.impl.internal;
+package ch.bbv.fsm.impl.internal.action;
 
-import ch.bbv.fsm.Action;
-import ch.bbv.fsm.StateMachine;
+import ch.bbv.fsm.impl.internal.state.StateContext;
 
 /**
- * Wraps an action without parameters.
+ * Action Holder. A wrapper class for different action types. It allows to execute all actions with the same method call.
  * 
  * @param <TState>
  *            the type of the states
  * @param <TEvent>
  *            the type of the events
- * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
  */
-public class ActionHolderNoParameter<TState extends Enum<?>, TEvent extends Enum<?>> implements ActionHolder<TState, TEvent> {
+public interface ActionHolder<TState extends Enum<?>, TEvent extends Enum<?>> {
 
 	/**
-	 * the wrapped action.
-	 */
-	private final Action<TState, TEvent> action;
-
-	/**
-	 * Initializes a new instance.
+	 * Executes the wrapped action.
 	 * 
-	 * @param action
-	 *            the action to wrap.
+	 * @param stateContext
+	 *            the calling state machine
 	 */
-	public ActionHolderNoParameter(final Action<TState, TEvent> action) {
-		this.action = action;
-	}
-
-	@Override
-	public void execute(final StateMachine<TState, TEvent> stateMachine) {
-		this.action.execute(stateMachine);
-	}
+	void execute(StateContext<TState, TEvent> stateContext);
 }

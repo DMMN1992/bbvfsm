@@ -18,10 +18,10 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl.internal.transition;
 
-import ch.bbv.fsm.impl.internal.Notifier;
-import ch.bbv.fsm.impl.internal.StateMachineImpl;
+import ch.bbv.fsm.impl.internal.driver.StateMachineDriver;
 import ch.bbv.fsm.impl.internal.state.State;
 import ch.bbv.fsm.impl.internal.state.StateContext;
+import ch.bbv.fsm.impl.internal.statemachine.Notifier;
 
 /**
  * Context during a transition.
@@ -58,7 +58,7 @@ public class TransitionContext<TState extends Enum<?>, TEvent extends Enum<?>> e
 	 *            the notifier
 	 */
 	public TransitionContext(final State<TState, TEvent> state, final TEvent eventId, final Object[] eventArguments,
-			final StateMachineImpl<TState, TEvent> stateMachine, final Notifier<TState, TEvent> notifier) {
+			final StateMachineDriver<TState, TEvent> stateMachine, final Notifier<TState, TEvent> notifier) {
 		super(state, stateMachine, notifier);
 		this.eventId = eventId;
 		this.eventArguments = eventArguments;

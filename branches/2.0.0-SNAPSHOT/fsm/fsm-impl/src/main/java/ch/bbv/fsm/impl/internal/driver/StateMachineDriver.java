@@ -16,7 +16,7 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.impl.internal;
+package ch.bbv.fsm.impl.internal.driver;
 
 import java.util.List;
 import java.util.Map;
@@ -33,6 +33,7 @@ import ch.bbv.fsm.impl.internal.events.TransitionExceptionEventArgsImpl;
 import ch.bbv.fsm.impl.internal.state.State;
 import ch.bbv.fsm.impl.internal.state.StateContext;
 import ch.bbv.fsm.impl.internal.state.StateDictionary;
+import ch.bbv.fsm.impl.internal.statemachine.Notifier;
 import ch.bbv.fsm.impl.internal.transition.TransitionContext;
 import ch.bbv.fsm.impl.internal.transition.TransitionResult;
 
@@ -48,9 +49,9 @@ import com.google.common.collect.Maps;
  * @param <TEvent>
  *            the type of the events.
  */
-public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>> implements Notifier<TState, TEvent> {
+public class StateMachineDriver<TState extends Enum<?>, TEvent extends Enum<?>> implements Notifier<TState, TEvent> {
 
-	private static final Logger LOG = LoggerFactory.getLogger(StateMachineImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(StateMachineDriver.class);
 
 	/**
 	 * Name of this state machine used in log messages.
@@ -90,7 +91,7 @@ public class StateMachineImpl<TState extends Enum<?>, TEvent extends Enum<?>> im
 	 * @param states
 	 *            the states
 	 */
-	public StateMachineImpl(final StateMachine<TState, TEvent> stateMachine, final String name, final StateDictionary<TState, TEvent> states) {
+	public StateMachineDriver(final StateMachine<TState, TEvent> stateMachine, final String name, final StateDictionary<TState, TEvent> states) {
 		this.name = name;
 		this.states = states;
 		this.stateMachine = stateMachine;

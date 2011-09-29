@@ -16,7 +16,7 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.impl.internal;
+package ch.bbv.fsm.impl.internal.statemachine;
 
 import ch.bbv.fsm.impl.internal.state.StateContext;
 import ch.bbv.fsm.impl.internal.transition.TransitionContext;

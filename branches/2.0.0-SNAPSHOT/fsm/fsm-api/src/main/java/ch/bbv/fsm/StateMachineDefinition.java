@@ -29,8 +29,15 @@ import ch.bbv.fsm.events.StateMachineEventHandler;
  *            the enumeration type of the states.
  * @param <TEvent>
  *            the enumeration type of the events.
+ * @param <TStateMachine>
+ *            the type of state machine
  */
-public interface StateMachineDefinition<TState extends Enum<?>, TEvent extends Enum<?>> {
+public interface StateMachineDefinition<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
+
+	/**
+	 * Returns the state machine's default initial state.
+	 */
+	TState getInitialState();
 
 	/**
 	 * Defines behavior of a state.
@@ -83,7 +90,7 @@ public interface StateMachineDefinition<TState extends Enum<?>, TEvent extends E
 	 * @param initialState
 	 *            The state to which the state machine is initialized.
 	 */
-	StateMachine<TState, TEvent> createActiveStateMachine(String name, TState initialState);
+	TStateMachine createActiveStateMachine(String name, TState initialState);
 
 	/**
 	 * Creates an active state-machine from this definition with the default initial state.
@@ -91,7 +98,7 @@ public interface StateMachineDefinition<TState extends Enum<?>, TEvent extends E
 	 * @param name
 	 *            the state machine's name
 	 */
-	StateMachine<TState, TEvent> createActiveStateMachine(String name);
+	TStateMachine createActiveStateMachine(String name);
 
 	/**
 	 * Creates an passive state-machine from this definition.
@@ -101,7 +108,7 @@ public interface StateMachineDefinition<TState extends Enum<?>, TEvent extends E
 	 * @param initialState
 	 *            The state to which the state machine is initialized.
 	 */
-	StateMachine<TState, TEvent> createPassiveStateMachine(String name, TState initialState);
+	TStateMachine createPassiveStateMachine(String name, TState initialState);
 
 	/**
 	 * Creates an passive state-machine from this definition with the default initial state.
@@ -109,7 +116,7 @@ public interface StateMachineDefinition<TState extends Enum<?>, TEvent extends E
 	 * @param name
 	 *            the state machine's name
 	 */
-	StateMachine<TState, TEvent> createPassiveStateMachine(String name);
+	TStateMachine createPassiveStateMachine(String name);
 
 	/**
 	 * Returns a report of this state machine with all states and transitions.

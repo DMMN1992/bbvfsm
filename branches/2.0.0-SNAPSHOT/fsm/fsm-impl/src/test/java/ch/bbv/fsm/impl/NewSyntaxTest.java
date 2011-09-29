@@ -42,7 +42,7 @@ public class NewSyntaxTest {
 
 	@Test
 	public void transitionTest() {
-		final StateMachineDefinition<States, Events> stateMachineDefinition = new StateMachineDefinitionImpl<States, Events>();
+		final StateMachineDefinition<States, Events> stateMachineDefinition = new AbstractStateMachineDefinition<States, Events>();
 
 		stateMachineDefinition.in(States.A).on(Events.B).goTo(States.B).execute(from(this).actionMethod(any(String.class), any(int.class)));
 

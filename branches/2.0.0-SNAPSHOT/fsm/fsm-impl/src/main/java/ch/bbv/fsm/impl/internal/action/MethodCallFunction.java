@@ -16,43 +16,50 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.impl.internal;
+package ch.bbv.fsm.impl.internal.action;
 
-import ch.bbv.fsm.Action;
 import ch.bbv.fsm.StateMachine;
+import ch.bbv.fsm.action.MethodCall;
+import ch.bbv.fsm.guard.Function;
 
 /**
- * Wraps an action with a parameter of type T.
+ * Implementation of a function that wraps a MethodCall.
  * 
  * @param <TState>
- *            the type of the states
+ *            the type of the states.
  * @param <TEvent>
- *            the type of the events
+ *            the type of the events.
  * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
- * @param <T>
- *            the type of the parameter.
  */
-public class ActionHolderParameter<TState extends Enum<?>, TEvent extends Enum<?>, T> implements ActionHolder<TState, TEvent> {
+public class MethodCallFunction<TState extends Enum<?>, TEvent extends Enum<?>> implements Function<TState, TEvent, Object[], Boolean> {
 
-	private final Action<TState, TEvent> action;
-	private final T parameter;
+	private final MethodCall methodCall;
 
 	/**
-	 * Initializes a new instance.
+	 * Creates a new instance.
 	 * 
-	 * @param action
-	 *            the action
-	 * @param parameter
-	 *            the parameter
+	 * @param methodCall
+	 *            the methodCall instance
 	 */
-	public ActionHolderParameter(final Action<TState, TEvent> action, final T parameter) {
-		this.action = action;
-		this.parameter = parameter;
+	public MethodCallFunction(final MethodCall methodCall) {
+		this.methodCall = methodCall;
 	}
 
 	@Override
-	public void execute(final StateMachine<TState, TEvent> stateMachine) {
-		this.action.execute(stateMachine, this.parameter);
+	public Boolean execute(final StateMachine<TState, TEvent> stateMachine, final Object[] args) {
+		try {
+			Object[] arguments;
+			if (args.length == this.methodCall.getArguments().length) {
+				arguments = args;
+			} else {
+				arguments = this.methodCall.getArguments();
+			}
+
+			return (Boolean) this.methodCall.getMethod().invoke(this.methodCall.getOwner(), arguments);
+		} catch (final Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
+
 }

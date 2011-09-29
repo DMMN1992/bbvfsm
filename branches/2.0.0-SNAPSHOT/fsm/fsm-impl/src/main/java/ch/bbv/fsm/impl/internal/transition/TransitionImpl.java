@@ -23,8 +23,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ch.bbv.fsm.Action;
-import ch.bbv.fsm.Function;
+import ch.bbv.fsm.action.Action;
+import ch.bbv.fsm.guard.Function;
 import ch.bbv.fsm.impl.internal.state.State;
 import ch.bbv.fsm.impl.internal.state.StateContext;
 

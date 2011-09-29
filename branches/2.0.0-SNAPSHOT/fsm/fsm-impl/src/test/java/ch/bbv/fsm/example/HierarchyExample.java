@@ -26,7 +26,7 @@ import org.junit.Test;
 import ch.bbv.fsm.HistoryType;
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.StateMachineDefinition;
-import ch.bbv.fsm.impl.StateMachineDefinitionImpl;
+import ch.bbv.fsm.impl.AbstractStateMachineDefinition;
 
 /**
  * Sample showing the usage of state machine.
@@ -45,7 +45,7 @@ public class HierarchyExample {
 
 	@Before
 	public void setup() {
-		stateMachineDefinition = new StateMachineDefinitionImpl<HierarchyExample.States, HierarchyExample.Events>();
+		stateMachineDefinition = new AbstractStateMachineDefinition<HierarchyExample.States, HierarchyExample.Events>();
 
 		stateMachineDefinition.defineHierarchyOn(States.B, States.B_1, HistoryType.NONE, States.B_1, States.B_2);
 		stateMachineDefinition.defineHierarchyOn(States.D, States.D_1, HistoryType.SHALLOW, States.D_1, States.D_2);

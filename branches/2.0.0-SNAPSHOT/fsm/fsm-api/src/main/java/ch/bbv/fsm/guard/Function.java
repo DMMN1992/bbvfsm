@@ -16,7 +16,9 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm;
+package ch.bbv.fsm.guard;
+
+import ch.bbv.fsm.StateMachine;
 
 /**
  * Defines a function with one parameter.

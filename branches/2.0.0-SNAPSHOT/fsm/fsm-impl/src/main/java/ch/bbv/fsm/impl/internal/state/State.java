@@ -19,7 +19,7 @@
 package ch.bbv.fsm.impl.internal.state;
 
 import ch.bbv.fsm.HistoryType;
-import ch.bbv.fsm.impl.internal.ActionHolder;
+import ch.bbv.fsm.impl.internal.action.ActionHolder;
 import ch.bbv.fsm.impl.internal.transition.TransitionContext;
 import ch.bbv.fsm.impl.internal.transition.TransitionDictionary;
 import ch.bbv.fsm.impl.internal.transition.TransitionResult;

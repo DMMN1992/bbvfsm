@@ -21,11 +21,11 @@ package ch.bbv.fsm.impl;
 import org.junit.Assert;
 import org.junit.Test;
 
-import ch.bbv.fsm.Function;
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.StateMachineDefinition;
 import ch.bbv.fsm.events.StateMachineEventAdapter;
 import ch.bbv.fsm.events.TransitionEventArgs;
+import ch.bbv.fsm.guard.Function;
 import ch.bbv.fsm.impl.StatesAndEvents.Events;
 import ch.bbv.fsm.impl.StatesAndEvents.States;
 
@@ -55,7 +55,7 @@ public class GuardTest {
 
 		};
 
-		final StateMachineDefinition<States, Events> stateMachineDefinition = new StateMachineDefinitionImpl<States, Events>();
+		final StateMachineDefinition<States, Events> stateMachineDefinition = new AbstractStateMachineDefinition<States, Events>();
 
 		stateMachineDefinition.addEventHandler(new Handler());
 
@@ -88,7 +88,7 @@ public class GuardTest {
 			}
 
 		};
-		final StateMachineDefinition<States, Events> stateMachineDefinition = new StateMachineDefinitionImpl<States, Events>();
+		final StateMachineDefinition<States, Events> stateMachineDefinition = new AbstractStateMachineDefinition<States, Events>();
 
 		stateMachineDefinition.in(States.A).on(Events.A).goTo(States.B).onlyIf(f2);
 
@@ -123,7 +123,7 @@ public class GuardTest {
 
 		};
 
-		final StateMachineDefinition<States, Events> stateMachineDefinition = new StateMachineDefinitionImpl<States, Events>();
+		final StateMachineDefinition<States, Events> stateMachineDefinition = new AbstractStateMachineDefinition<States, Events>();
 
 		stateMachineDefinition.in(States.A).on(Events.A).goTo(States.B).onlyIf(f1).on(Events.A).goTo(States.C).onlyIf(f2);
 

@@ -10,16 +10,17 @@ import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.StateMachineDefinition;
 import ch.bbv.fsm.dsl.EntryActionSyntax;
 import ch.bbv.fsm.events.StateMachineEventHandler;
-import ch.bbv.fsm.impl.internal.DelegatingStateMachineEventHandler;
-import ch.bbv.fsm.impl.internal.Notifier;
-import ch.bbv.fsm.impl.internal.StateBuilder;
-import ch.bbv.fsm.impl.internal.StateMachineImpl;
+import ch.bbv.fsm.impl.internal.dsl.StateBuilder;
 import ch.bbv.fsm.impl.internal.events.ExceptionEventArgsImpl;
 import ch.bbv.fsm.impl.internal.events.TransitionEventArgsImpl;
 import ch.bbv.fsm.impl.internal.events.TransitionExceptionEventArgsImpl;
 import ch.bbv.fsm.impl.internal.state.State;
 import ch.bbv.fsm.impl.internal.state.StateContext;
 import ch.bbv.fsm.impl.internal.state.StateDictionary;
+import ch.bbv.fsm.impl.internal.statemachine.ActiveStateMachine;
+import ch.bbv.fsm.impl.internal.statemachine.DelegatingStateMachineEventHandler;
+import ch.bbv.fsm.impl.internal.statemachine.Notifier;
+import ch.bbv.fsm.impl.internal.statemachine.PassiveStateMachine;
 import ch.bbv.fsm.impl.internal.transition.TransitionContext;
 
 import com.google.common.collect.Lists;
@@ -28,14 +29,16 @@ import com.google.common.collect.Lists;
  * Implementation of the definition of the finite state machine.
  * 
  * @param <TState>
- *            the type of the states. (Enum)
+ *            the type of the states.
  * @param <TEvent>
- *            the type of the events. (Enum)
+ *            the type of the events.
+ * @param <TStateMachine>
+ *            the type of the state machine
  */
-public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends Enum<?>> implements StateMachineDefinition<TState, TEvent>,
-		Notifier<TState, TEvent> {
+public abstract class AbstractStateMachineDefinition<TStateMachine extends AbstractStateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
+		implements StateMachineDefinition<TStateMachine, TState, TEvent>, Notifier<TState, TEvent> {
 
-	private static final Logger LOG = LoggerFactory.getLogger(StateMachineImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(AbstractStateMachineDefinition.class);
 
 	/**
 	 * The dictionary of all states.
@@ -49,11 +52,16 @@ public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends E
 
 	private final List<StateMachineEventHandler<TState, TEvent>> eventHandler;
 
+	private final TState initialState;
+
 	/**
 	 * Initializes the passive state machine.
+	 * 
+	 * @param initialState
+	 *            the initial state to use
 	 */
-	public StateMachineDefinitionImpl() {
-		this(StateMachineDefinitionImpl.class.getSimpleName());
+	public AbstractStateMachineDefinition(final TState initialState) {
+		this(AbstractStateMachineDefinition.class.getSimpleName(), initialState);
 	}
 
 	/**
@@ -61,11 +69,20 @@ public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends E
 	 * 
 	 * @param name
 	 *            the name of the state machine used in the logs.
+	 * @param initialState
+	 *            the initial state to use
 	 */
-	public StateMachineDefinitionImpl(final String name) {
+	public AbstractStateMachineDefinition(final String name, final TState initialState) {
 		this.name = name;
 		this.states = new StateDictionary<TState, TEvent>();
 		this.eventHandler = Lists.newArrayList();
+		this.initialState = initialState;
+		define();
+	}
+
+	@Override
+	public final TState getInitialState() {
+		return initialState;
 	}
 
 	@Override
@@ -105,35 +122,38 @@ public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends E
 	}
 
 	@Override
-	public StateMachine<TState, TEvent> createActiveStateMachine(final String name, final TState initialState) {
+	public TStateMachine createActiveStateMachine(final String name, final TState initialState) {
 		final ActiveStateMachine<TState, TEvent> activeStateMachine = new ActiveStateMachine<TState, TEvent>(name, states);
 		activeStateMachine.addEventHandler(new DelegatingStateMachineEventHandler<TState, TEvent>(eventHandler));
 		activeStateMachine.initialize(initialState);
-		return activeStateMachine;
+		return createStateMachine(activeStateMachine);
 
 	}
 
+	protected abstract TStateMachine createStateMachine(StateMachine<TState, TEvent> driver);
+
 	@Override
-	public StateMachine<TState, TEvent> createActiveStateMachine(final String name) {
+	public TStateMachine createActiveStateMachine(final String name) {
 		final ActiveStateMachine<TState, TEvent> activeStateMachine = new ActiveStateMachine<TState, TEvent>(name, states);
 		activeStateMachine.addEventHandler(new DelegatingStateMachineEventHandler<TState, TEvent>(eventHandler));
-		return activeStateMachine;
+		activeStateMachine.initialize(initialState);
+		return createStateMachine(activeStateMachine);
 	}
 
 	@Override
-	public StateMachine<TState, TEvent> createPassiveStateMachine(final String name, final TState initialState) {
+	public TStateMachine createPassiveStateMachine(final String name, final TState initialState) {
 		final PassiveStateMachine<TState, TEvent> passiveStateMachine = new PassiveStateMachine<TState, TEvent>(name, states);
 		passiveStateMachine.addEventHandler(new DelegatingStateMachineEventHandler<TState, TEvent>(eventHandler));
 		passiveStateMachine.initialize(initialState);
-		return passiveStateMachine;
-
+		return createStateMachine(passiveStateMachine);
 	}
 
 	@Override
-	public StateMachine<TState, TEvent> createPassiveStateMachine(final String name) {
+	public TStateMachine createPassiveStateMachine(final String name) {
 		final PassiveStateMachine<TState, TEvent> passiveStateMachine = new PassiveStateMachine<TState, TEvent>(name, states);
 		passiveStateMachine.addEventHandler(new DelegatingStateMachineEventHandler<TState, TEvent>(eventHandler));
-		return passiveStateMachine;
+		passiveStateMachine.initialize(initialState);
+		return createStateMachine(passiveStateMachine);
 	}
 
 	@Override
@@ -175,4 +195,11 @@ public class StateMachineDefinitionImpl<TState extends Enum<?>, TEvent extends E
 			onExceptionThrown(transitionContext, e);
 		}
 	}
+
+	protected TStateMachine getPrototype() {
+		final TStateMachine prototype = createStateMachine(null);
+		return Tool.from(prototype);
+	}
+
+	protected abstract void define();
 }

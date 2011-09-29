@@ -16,35 +16,46 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.dsl;
+package ch.bbv.fsm.impl.internal.action;
 
+import java.lang.reflect.InvocationTargetException;
+
+import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.action.Action;
+import ch.bbv.fsm.action.MethodCall;
 
 /**
- * Possibilities to execute an action.
+ * Calls a method.
  * 
  * @param <TState>
- *            the type of the states.
+ *            the type of the states
  * @param <TEvent>
- *            the type of the events.
+ *            the type of the events
  */
-public interface ExecuteSyntax<TState extends Enum<?>, TEvent extends Enum<?>> extends GuardSyntax<TState, TEvent> {
+public class MethodCallAction<TState extends Enum<?>, TEvent extends Enum<?>> implements Action<TState, TEvent> {
+
+	private final MethodCall methodCall;
 
 	/**
-	 * Defines the actions to execute on a transition.
-	 * 
-	 * @param action
-	 *            The actions.
-	 * @return Guard syntax.
-	 */
-	ExecuteSyntax<TState, TEvent> execute(Action<TState, TEvent> action);
-
-	/**
-	 * Defines the actions to execute on a transition.
+	 * Constructor.
 	 * 
 	 * @param methodCall
-	 *            The actions.
-	 * @return Guard syntax.
+	 *            the method to call
 	 */
-	ExecuteSyntax<TState, TEvent> execute(Object methodCall);
+	public MethodCallAction(final MethodCall methodCall) {
+		this.methodCall = methodCall;
+	}
+
+	@Override
+	public void execute(final StateMachine<TState, TEvent> stateMachine, final Object... arguments) {
+		try {
+			this.methodCall.getMethod().invoke(this.methodCall.getOwner(), arguments);
+		} catch (final IllegalArgumentException e) {
+			throw new RuntimeException(e);
+		} catch (final IllegalAccessException e) {
+			throw new RuntimeException(e);
+		} catch (final InvocationTargetException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }

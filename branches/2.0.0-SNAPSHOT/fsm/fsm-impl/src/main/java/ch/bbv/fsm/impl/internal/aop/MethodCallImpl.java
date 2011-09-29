@@ -21,7 +21,7 @@ package ch.bbv.fsm.impl.internal.aop;
 import java.lang.reflect.Method;
 import java.util.Stack;
 
-import ch.bbv.fsm.dsl.MethodCall;
+import ch.bbv.fsm.action.MethodCall;
 
 /**
  * Implementation of a Method Call.
