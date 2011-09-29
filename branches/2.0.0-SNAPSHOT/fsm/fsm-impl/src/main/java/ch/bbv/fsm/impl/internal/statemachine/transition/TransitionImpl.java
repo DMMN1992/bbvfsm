@@ -16,7 +16,7 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.impl.internal.transition;
+package ch.bbv.fsm.impl.internal.statemachine.transition;
 
 import java.util.List;
 
@@ -25,8 +25,8 @@ import org.slf4j.LoggerFactory;
 
 import ch.bbv.fsm.action.Action;
 import ch.bbv.fsm.guard.Function;
-import ch.bbv.fsm.impl.internal.state.State;
-import ch.bbv.fsm.impl.internal.state.StateContext;
+import ch.bbv.fsm.impl.internal.statemachine.state.State;
+import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 
 import com.google.common.collect.Lists;
 

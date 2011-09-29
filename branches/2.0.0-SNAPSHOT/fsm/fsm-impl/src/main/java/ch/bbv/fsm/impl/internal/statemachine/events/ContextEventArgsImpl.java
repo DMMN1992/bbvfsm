@@ -16,42 +16,51 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.impl.internal.events;
+package ch.bbv.fsm.impl.internal.statemachine.events;
 
-import ch.bbv.fsm.events.TransitionExceptionEventArgs;
-import ch.bbv.fsm.impl.internal.transition.TransitionContext;
+import ch.bbv.fsm.StateMachine;
+import ch.bbv.fsm.events.ContextEventArgs;
+import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 
 /**
- * See {@link TransitionExceptionEventArgs}.
+ * See {@link ContextEventArgs}.
  * 
  * @param <TState>
  *            the state enumeration
  * @param <TEvent>
  *            the event enumeration
+ * @param <TStateMachine>
+ *            the type of the state machine
  */
-public class TransitionExceptionEventArgsImpl<TState extends Enum<?>, TEvent extends Enum<?>> extends
-		TransitionEventArgsImpl<TState, TEvent> implements TransitionExceptionEventArgs<TState, TEvent> {
+public class ContextEventArgsImpl<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
+		implements ContextEventArgs<TStateMachine, TState, TEvent> {
 
 	/**
-	 * The exception.
+	 * The context.
 	 */
-	private final Exception exception;
+	private final StateContext<TState, TEvent> stateContext;
 
 	/**
-	 * Constructor.
+	 * Initializes a new instance.
 	 * 
-	 * @param context
-	 *            the event context
-	 * @param exception
-	 *            the exception
+	 * @param stateContext
+	 *            the state context.
 	 */
-	public TransitionExceptionEventArgsImpl(final TransitionContext<TState, TEvent> context, final Exception exception) {
-		super(context);
-		this.exception = exception;
+	public ContextEventArgsImpl(final StateContext<TState, TEvent> stateContext) {
+		this.stateContext = stateContext;
+	}
+
+	/**
+	 * Returns the state context.
+	 * 
+	 * @return the state context.
+	 */
+	public StateContext<TState, TEvent> getStateContext() {
+		return this.stateContext;
 	}
 
 	@Override
-	public Exception getException() {
-		return this.exception;
+	public TStateMachine getSource() {
+		return null;
 	}
 }

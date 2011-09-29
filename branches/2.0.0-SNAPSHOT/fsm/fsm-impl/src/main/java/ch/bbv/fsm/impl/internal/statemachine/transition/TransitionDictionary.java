@@ -16,32 +16,45 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.impl.internal.transition;
+package ch.bbv.fsm.impl.internal.statemachine.transition;
 
-import ch.bbv.fsm.impl.internal.state.State;
+import java.util.List;
 
 /**
- * The result of a transition.
+ * Interface for the mapping between states and their transitions.
  * 
+ * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
  * @param <TState>
- *            the type of states
+ *            the type of the states
  * @param <TEvent>
- *            the type of events
+ *            the type of the events
  */
-public interface TransitionResult<TState extends Enum<?>, TEvent extends Enum<?>> {
+public interface TransitionDictionary<TState extends Enum<?>, TEvent extends Enum<?>> {
 
 	/**
-	 * Returns the new state.
+	 * Adds a transition to an event.
 	 * 
-	 * @return the new state.
+	 * @param eventId
+	 *            the event id
+	 * @param transition
+	 *            the transition
 	 */
-	State<TState, TEvent> getNewState();
+	void add(TEvent eventId, Transition<TState, TEvent> transition);
 
 	/**
-	 * Gets a value indicating whether this transition is fired.
+	 * Returns all transitions.
 	 * 
-	 * @return true if fired; otherwise, false.
+	 * @return all transitions.
 	 */
-	boolean isFired();
+	List<TransitionInfo<TState, TEvent>> getTransitions();
+
+	/**
+	 * Returns a list of transitions for the given event.
+	 * 
+	 * @param eventId
+	 *            the event id
+	 * @return a list of transitions
+	 */
+	List<Transition<TState, TEvent>> getTransitions(TEvent eventId);
 
 }

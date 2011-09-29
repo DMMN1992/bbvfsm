@@ -16,42 +16,47 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.impl.internal.events;
+package ch.bbv.fsm.impl.internal.statemachine.events;
 
-import ch.bbv.fsm.events.ExceptionEventArgs;
-import ch.bbv.fsm.impl.internal.state.StateContext;
+import ch.bbv.fsm.StateMachine;
+import ch.bbv.fsm.events.TransitionCompletedEventArgs;
+import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionContext;
 
 /**
- * See {@link ExceptionEventArgs}.
+ * See {@link TransitionEventArgsImpl}.
  * 
  * @param <TState>
  *            the state enumeration
  * @param <TEvent>
  *            the event enumeration
+ * @param <TStateMachine>
+ *            the type of the state machine
  */
-public class ExceptionEventArgsImpl<TState extends Enum<?>, TEvent extends Enum<?>> extends ContextEventArgsImpl<TState, TEvent> implements
-		ExceptionEventArgs<TState, TEvent> {
+public class TransitionCompletedEventArgsImpl<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
+		extends TransitionEventArgsImpl<TStateMachine, TState, TEvent> implements
+		TransitionCompletedEventArgs<TStateMachine, TState, TEvent> {
 
 	/**
-	 * The exception.
+	 * The new state the state machine is in after the transition.
 	 */
-	private final Exception exception;
+	private final TState newStateId;
 
 	/**
-	 * Initializes a new instance.
+	 * Constructor.
 	 * 
-	 * @param stateContext
-	 *            the state context.
-	 * @param exception
-	 *            the exception.
+	 * @param newStateId
+	 *            the new state's id
+	 * @param context
+	 *            the current context
 	 */
-	public ExceptionEventArgsImpl(final StateContext<TState, TEvent> stateContext, final Exception exception) {
-		super(stateContext);
-		this.exception = exception;
+	public TransitionCompletedEventArgsImpl(final TState newStateId, final TransitionContext<TState, TEvent> context) {
+		super(context);
+		this.newStateId = newStateId;
 	}
 
 	@Override
-	public Exception getException() {
-		return this.exception;
+	public TState getNewStateId() {
+		return this.newStateId;
 	}
+
 }

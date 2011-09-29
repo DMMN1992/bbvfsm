@@ -22,9 +22,9 @@ import java.util.LinkedList;
 
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.events.StateMachineEventHandler;
-import ch.bbv.fsm.impl.internal.interpreter.StateMachineInterpreter;
 import ch.bbv.fsm.impl.internal.report.EventInformation;
-import ch.bbv.fsm.impl.internal.state.StateDictionary;
+import ch.bbv.fsm.impl.internal.statemachine.StateMachineInterpreter;
+import ch.bbv.fsm.impl.internal.statemachine.state.StateDictionary;
 
 /**
  * A passive state machine. This state machine reacts to events on the current thread.

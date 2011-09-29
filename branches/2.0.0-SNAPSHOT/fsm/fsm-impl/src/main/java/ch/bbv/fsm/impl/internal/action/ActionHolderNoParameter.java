@@ -19,7 +19,7 @@
 package ch.bbv.fsm.impl.internal.action;
 
 import ch.bbv.fsm.action.Action;
-import ch.bbv.fsm.impl.internal.state.StateContext;
+import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 
 /**
  * Wraps an action without parameters.

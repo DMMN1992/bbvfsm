@@ -32,10 +32,10 @@ import ch.bbv.fsm.impl.internal.action.ActionHolderParameter;
 import ch.bbv.fsm.impl.internal.action.MethodCallAction;
 import ch.bbv.fsm.impl.internal.action.MethodCallFunction;
 import ch.bbv.fsm.impl.internal.aop.MethodCallImpl;
-import ch.bbv.fsm.impl.internal.state.State;
-import ch.bbv.fsm.impl.internal.state.StateDictionary;
-import ch.bbv.fsm.impl.internal.transition.Transition;
-import ch.bbv.fsm.impl.internal.transition.TransitionImpl;
+import ch.bbv.fsm.impl.internal.statemachine.state.State;
+import ch.bbv.fsm.impl.internal.statemachine.state.StateDictionary;
+import ch.bbv.fsm.impl.internal.statemachine.transition.Transition;
+import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionImpl;
 
 /**
  * State Builder.

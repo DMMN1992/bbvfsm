@@ -18,7 +18,7 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl.internal.action;
 
-import ch.bbv.fsm.impl.internal.state.StateContext;
+import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 
 /**
  * Action Holder. A wrapper class for different action types. It allows to execute all actions with the same method call.

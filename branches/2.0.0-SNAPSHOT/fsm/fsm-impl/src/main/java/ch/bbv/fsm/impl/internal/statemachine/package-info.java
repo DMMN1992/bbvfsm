@@ -1,5 +1,5 @@
 /**
  * Interpreter for the state machine.
  */
-package ch.bbv.fsm.impl.internal.interpreter;
+package ch.bbv.fsm.impl.internal.statemachine;
 

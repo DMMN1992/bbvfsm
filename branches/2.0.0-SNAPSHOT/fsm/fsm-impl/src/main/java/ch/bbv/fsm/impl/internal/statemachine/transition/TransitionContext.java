@@ -16,12 +16,12 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.impl.internal.transition;
+package ch.bbv.fsm.impl.internal.statemachine.transition;
 
 import ch.bbv.fsm.impl.internal.driver.Notifier;
-import ch.bbv.fsm.impl.internal.interpreter.StateMachineInterpreter;
-import ch.bbv.fsm.impl.internal.state.State;
-import ch.bbv.fsm.impl.internal.state.StateContext;
+import ch.bbv.fsm.impl.internal.statemachine.StateMachineInterpreter;
+import ch.bbv.fsm.impl.internal.statemachine.state.State;
+import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 
 /**
  * Context during a transition.

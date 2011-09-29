@@ -19,7 +19,7 @@
 package ch.bbv.fsm.impl.internal.action;
 
 import ch.bbv.fsm.action.MethodCall;
-import ch.bbv.fsm.impl.internal.state.StateContext;
+import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 
 /**
  * Wraps a MethodCall instance as an ActionHolder.

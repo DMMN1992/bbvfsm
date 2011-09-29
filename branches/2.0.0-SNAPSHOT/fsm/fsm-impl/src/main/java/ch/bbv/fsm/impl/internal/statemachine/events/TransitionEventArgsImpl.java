@@ -16,10 +16,11 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.impl.internal.events;
+package ch.bbv.fsm.impl.internal.statemachine.events;
 
+import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.events.TransitionEventArgs;
-import ch.bbv.fsm.impl.internal.transition.TransitionContext;
+import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionContext;
 
 /**
  * See {@link ContextEventArgsImpl}.
@@ -28,9 +29,11 @@ import ch.bbv.fsm.impl.internal.transition.TransitionContext;
  *            the state enumeration
  * @param <TEvent>
  *            the event enumeration
+ * @param <TStateMachine>
+ *            the type of the state machine
  */
-public class TransitionEventArgsImpl<TState extends Enum<?>, TEvent extends Enum<?>> extends ContextEventArgsImpl<TState, TEvent> implements
-		TransitionEventArgs<TState, TEvent> {
+public class TransitionEventArgsImpl<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
+		extends ContextEventArgsImpl<TStateMachine, TState, TEvent> implements TransitionEventArgs<TStateMachine, TState, TEvent> {
 	/**
 	 * Initializes a new instance.
 	 * 

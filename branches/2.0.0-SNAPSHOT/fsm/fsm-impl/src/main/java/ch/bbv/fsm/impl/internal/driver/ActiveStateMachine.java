@@ -26,9 +26,9 @@ import java.util.concurrent.TimeUnit;
 
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.events.StateMachineEventHandler;
-import ch.bbv.fsm.impl.internal.interpreter.StateMachineInterpreter;
 import ch.bbv.fsm.impl.internal.report.EventInformation;
-import ch.bbv.fsm.impl.internal.state.StateDictionary;
+import ch.bbv.fsm.impl.internal.statemachine.StateMachineInterpreter;
+import ch.bbv.fsm.impl.internal.statemachine.state.StateDictionary;
 
 /**
  * An active state machine. This state machine reacts to events on a separate worker thread.

@@ -25,8 +25,9 @@ import org.mockito.Mockito;
 
 import ch.bbv.fsm.impl.StatesAndEvents.Events;
 import ch.bbv.fsm.impl.StatesAndEvents.States;
-import ch.bbv.fsm.impl.internal.state.State;
-import ch.bbv.fsm.impl.internal.transition.TransitionContext;
+import ch.bbv.fsm.impl.internal.statemachine.events.TransitionEventArgsImpl;
+import ch.bbv.fsm.impl.internal.statemachine.state.State;
+import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionContext;
 
 public class TransitionEventArgsImplTest {
 	@Test

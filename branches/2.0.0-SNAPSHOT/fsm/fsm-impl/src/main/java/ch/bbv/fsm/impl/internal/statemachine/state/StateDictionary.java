@@ -16,7 +16,7 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.impl.internal.state;
+package ch.bbv.fsm.impl.internal.statemachine.state;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentMap;

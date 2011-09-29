@@ -20,8 +20,8 @@ package ch.bbv.fsm.impl.internal.report;
 
 import java.util.List;
 
-import ch.bbv.fsm.impl.internal.state.State;
-import ch.bbv.fsm.impl.internal.transition.TransitionInfo;
+import ch.bbv.fsm.impl.internal.statemachine.state.State;
+import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionInfo;
 
 /**
  * State Machine Report.

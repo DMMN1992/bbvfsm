@@ -15,13 +15,13 @@ import ch.bbv.fsm.impl.internal.driver.DelegatingStateMachineEventHandler;
 import ch.bbv.fsm.impl.internal.driver.Notifier;
 import ch.bbv.fsm.impl.internal.driver.PassiveStateMachine;
 import ch.bbv.fsm.impl.internal.dsl.StateBuilder;
-import ch.bbv.fsm.impl.internal.events.ExceptionEventArgsImpl;
-import ch.bbv.fsm.impl.internal.events.TransitionEventArgsImpl;
-import ch.bbv.fsm.impl.internal.events.TransitionExceptionEventArgsImpl;
-import ch.bbv.fsm.impl.internal.state.State;
-import ch.bbv.fsm.impl.internal.state.StateContext;
-import ch.bbv.fsm.impl.internal.state.StateDictionary;
-import ch.bbv.fsm.impl.internal.transition.TransitionContext;
+import ch.bbv.fsm.impl.internal.statemachine.events.ExceptionEventArgsImpl;
+import ch.bbv.fsm.impl.internal.statemachine.events.TransitionEventArgsImpl;
+import ch.bbv.fsm.impl.internal.statemachine.events.TransitionExceptionEventArgsImpl;
+import ch.bbv.fsm.impl.internal.statemachine.state.State;
+import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
+import ch.bbv.fsm.impl.internal.statemachine.state.StateDictionary;
+import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionContext;
 
 import com.google.common.collect.Lists;
 

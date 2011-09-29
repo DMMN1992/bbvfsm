@@ -16,48 +16,45 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.impl.internal.events;
+package ch.bbv.fsm.impl.internal.statemachine.events;
 
 import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.events.ContextEventArgs;
-import ch.bbv.fsm.impl.internal.state.StateContext;
+import ch.bbv.fsm.events.ExceptionEventArgs;
+import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 
 /**
- * See {@link ContextEventArgs}.
+ * See {@link ExceptionEventArgs}.
  * 
  * @param <TState>
  *            the state enumeration
  * @param <TEvent>
  *            the event enumeration
+ * @param <TStateMachine>
+ *            the type of the state machine
  */
-public class ContextEventArgsImpl<TState extends Enum<?>, TEvent extends Enum<?>> implements ContextEventArgs<TState, TEvent> {
+public class ExceptionEventArgsImpl<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
+		extends ContextEventArgsImpl<TStateMachine, TState, TEvent> implements ExceptionEventArgs<TStateMachine, TState, TEvent> {
 
 	/**
-	 * The context.
+	 * The exception.
 	 */
-	private final StateContext<TState, TEvent> stateContext;
+	private final Exception exception;
 
 	/**
 	 * Initializes a new instance.
 	 * 
 	 * @param stateContext
 	 *            the state context.
+	 * @param exception
+	 *            the exception.
 	 */
-	public ContextEventArgsImpl(final StateContext<TState, TEvent> stateContext) {
-		this.stateContext = stateContext;
-	}
-
-	/**
-	 * Returns the state context.
-	 * 
-	 * @return the state context.
-	 */
-	public StateContext<TState, TEvent> getStateContext() {
-		return this.stateContext;
+	public ExceptionEventArgsImpl(final StateContext<TState, TEvent> stateContext, final Exception exception) {
+		super(stateContext);
+		this.exception = exception;
 	}
 
 	@Override
-	public StateMachine<TState, TEvent> getSource() {
-		return this.stateContext.getStateMachine();
+	public Exception getException() {
+		return this.exception;
 	}
 }

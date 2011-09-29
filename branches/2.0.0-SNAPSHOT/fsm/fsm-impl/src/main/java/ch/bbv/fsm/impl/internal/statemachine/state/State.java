@@ -16,13 +16,13 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.impl.internal.state;
+package ch.bbv.fsm.impl.internal.statemachine.state;
 
 import ch.bbv.fsm.HistoryType;
 import ch.bbv.fsm.impl.internal.action.ActionHolder;
-import ch.bbv.fsm.impl.internal.transition.TransitionContext;
-import ch.bbv.fsm.impl.internal.transition.TransitionDictionary;
-import ch.bbv.fsm.impl.internal.transition.TransitionResult;
+import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionContext;
+import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionDictionary;
+import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionResult;
 
 /**
  * Represents a state of the state machine.

@@ -16,12 +16,12 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.impl.internal.interpreter;
+package ch.bbv.fsm.impl.internal.statemachine;
 
 import java.util.Stack;
 
-import ch.bbv.fsm.impl.internal.state.State;
-import ch.bbv.fsm.impl.internal.state.StateContext;
+import ch.bbv.fsm.impl.internal.statemachine.state.State;
+import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 
 /**
  * State Machine Initializer.

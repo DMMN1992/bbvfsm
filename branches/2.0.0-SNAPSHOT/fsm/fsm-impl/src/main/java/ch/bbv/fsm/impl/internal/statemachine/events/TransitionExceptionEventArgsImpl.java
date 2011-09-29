@@ -16,47 +16,46 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.impl.internal.driver;
+package ch.bbv.fsm.impl.internal.statemachine.events;
 
-import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
+import ch.bbv.fsm.StateMachine;
+import ch.bbv.fsm.events.TransitionExceptionEventArgs;
 import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionContext;
 
 /**
- * Notifier interface.
+ * See {@link TransitionExceptionEventArgs}.
  * 
- * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
  * @param <TState>
- *            the type of the states.
+ *            the state enumeration
  * @param <TEvent>
- *            the type of the events.
+ *            the event enumeration
+ * @param <TStateMachine>
+ *            the type of the state machine
  */
-public interface Notifier<TState extends Enum<?>, TEvent extends Enum<?>> {
+public class TransitionExceptionEventArgsImpl<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
+		extends TransitionEventArgsImpl<TStateMachine, TState, TEvent> implements
+		TransitionExceptionEventArgs<TStateMachine, TState, TEvent> {
 
 	/**
-	 * Called when an exception was thrown.
-	 * 
-	 * @param stateContext
-	 *            the context.
-	 * @param exception
-	 *            the exception.
+	 * The exception.
 	 */
-	void onExceptionThrown(StateContext<TState, TEvent> stateContext, Exception exception);
+	private final Exception exception;
 
 	/**
-	 * Called when an exception was thrown in a transition.
+	 * Constructor.
 	 * 
 	 * @param context
-	 *            the transition context.
+	 *            the event context
 	 * @param exception
-	 *            the exception.
+	 *            the exception
 	 */
-	void onExceptionThrown(TransitionContext<TState, TEvent> context, Exception exception);
+	public TransitionExceptionEventArgsImpl(final TransitionContext<TState, TEvent> context, final Exception exception) {
+		super(context);
+		this.exception = exception;
+	}
 
-	/**
-	 * Called before a transition is executed.
-	 * 
-	 * @param context
-	 *            the context.
-	 */
-	void onTransitionBegin(TransitionContext<TState, TEvent> context);
+	@Override
+	public Exception getException() {
+		return this.exception;
+	}
 }

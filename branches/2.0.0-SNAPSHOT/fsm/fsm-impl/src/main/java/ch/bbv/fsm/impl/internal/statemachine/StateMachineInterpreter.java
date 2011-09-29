@@ -16,7 +16,7 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.impl.internal.interpreter;
+package ch.bbv.fsm.impl.internal.statemachine;
 
 import java.util.List;
 import java.util.Map;
@@ -27,15 +27,15 @@ import org.slf4j.LoggerFactory;
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.events.StateMachineEventHandler;
 import ch.bbv.fsm.impl.internal.driver.Notifier;
-import ch.bbv.fsm.impl.internal.events.ExceptionEventArgsImpl;
-import ch.bbv.fsm.impl.internal.events.TransitionCompletedEventArgsImpl;
-import ch.bbv.fsm.impl.internal.events.TransitionEventArgsImpl;
-import ch.bbv.fsm.impl.internal.events.TransitionExceptionEventArgsImpl;
-import ch.bbv.fsm.impl.internal.state.State;
-import ch.bbv.fsm.impl.internal.state.StateContext;
-import ch.bbv.fsm.impl.internal.state.StateDictionary;
-import ch.bbv.fsm.impl.internal.transition.TransitionContext;
-import ch.bbv.fsm.impl.internal.transition.TransitionResult;
+import ch.bbv.fsm.impl.internal.statemachine.events.ExceptionEventArgsImpl;
+import ch.bbv.fsm.impl.internal.statemachine.events.TransitionCompletedEventArgsImpl;
+import ch.bbv.fsm.impl.internal.statemachine.events.TransitionEventArgsImpl;
+import ch.bbv.fsm.impl.internal.statemachine.events.TransitionExceptionEventArgsImpl;
+import ch.bbv.fsm.impl.internal.statemachine.state.State;
+import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
+import ch.bbv.fsm.impl.internal.statemachine.state.StateDictionary;
+import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionContext;
+import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionResult;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;

@@ -16,43 +16,32 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.impl.internal.events;
+package ch.bbv.fsm.impl.internal.statemachine.transition;
 
-import ch.bbv.fsm.events.TransitionCompletedEventArgs;
-import ch.bbv.fsm.impl.internal.transition.TransitionContext;
+import ch.bbv.fsm.impl.internal.statemachine.state.State;
 
 /**
- * See {@link TransitionEventArgsImpl}.
+ * The result of a transition.
  * 
  * @param <TState>
- *            the state enumeration
+ *            the type of states
  * @param <TEvent>
- *            the event enumeration
+ *            the type of events
  */
-public class TransitionCompletedEventArgsImpl<TState extends Enum<?>, TEvent extends Enum<?>> extends
-		TransitionEventArgsImpl<TState, TEvent> implements TransitionCompletedEventArgs<TState, TEvent> {
+public interface TransitionResult<TState extends Enum<?>, TEvent extends Enum<?>> {
 
 	/**
-	 * The new state the state machine is in after the transition.
-	 */
-	private final TState newStateId;
-
-	/**
-	 * Constructor.
+	 * Returns the new state.
 	 * 
-	 * @param newStateId
-	 *            the new state's id
-	 * @param context
-	 *            the current context
+	 * @return the new state.
 	 */
-	public TransitionCompletedEventArgsImpl(final TState newStateId, final TransitionContext<TState, TEvent> context) {
-		super(context);
-		this.newStateId = newStateId;
-	}
+	State<TState, TEvent> getNewState();
 
-	@Override
-	public TState getNewStateId() {
-		return this.newStateId;
-	}
+	/**
+	 * Gets a value indicating whether this transition is fired.
+	 * 
+	 * @return true if fired; otherwise, false.
+	 */
+	boolean isFired();
 
 }

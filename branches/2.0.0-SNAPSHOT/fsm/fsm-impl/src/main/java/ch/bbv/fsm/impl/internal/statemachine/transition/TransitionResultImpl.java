@@ -16,11 +16,11 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.impl.internal.transition;
+package ch.bbv.fsm.impl.internal.statemachine.transition;
 
 import java.util.List;
 
-import ch.bbv.fsm.impl.internal.state.State;
+import ch.bbv.fsm.impl.internal.statemachine.state.State;
 
 /**
  * The implementation of {@link TransitionResult}.
