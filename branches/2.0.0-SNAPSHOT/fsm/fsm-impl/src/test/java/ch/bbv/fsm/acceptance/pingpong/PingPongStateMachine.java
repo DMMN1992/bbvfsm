@@ -5,7 +5,7 @@ import ch.bbv.fsm.acceptance.pingpong.PingPongStateMachineDefinion.Event;
 import ch.bbv.fsm.acceptance.pingpong.PingPongStateMachineDefinion.State;
 import ch.bbv.fsm.impl.AbstractStateMachine;
 
-public class PingPongStateMachine extends AbstractStateMachine<State, Event> {
+public class PingPongStateMachine extends AbstractStateMachine<PingPongStateMachine, State, Event> {
 
 	private String player1;
 	private String player2;
@@ -54,5 +54,9 @@ public class PingPongStateMachine extends AbstractStateMachine<State, Event> {
 
 	public boolean checkTermination() {
 		return false;
+	}
+
+	public void sayActionCalled() {
+		log.append("actionCalled");
 	}
 }
