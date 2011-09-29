@@ -35,7 +35,8 @@ import ch.bbv.fsm.events.StateMachineEventHandler;
 public interface StateMachineDefinition<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
 
 	/**
-	 * Returns the state machine's default initial state.
+	 * Returns the state machine's default initial state. This state will be used as initial state if the state machine is created using
+	 * {@link #createActiveStateMachine(String)} or {@link #createPassiveStateMachine(String)}.
 	 */
 	TState getInitialState();
 

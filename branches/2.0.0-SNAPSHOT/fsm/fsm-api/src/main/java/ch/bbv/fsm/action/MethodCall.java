@@ -29,8 +29,11 @@ public interface MethodCall {
 
 	/**
 	 * Executes the method in the owner with the arguments. A RuntimeException is thrown if an error occurs.
+	 * 
+	 * @param target
+	 *            the object on that the method call is executed
 	 */
-	void execute();
+	void execute(Object target);
 
 	/**
 	 * Returns an array of arguments of the method.
@@ -45,12 +48,5 @@ public interface MethodCall {
 	 * @return the method definition.
 	 */
 	Method getMethod();
-
-	/**
-	 * Returns the owner instance of the method.
-	 * 
-	 * @return the owner instance of the method.
-	 */
-	Object getOwner();
 
 }

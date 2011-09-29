@@ -18,8 +18,6 @@
  *******************************************************************************/
 package ch.bbv.fsm;
 
-import ch.bbv.fsm.events.StateMachineEventHandler;
-
 /**
  * Interface for all finite state machines.
  * 
@@ -73,34 +71,19 @@ public interface StateMachine<TState extends Enum<?>, TEvent extends Enum<?>> {
 
 	/**
 	 * Starts the state machine. Events will be processed. If the state machine is not started then the events will be queued until the
-	 * state machine is started. Already queued events are processed.
+	 * state machine is started. Already queued events are processed. If there is an entry action defined on the initial state, this entry
+	 * action will be executed.
 	 */
 	void start();
 
 	/**
-	 * Stops the state machine. Events will be queued until the state machine is started.
+	 * Terminates the state machine. The state machine can not be used any longer.
 	 */
-	void stop();
+	void terminate();
 
 	/**
 	 * Returns the current state.
 	 */
 	TState getCurrentState();
-
-	/**
-	 * Adds an event handler.
-	 * 
-	 * @param handler
-	 *            the event handler
-	 */
-	void addEventHandler(StateMachineEventHandler<StateMachine<TState, TEvent>, TState, TEvent> handler);
-
-	/**
-	 * Removes the given event handler.
-	 * 
-	 * @param handler
-	 *            the event handler to be removed.
-	 */
-	void removeEventHandler(StateMachineEventHandler<StateMachine<TState, TEvent>, TState, TEvent> handler);
 
 }
