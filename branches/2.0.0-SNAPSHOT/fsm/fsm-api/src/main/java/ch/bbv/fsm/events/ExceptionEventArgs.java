@@ -18,6 +18,8 @@
  *******************************************************************************/
 package ch.bbv.fsm.events;
 
+import ch.bbv.fsm.StateMachine;
+
 /**
  * The exception event argument.
  * 
@@ -26,8 +28,11 @@ package ch.bbv.fsm.events;
  *            the type of the states.
  * @param <TEvent>
  *            the type of the events.
+ * @param <TStateMachine>
+ *            the type of the state machine
  */
-public interface ExceptionEventArgs<TState extends Enum<?>, TEvent extends Enum<?>> extends ContextEventArgs<TState, TEvent> {
+public interface ExceptionEventArgs<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
+		extends ContextEventArgs<TStateMachine, TState, TEvent> {
 
 	/**
 	 * Returns the exception.

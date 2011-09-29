@@ -16,7 +16,7 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.impl.internal.statemachine;
+package ch.bbv.fsm.impl.internal.driver;
 
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.ExecutorService;
@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.events.StateMachineEventHandler;
-import ch.bbv.fsm.impl.internal.driver.StateMachineDriver;
+import ch.bbv.fsm.impl.internal.interpreter.StateMachineInterpreter;
 import ch.bbv.fsm.impl.internal.report.EventInformation;
 import ch.bbv.fsm.impl.internal.state.StateDictionary;
 
@@ -46,7 +46,7 @@ public class ActiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>> 
 	/**
 	 * The internal state machine.
 	 */
-	private final StateMachineDriver<TState, TEvent> stateMachine;
+	private final StateMachineInterpreter<TState, TEvent> stateMachine;
 
 	/**
 	 * List of all queued events.
@@ -81,7 +81,7 @@ public class ActiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>> 
 	 *            the states
 	 */
 	public ActiveStateMachine(final String name, final StateDictionary<TState, TEvent> states) {
-		this.stateMachine = new StateMachineDriver<TState, TEvent>(this, name, states);
+		this.stateMachine = new StateMachineInterpreter<TState, TEvent>(this, name, states);
 		this.events = new LinkedBlockingDeque<EventInformation<TEvent>>();
 		this.executorService = Executors.newFixedThreadPool(1);
 	}

@@ -18,6 +18,8 @@
  *******************************************************************************/
 package ch.bbv.fsm.events;
 
+import ch.bbv.fsm.StateMachine;
+
 /**
  * Defines the transition completed event argument.
  * 
@@ -26,8 +28,11 @@ package ch.bbv.fsm.events;
  *            the type of the states.
  * @param <TEvent>
  *            the type of the events.
+ * @param <TStateMachine>
+ *            the type of the state machine
  */
-public interface TransitionCompletedEventArgs<TState extends Enum<?>, TEvent extends Enum<?>> extends TransitionEventArgs<TState, TEvent> {
+public interface TransitionCompletedEventArgs<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
+		extends TransitionEventArgs<TStateMachine, TState, TEvent> {
 
 	/**
 	 * Gets the new state id the state machine is in after the transition.

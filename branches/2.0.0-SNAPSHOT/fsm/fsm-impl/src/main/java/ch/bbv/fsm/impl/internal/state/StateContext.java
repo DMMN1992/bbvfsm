@@ -20,9 +20,8 @@ package ch.bbv.fsm.impl.internal.state;
 
 import java.util.List;
 
-import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.impl.internal.driver.StateMachineDriver;
-import ch.bbv.fsm.impl.internal.statemachine.Notifier;
+import ch.bbv.fsm.impl.internal.driver.Notifier;
+import ch.bbv.fsm.impl.internal.interpreter.StateMachineInterpreter;
 
 import com.google.common.collect.Lists;
 
@@ -93,11 +92,6 @@ public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
 			this.stateId = stateId;
 		}
 
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see java.lang.Object#toString()
-		 */
 		@Override
 		public String toString() {
 			return this.recordType + " " + this.stateId;
@@ -132,7 +126,7 @@ public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 */
 	private final List<Record> records;
 
-	private final StateMachineDriver<TState, TEvent> stateMachineImpl;
+	private final StateMachineInterpreter<TState, TEvent> stateMachineInterpreter;
 
 	private final Notifier<TState, TEvent> notifier;
 
@@ -146,10 +140,10 @@ public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param notifier
 	 *            the notifier
 	 */
-	public StateContext(final State<TState, TEvent> sourceState, final StateMachineDriver<TState, TEvent> stateMachineImpl,
+	public StateContext(final State<TState, TEvent> sourceState, final StateMachineInterpreter<TState, TEvent> stateMachineImpl,
 			final Notifier<TState, TEvent> notifier) {
 		this.sourceState = sourceState;
-		this.stateMachineImpl = stateMachineImpl;
+		this.stateMachineInterpreter = stateMachineImpl;
 		this.notifier = notifier;
 		this.exceptions = Lists.newArrayList();
 		this.records = Lists.newArrayList();
@@ -203,15 +197,8 @@ public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
 	/**
 	 * Returns the state machine's implementation.
 	 */
-	public StateMachineDriver<TState, TEvent> getStateMachineImpl() {
-		return stateMachineImpl;
-	}
-
-	/**
-	 * Returns the state machine.
-	 */
-	public StateMachine<TState, TEvent> getStateMachine() {
-		return stateMachineImpl.getStateMachine();
+	public StateMachineInterpreter<TState, TEvent> getStateMachineInterpreter() {
+		return stateMachineInterpreter;
 	}
 
 	/**
@@ -230,7 +217,7 @@ public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
 	public State<TState, TEvent> getLastActiveSubState(final State<TState, TEvent> superState) {
 		State<TState, TEvent> result = null;
 		if (superState != null) {
-			result = stateMachineImpl.getLastActiveSubState(superState);
+			result = stateMachineInterpreter.getLastActiveSubState(superState);
 			if (result == null) {
 				result = superState.getInitialState();
 			}
@@ -247,7 +234,7 @@ public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 *            the last active sub state
 	 */
 	public void setLastActiveSubState(final State<TState, TEvent> superState, final State<TState, TEvent> subState) {
-		stateMachineImpl.setLastActiveSubState(superState, subState);
+		stateMachineInterpreter.setLastActiveSubState(superState, subState);
 	}
 
 }

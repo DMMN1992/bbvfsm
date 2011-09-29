@@ -51,4 +51,8 @@ public class PingPongStateMachine extends AbstractStateMachine<State, Event> {
 	public String getLog() {
 		return log.toString();
 	}
+
+	public boolean checkTermination() {
+		return false;
+	}
 }

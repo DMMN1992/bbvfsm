@@ -78,11 +78,6 @@ public class MethodCallImpl implements MethodCall {
 		this.args = args;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.asm.dsl.MethodCall#execute()
-	 */
 	@Override
 	public void execute() {
 		try {
@@ -92,31 +87,16 @@ public class MethodCallImpl implements MethodCall {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.asm.dsl.MethodCall#getArguments()
-	 */
 	@Override
 	public Object[] getArguments() {
 		return this.args;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.asm.dsl.MethodCall#getMethod()
-	 */
 	@Override
 	public Method getMethod() {
 		return this.method;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.asm.dsl.MethodCall#getOwner()
-	 */
 	@Override
 	public Object getOwner() {
 		return this.owner;

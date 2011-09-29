@@ -64,21 +64,11 @@ public class TransitionResultImpl<TState extends Enum<?>, TEvent extends Enum<?>
 		return this.exceptions;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.asm.impl.internal.transition.TransitionResult#getNewState()
-	 */
 	@Override
 	public State<TState, TEvent> getNewState() {
 		return this.newState;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.asm.impl.internal.transition.TransitionResult#isFired()
-	 */
 	@Override
 	public boolean isFired() {
 		return this.fired;

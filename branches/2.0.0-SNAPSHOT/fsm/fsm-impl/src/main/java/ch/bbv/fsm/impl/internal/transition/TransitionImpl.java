@@ -132,11 +132,6 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>> impl
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.asm.impl.internal.transition.Transition#fire(ch.bbv.asm.impl.internal .transition.TransitionContext)
-	 */
 	@Override
 	@SuppressWarnings("unchecked")
 	public TransitionResult<TState, TEvent> fire(final TransitionContext<TState, TEvent> context) {
@@ -161,41 +156,21 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>> impl
 		return new TransitionResultImpl<TState, TEvent>(true, newState, context.getExceptions());
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.asm.impl.internal.transition.Transition#getActions()
-	 */
 	@Override
 	public List<Action<TState, TEvent>> getActions() {
 		return this.actions;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.asm.impl.internal.transition.Transition#getGuard()
-	 */
 	@Override
 	public Function<TState, TEvent, Object[], Boolean> getGuard() {
 		return this.guard;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.asm.impl.internal.transition.Transition#getSource()
-	 */
 	@Override
 	public State<TState, TEvent> getSource() {
 		return this.source;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.asm.impl.internal.transition.Transition#getTarget()
-	 */
 	@Override
 	public State<TState, TEvent> getTarget() {
 		return this.target;
@@ -240,41 +215,21 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>> impl
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.asm.impl.internal.transition.Transition#setGuard(ch.bbv.asm.Function )
-	 */
 	@Override
 	public void setGuard(final Function<TState, TEvent, Object[], Boolean> guard) {
 		this.guard = guard;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.asm.impl.internal.transition.Transition#setSource(ch.bbv.asm.impl .internal.state.State)
-	 */
 	@Override
 	public void setSource(final State<TState, TEvent> source) {
 		this.source = source;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.asm.impl.internal.transition.Transition#setTarget(ch.bbv.asm.impl .internal.state.State)
-	 */
 	@Override
 	public void setTarget(final State<TState, TEvent> target) {
 		this.target = target;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.asm.impl.internal.transition.Transition#setTargetState(ch.bbv. asm.impl.internal.state.State)
-	 */
 	@Override
 	public void setTargetState(final State<TState, TEvent> targetState) {
 		this.target = targetState;

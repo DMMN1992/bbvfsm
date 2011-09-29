@@ -18,14 +18,20 @@
  *******************************************************************************/
 package ch.bbv.fsm.events;
 
+import ch.bbv.fsm.StateMachine;
+
 /**
  * Event handler of the state machine.
  * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
  * @param <TState>
+ *            the type of the states.
  * @param <TEvent>
+ *            the type of the events.
+ * @param <TStateMachine>
+ *            the type of the state machine
  */
-public interface StateMachineEventHandler<TState extends Enum<?>, TEvent extends Enum<?>> {
+public interface StateMachineEventHandler<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
 
 	/**
 	 * Occurs when an exception was thrown inside the state machine.
@@ -33,7 +39,7 @@ public interface StateMachineEventHandler<TState extends Enum<?>, TEvent extends
 	 * @param arg
 	 *            the event argument.
 	 */
-	void onExceptionThrown(ExceptionEventArgs<TState, TEvent> arg);
+	void onExceptionThrown(ExceptionEventArgs<TStateMachine, TState, TEvent> arg);
 
 	/**
 	 * Occurs when a transition begins.
@@ -41,7 +47,7 @@ public interface StateMachineEventHandler<TState extends Enum<?>, TEvent extends
 	 * @param args
 	 *            the event argument.
 	 */
-	void onTransitionBegin(TransitionEventArgs<TState, TEvent> args);
+	void onTransitionBegin(TransitionEventArgs<TStateMachine, TState, TEvent> args);
 
 	/**
 	 * Occurs when a transition completed.
@@ -49,7 +55,7 @@ public interface StateMachineEventHandler<TState extends Enum<?>, TEvent extends
 	 * @param arg
 	 *            the completion event
 	 */
-	void onTransitionCompleted(TransitionCompletedEventArgs<TState, TEvent> arg);
+	void onTransitionCompleted(TransitionCompletedEventArgs<TStateMachine, TState, TEvent> arg);
 
 	/**
 	 * Occurs when no transition could be executed.
@@ -57,7 +63,7 @@ public interface StateMachineEventHandler<TState extends Enum<?>, TEvent extends
 	 * @param arg
 	 *            the event argument.
 	 */
-	void onTransitionDeclined(TransitionEventArgs<TState, TEvent> arg);
+	void onTransitionDeclined(TransitionEventArgs<TStateMachine, TState, TEvent> arg);
 
 	/**
 	 * Occurs when an exception was thrown inside a transition of the state machine.
@@ -65,6 +71,6 @@ public interface StateMachineEventHandler<TState extends Enum<?>, TEvent extends
 	 * @param arg
 	 *            the event argument.
 	 */
-	void onTransitionThrowsException(TransitionExceptionEventArgs<TState, TEvent> arg);
+	void onTransitionThrowsException(TransitionExceptionEventArgs<TStateMachine, TState, TEvent> arg);
 
 }

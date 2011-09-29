@@ -16,7 +16,7 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.impl.internal.driver;
+package ch.bbv.fsm.impl.internal.interpreter;
 
 import java.util.List;
 import java.util.Map;
@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.events.StateMachineEventHandler;
+import ch.bbv.fsm.impl.internal.driver.Notifier;
 import ch.bbv.fsm.impl.internal.events.ExceptionEventArgsImpl;
 import ch.bbv.fsm.impl.internal.events.TransitionCompletedEventArgsImpl;
 import ch.bbv.fsm.impl.internal.events.TransitionEventArgsImpl;
@@ -33,7 +34,6 @@ import ch.bbv.fsm.impl.internal.events.TransitionExceptionEventArgsImpl;
 import ch.bbv.fsm.impl.internal.state.State;
 import ch.bbv.fsm.impl.internal.state.StateContext;
 import ch.bbv.fsm.impl.internal.state.StateDictionary;
-import ch.bbv.fsm.impl.internal.statemachine.Notifier;
 import ch.bbv.fsm.impl.internal.transition.TransitionContext;
 import ch.bbv.fsm.impl.internal.transition.TransitionResult;
 
@@ -49,9 +49,9 @@ import com.google.common.collect.Maps;
  * @param <TEvent>
  *            the type of the events.
  */
-public class StateMachineDriver<TState extends Enum<?>, TEvent extends Enum<?>> implements Notifier<TState, TEvent> {
+public class StateMachineInterpreter<TState extends Enum<?>, TEvent extends Enum<?>> implements Notifier<TState, TEvent> {
 
-	private static final Logger LOG = LoggerFactory.getLogger(StateMachineDriver.class);
+	private static final Logger LOG = LoggerFactory.getLogger(StateMachineInterpreter.class);
 
 	/**
 	 * Name of this state machine used in log messages.
@@ -79,8 +79,6 @@ public class StateMachineDriver<TState extends Enum<?>, TEvent extends Enum<?>> 
 
 	private final List<StateMachineEventHandler<TState, TEvent>> eventHandler;
 
-	private final StateMachine<TState, TEvent> stateMachine;
-
 	/**
 	 * Initializes a new instance of the StateMachineImpl<TState,TEvent> class.
 	 * 
@@ -91,10 +89,10 @@ public class StateMachineDriver<TState extends Enum<?>, TEvent extends Enum<?>> 
 	 * @param states
 	 *            the states
 	 */
-	public StateMachineDriver(final StateMachine<TState, TEvent> stateMachine, final String name, final StateDictionary<TState, TEvent> states) {
+	public StateMachineInterpreter(final StateMachine<TState, TEvent> stateMachine, final String name,
+			final StateDictionary<TState, TEvent> states) {
 		this.name = name;
 		this.states = states;
-		this.stateMachine = stateMachine;
 		this.eventHandler = Lists.newArrayList();
 	}
 
@@ -332,12 +330,5 @@ public class StateMachineDriver<TState extends Enum<?>, TEvent extends Enum<?>> 
 	@Override
 	public String toString() {
 		return this.name;
-	}
-
-	/**
-	 * Returns the state machine.
-	 */
-	public StateMachine<TState, TEvent> getStateMachine() {
-		return stateMachine;
 	}
 }

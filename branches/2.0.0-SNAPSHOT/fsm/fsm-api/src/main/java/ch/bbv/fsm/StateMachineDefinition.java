@@ -72,7 +72,7 @@ public interface StateMachineDefinition<TStateMachine extends StateMachine<TStat
 	 * @param handler
 	 *            the event handler
 	 */
-	void addEventHandler(StateMachineEventHandler<TState, TEvent> handler);
+	void addEventHandler(StateMachineEventHandler<TStateMachine, TState, TEvent> handler);
 
 	/**
 	 * Removes the given event handler.
@@ -80,7 +80,7 @@ public interface StateMachineDefinition<TStateMachine extends StateMachine<TStat
 	 * @param handler
 	 *            the event handler to be removed.
 	 */
-	void removeEventHandler(StateMachineEventHandler<TState, TEvent> handler);
+	void removeEventHandler(StateMachineEventHandler<TStateMachine, TState, TEvent> handler);
 
 	/**
 	 * Creates an active state-machine from this definition.

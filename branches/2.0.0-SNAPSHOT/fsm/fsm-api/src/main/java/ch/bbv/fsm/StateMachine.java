@@ -93,7 +93,7 @@ public interface StateMachine<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param handler
 	 *            the event handler
 	 */
-	void addEventHandler(StateMachineEventHandler<TState, TEvent> handler);
+	void addEventHandler(StateMachineEventHandler<StateMachine<TState, TEvent>, TState, TEvent> handler);
 
 	/**
 	 * Removes the given event handler.
@@ -101,6 +101,6 @@ public interface StateMachine<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param handler
 	 *            the event handler to be removed.
 	 */
-	void removeEventHandler(StateMachineEventHandler<TState, TEvent> handler);
+	void removeEventHandler(StateMachineEventHandler<StateMachine<TState, TEvent>, TState, TEvent> handler);
 
 }

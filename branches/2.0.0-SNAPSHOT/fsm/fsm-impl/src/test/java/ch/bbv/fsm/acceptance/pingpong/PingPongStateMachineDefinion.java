@@ -27,7 +27,7 @@ public class PingPongStateMachineDefinion extends
 	protected void define() {
 		final PingPongStateMachine pingPongStateMachine = getPrototype();
 
-		in(State.Ping).on(Event.Hit).goTo(State.Pong);
+		in(State.Ping).on(Event.Hit).goTo(State.Pong).onlyIf(pingPongStateMachine.checkTermination());
 		in(State.Ping).executeOnEntry(pingPongStateMachine.sayPing());
 		in(State.Ping).on(Event.Out).goTo(State.Finished).execute(pingPongStateMachine.sayTerminated());
 

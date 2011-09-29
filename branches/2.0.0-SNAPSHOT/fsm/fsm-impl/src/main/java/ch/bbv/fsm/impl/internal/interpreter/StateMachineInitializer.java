@@ -16,7 +16,7 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.impl.internal.driver;
+package ch.bbv.fsm.impl.internal.interpreter;
 
 import java.util.Stack;
 

@@ -50,11 +50,6 @@ public class ExceptionEventArgsImpl<TState extends Enum<?>, TEvent extends Enum<
 		this.exception = exception;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.bbv.asm.IExceptionEventArgs#getException()
-	 */
 	@Override
 	public Exception getException() {
 		return this.exception;
