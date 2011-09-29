@@ -18,17 +18,21 @@
  *******************************************************************************/
 package ch.bbv.fsm.dsl;
 
+import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.action.Action;
 
 /**
  * Possibilities to execute an action on exit.
  * 
+ * @param <TStateMachine>
+ *            the type of the state machine
  * @param <TState>
  *            the type of the states.
  * @param <TEvent>
  *            the type of the events.
  */
-public interface ExitActionSyntax<TState extends Enum<?>, TEvent extends Enum<?>> extends EventSyntax<TState, TEvent> {
+public interface ExitActionSyntax<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
+		extends EventSyntax<TStateMachine, TState, TEvent> {
 
 	/**
 	 * Defines an exit action.
@@ -37,7 +41,7 @@ public interface ExitActionSyntax<TState extends Enum<?>, TEvent extends Enum<?>
 	 *            the action.
 	 * @return Event syntax.
 	 */
-	EventSyntax<TState, TEvent> executeOnExit(Action<TState, TEvent> action);
+	EventSyntax<TStateMachine, TState, TEvent> executeOnExit(Action<TStateMachine, TState, TEvent> action);
 
 	/**
 	 * Defines an exit action.
@@ -50,7 +54,7 @@ public interface ExitActionSyntax<TState extends Enum<?>, TEvent extends Enum<?>
 	 *            the parameter of the action.
 	 * @return Exit action syntax.
 	 */
-	<T> EventSyntax<TState, TEvent> executeOnExit(Action<TState, TEvent> action, T parameter);
+	<T> EventSyntax<TStateMachine, TState, TEvent> executeOnExit(Action<TStateMachine, TState, TEvent> action, T parameter);
 
 	/**
 	 * Defines an exit action.
@@ -59,6 +63,6 @@ public interface ExitActionSyntax<TState extends Enum<?>, TEvent extends Enum<?>
 	 *            the method to call
 	 * @return Event syntax.
 	 */
-	EventSyntax<TState, TEvent> executeOnExit(Object method);
+	EventSyntax<TStateMachine, TState, TEvent> executeOnExit(Object method);
 
 }

@@ -28,13 +28,14 @@ import ch.bbv.fsm.StateMachine;
  *            parameter type
  * @param <ReturnType>
  *            return type
+ * @param <TStateMachine>
+ *            the type of state machine
  * @param <TState>
  *            the state enumeration
  * @param <TEvent>
  *            the event enumeration
  */
-
-public interface Function<TState extends Enum<?>, TEvent extends Enum<?>, ParameterType, ReturnType> {
+public interface Function<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>, ParameterType, ReturnType> {
 
 	/**
 	 * Executes the function.
@@ -45,6 +46,6 @@ public interface Function<TState extends Enum<?>, TEvent extends Enum<?>, Parame
 	 *            the parameter of the function.
 	 * @return the return value of the function.
 	 */
-	ReturnType execute(StateMachine<TState, TEvent> stateMachine, ParameterType parameter);
+	ReturnType execute(TStateMachine stateMachine, ParameterType parameter);
 
 }

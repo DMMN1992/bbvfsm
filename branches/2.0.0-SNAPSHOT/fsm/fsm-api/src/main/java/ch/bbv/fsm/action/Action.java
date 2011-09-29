@@ -22,12 +22,15 @@ import ch.bbv.fsm.StateMachine;
 
 /**
  * @author Ueli Kurmann (bbv Software Services AG)
+ * 
+ * @param <TStateMachine>
+ *            the type of the state machine
  * @param <TState>
  *            the state enumeration
  * @param <TEvent>
  *            the event enumeration
  */
-public interface Action<TState extends Enum<?>, TEvent extends Enum<?>> {
+public interface Action<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
 
 	/**
 	 * Executes the action.
@@ -37,6 +40,6 @@ public interface Action<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param arguments
 	 *            the arguments of the action.
 	 */
-	void execute(StateMachine<TState, TEvent> stateMachine, Object... arguments);
+	void execute(TStateMachine stateMachine, Object... arguments);
 
 }

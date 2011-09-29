@@ -18,15 +18,19 @@
  *******************************************************************************/
 package ch.bbv.fsm.dsl;
 
+import ch.bbv.fsm.StateMachine;
+
 /**
  * Define an event on a state.
  * 
+ * @param <TStateMachine>
+ *            the type of the state machine
  * @param <TState>
  *            the type of the states.
  * @param <TEvent>
  *            the type of the events.
  */
-public interface EventSyntax<TState extends Enum<?>, TEvent extends Enum<?>> {
+public interface EventSyntax<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
 
 	/**
 	 * Defines an event that is accepted.
@@ -35,5 +39,5 @@ public interface EventSyntax<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 *            the event id.
 	 * @return >Event action syntax.
 	 */
-	EventActionSyntax<TState, TEvent> on(TEvent eventId);
+	EventActionSyntax<TStateMachine, TState, TEvent> on(TEvent eventId);
 }

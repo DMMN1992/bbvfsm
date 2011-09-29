@@ -18,17 +18,21 @@
  *******************************************************************************/
 package ch.bbv.fsm.dsl;
 
+import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.action.Action;
 
 /**
  * Possibilities to execute an action.
  * 
+ * @param <TStateMachine>
+ *            the type of state machine
  * @param <TState>
  *            the type of the states.
  * @param <TEvent>
  *            the type of the events.
  */
-public interface ExecuteSyntax<TState extends Enum<?>, TEvent extends Enum<?>> extends GuardSyntax<TState, TEvent> {
+public interface ExecuteSyntax<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> extends
+		GuardSyntax<TStateMachine, TState, TEvent> {
 
 	/**
 	 * Defines the actions to execute on a transition.
@@ -37,7 +41,7 @@ public interface ExecuteSyntax<TState extends Enum<?>, TEvent extends Enum<?>> e
 	 *            The actions.
 	 * @return Guard syntax.
 	 */
-	ExecuteSyntax<TState, TEvent> execute(Action<TState, TEvent> action);
+	ExecuteSyntax<TStateMachine, TState, TEvent> execute(Action<TStateMachine, TState, TEvent> action);
 
 	/**
 	 * Defines the actions to execute on a transition.
@@ -46,5 +50,5 @@ public interface ExecuteSyntax<TState extends Enum<?>, TEvent extends Enum<?>> e
 	 *            The actions.
 	 * @return Guard syntax.
 	 */
-	ExecuteSyntax<TState, TEvent> execute(Object methodCall);
+	ExecuteSyntax<TStateMachine, TState, TEvent> execute(Object methodCall);
 }

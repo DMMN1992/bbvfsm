@@ -18,6 +18,7 @@
  *******************************************************************************/
 package ch.bbv.fsm.dsl;
 
+import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.guard.Function;
 
 /**
@@ -27,8 +28,11 @@ import ch.bbv.fsm.guard.Function;
  *            the type of the states.
  * @param <TEvent>
  *            the type of the events.
+ * @param <TStateMachine>
+ *            the type of state machine
  */
-public interface GuardSyntax<TState extends Enum<?>, TEvent extends Enum<?>> extends EventSyntax<TState, TEvent> {
+public interface GuardSyntax<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> extends
+		EventSyntax<TStateMachine, TState, TEvent> {
 
 	/**
 	 * Defines a guard for a transition. A boolean itself is not valid. There needs to be a function call using from(owner).function
@@ -38,7 +42,7 @@ public interface GuardSyntax<TState extends Enum<?>, TEvent extends Enum<?>> ext
 	 *            function call using the from construct.
 	 * @return the event syntax.
 	 */
-	EventSyntax<TState, TEvent> onlyIf(boolean guard);
+	EventSyntax<TStateMachine, TState, TEvent> onlyIf(boolean guard);
 
 	/**
 	 * Defines a guard for a transition.
@@ -47,5 +51,5 @@ public interface GuardSyntax<TState extends Enum<?>, TEvent extends Enum<?>> ext
 	 *            the guard.
 	 * @return Event syntax.
 	 */
-	EventSyntax<TState, TEvent> onlyIf(Function<TState, TEvent, Object[], Boolean> guard);
+	EventSyntax<TStateMachine, TState, TEvent> onlyIf(Function<TStateMachine, TState, TEvent, Object[], Boolean> guard);
 }

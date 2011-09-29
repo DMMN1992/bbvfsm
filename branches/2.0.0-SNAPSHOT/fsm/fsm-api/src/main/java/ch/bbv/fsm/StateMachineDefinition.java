@@ -45,7 +45,7 @@ public interface StateMachineDefinition<TStateMachine extends StateMachine<TStat
 	 * @param state
 	 *            the state
 	 */
-	EntryActionSyntax<TState, TEvent> in(TState state);
+	EntryActionSyntax<TStateMachine, TState, TEvent> in(TState state);
 
 	/**
 	 * Defines a state hierarchy.

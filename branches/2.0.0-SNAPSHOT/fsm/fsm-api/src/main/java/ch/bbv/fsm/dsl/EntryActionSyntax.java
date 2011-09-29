@@ -18,19 +18,23 @@
  *******************************************************************************/
 package ch.bbv.fsm.dsl;
 
+import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.action.Action;
 
 /**
  * Entry Action Syntax.
  * 
  * @author Ueli Kurmann (bbv Software Services AG)
+ * 
+ * @param <TStateMachine>
+ *            the type of the state machine
  * @param <TState>
  *            the type of the states.
  * @param <TEvent>
  *            the type of the events.
  */
-public interface EntryActionSyntax<TState extends Enum<?>, TEvent extends Enum<?>> extends ExitActionSyntax<TState, TEvent>,
-		EventSyntax<TState, TEvent> {
+public interface EntryActionSyntax<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
+		extends ExitActionSyntax<TStateMachine, TState, TEvent>, EventSyntax<TStateMachine, TState, TEvent> {
 
 	/**
 	 * Defines an entry action.
@@ -39,7 +43,7 @@ public interface EntryActionSyntax<TState extends Enum<?>, TEvent extends Enum<?
 	 *            the Action
 	 * @return the ExitActionSyntax.
 	 */
-	ExitActionSyntax<TState, TEvent> executeOnEntry(Action<TState, TEvent> action);
+	ExitActionSyntax<TStateMachine, TState, TEvent> executeOnEntry(Action<TStateMachine, TState, TEvent> action);
 
 	/**
 	 * Defines an entry action.
@@ -52,7 +56,7 @@ public interface EntryActionSyntax<TState extends Enum<?>, TEvent extends Enum<?
 	 *            (necessary?)
 	 * @return the ExitActionSyntax
 	 */
-	<T> ExitActionSyntax<TState, TEvent> executeOnEntry(Action<TState, TEvent> action, T parameter);
+	<T> ExitActionSyntax<TStateMachine, TState, TEvent> executeOnEntry(Action<TStateMachine, TState, TEvent> action, T parameter);
 
 	/**
 	 * Defines an entry action.
@@ -60,5 +64,5 @@ public interface EntryActionSyntax<TState extends Enum<?>, TEvent extends Enum<?
 	 * @param methodCall
 	 *            the method called on entry.
 	 */
-	ExitActionSyntax<TState, TEvent> executeOnEntry(Object methodCall);
+	ExitActionSyntax<TStateMachine, TState, TEvent> executeOnEntry(Object methodCall);
 }
