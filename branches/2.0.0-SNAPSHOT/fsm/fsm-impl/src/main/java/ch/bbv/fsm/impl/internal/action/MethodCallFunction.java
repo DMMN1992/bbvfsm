@@ -25,6 +25,8 @@ import ch.bbv.fsm.guard.Function;
 /**
  * Implementation of a function that wraps a MethodCall.
  * 
+ * @param <TStateMachine>
+ *            the type of state machine
  * @param <TState>
  *            the type of the states.
  * @param <TEvent>

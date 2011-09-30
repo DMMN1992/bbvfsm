@@ -10,9 +10,9 @@ import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.StateMachineDefinition;
 import ch.bbv.fsm.dsl.EntryActionSyntax;
 import ch.bbv.fsm.events.StateMachineEventHandler;
-import ch.bbv.fsm.impl.internal.driver.ActiveStateMachine;
+import ch.bbv.fsm.impl.internal.driver.ActiveStateMachineDriver;
 import ch.bbv.fsm.impl.internal.driver.Notifier;
-import ch.bbv.fsm.impl.internal.driver.PassiveStateMachine;
+import ch.bbv.fsm.impl.internal.driver.PassiveStateMachineDriver;
 import ch.bbv.fsm.impl.internal.dsl.StateBuilder;
 import ch.bbv.fsm.impl.internal.statemachine.events.ExceptionEventArgsImpl;
 import ch.bbv.fsm.impl.internal.statemachine.events.TransitionEventArgsImpl;
@@ -52,8 +52,6 @@ public abstract class AbstractStateMachineDefinition<TStateMachine extends Abstr
 	private final List<StateMachineEventHandler<TStateMachine, TState, TEvent>> eventHandler;
 
 	private final TState initialState;
-
-	private TStateMachine stateMachine;
 
 	/**
 	 * Initializes the passive state machine.
@@ -124,7 +122,7 @@ public abstract class AbstractStateMachineDefinition<TStateMachine extends Abstr
 
 	@Override
 	public TStateMachine createActiveStateMachine(final String name, final TState initialState) {
-		final ActiveStateMachine<TStateMachine, TState, TEvent> activeStateMachine = new ActiveStateMachine<TStateMachine, TState, TEvent>();
+		final ActiveStateMachineDriver<TStateMachine, TState, TEvent> activeStateMachine = new ActiveStateMachineDriver<TStateMachine, TState, TEvent>();
 		final TStateMachine stateMachine = createStateMachine(activeStateMachine);
 		activeStateMachine.initialize(stateMachine, name, states, initialState);
 		return stateMachine;
@@ -132,7 +130,7 @@ public abstract class AbstractStateMachineDefinition<TStateMachine extends Abstr
 
 	@Override
 	public TStateMachine createActiveStateMachine(final String name) {
-		final ActiveStateMachine<TStateMachine, TState, TEvent> activeStateMachine = new ActiveStateMachine<TStateMachine, TState, TEvent>();
+		final ActiveStateMachineDriver<TStateMachine, TState, TEvent> activeStateMachine = new ActiveStateMachineDriver<TStateMachine, TState, TEvent>();
 		final TStateMachine stateMachine = createStateMachine(activeStateMachine);
 		activeStateMachine.initialize(stateMachine, name, states, initialState);
 		return stateMachine;
@@ -140,7 +138,7 @@ public abstract class AbstractStateMachineDefinition<TStateMachine extends Abstr
 
 	@Override
 	public TStateMachine createPassiveStateMachine(final String name, final TState initialState) {
-		final PassiveStateMachine<TStateMachine, TState, TEvent> passiveStateMachine = new PassiveStateMachine<TStateMachine, TState, TEvent>();
+		final PassiveStateMachineDriver<TStateMachine, TState, TEvent> passiveStateMachine = new PassiveStateMachineDriver<TStateMachine, TState, TEvent>();
 		final TStateMachine stateMachine = createStateMachine(passiveStateMachine);
 		passiveStateMachine.initialize(stateMachine, name, states, initialState);
 		return stateMachine;
@@ -148,7 +146,7 @@ public abstract class AbstractStateMachineDefinition<TStateMachine extends Abstr
 
 	@Override
 	public TStateMachine createPassiveStateMachine(final String name) {
-		final PassiveStateMachine<TStateMachine, TState, TEvent> passiveStateMachine = new PassiveStateMachine<TStateMachine, TState, TEvent>();
+		final PassiveStateMachineDriver<TStateMachine, TState, TEvent> passiveStateMachine = new PassiveStateMachineDriver<TStateMachine, TState, TEvent>();
 		final TStateMachine stateMachine = createStateMachine(passiveStateMachine);
 		passiveStateMachine.initialize(stateMachine, name, states, initialState);
 		return stateMachine;

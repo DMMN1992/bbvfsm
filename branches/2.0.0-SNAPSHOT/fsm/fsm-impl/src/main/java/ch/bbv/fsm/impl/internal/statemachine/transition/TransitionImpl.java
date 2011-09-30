@@ -34,6 +34,8 @@ import com.google.common.collect.Lists;
 /**
  * The implementation of a transition.
  * 
+ * @param <TStateMachine>
+ *            the type of state machine
  * @param <TState>
  *            the type of the states
  * @param <TEvent>

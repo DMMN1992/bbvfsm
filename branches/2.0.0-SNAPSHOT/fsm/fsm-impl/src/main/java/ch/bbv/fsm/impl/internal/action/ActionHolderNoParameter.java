@@ -25,6 +25,8 @@ import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 /**
  * Wraps an action without parameters.
  * 
+ * @param <TStateMachine>
+ *            the type of state machine
  * @param <TState>
  *            the type of the states
  * @param <TEvent>

@@ -5,6 +5,16 @@ import ch.bbv.fsm.impl.internal.report.EventInformation;
 import ch.bbv.fsm.impl.internal.statemachine.StateMachineInterpreter;
 import ch.bbv.fsm.impl.internal.statemachine.state.StateDictionary;
 
+/**
+ * Base implementation for all state machine drivers.
+ * 
+ * @param <TStateMachine>
+ *            the type of state machine
+ * @param <TState>
+ *            the enumeration type of the states.
+ * @param <TEvent>
+ *            the enumeration type of the events.
+ */
 abstract class AbstractStateMachineDriver<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
 		implements StateMachine<TState, TEvent> {
 
@@ -18,6 +28,16 @@ abstract class AbstractStateMachineDriver<TStateMachine extends StateMachine<TSt
 	public AbstractStateMachineDriver() {
 	}
 
+	/**
+	 * Initializes the state machine.
+	 * 
+	 * @param stateMachine
+	 *            the custom state machine
+	 * @param name
+	 *            the name of the state machine used in the logs.
+	 * @param states
+	 *            the states
+	 */
 	public void initialize(final TStateMachine stateMachine, final String name,
 			final StateDictionary<TStateMachine, TState, TEvent> states, final TState initialState) {
 		this.stateMachineInterpreter = new StateMachineInterpreter<TStateMachine, TState, TEvent>(stateMachine, name, states, initialState);

@@ -29,6 +29,9 @@ import ch.bbv.fsm.impl.internal.statemachine.state.State;
  * The transition between two states.
  * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)s
+ * 
+ * @param <TStateMachine>
+ *            the type of state machine
  * @param <TState>
  *            the type of the states
  * @param <TEvent>

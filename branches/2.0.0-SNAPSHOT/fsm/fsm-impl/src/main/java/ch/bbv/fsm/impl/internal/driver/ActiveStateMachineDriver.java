@@ -31,12 +31,15 @@ import ch.bbv.fsm.impl.internal.report.EventInformation;
  * An active state machine. This state machine reacts to events on a separate worker thread.
  * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
+ * 
  * @param <TState>
- *            the type of the states.
+ *            the enumeration type of the states.
  * @param <TEvent>
- *            the type of the events.
+ *            the enumeration type of the events.
+ * @param <TStateMachine>
+ *            the type of state machine
  */
-public class ActiveStateMachine<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> extends
+public class ActiveStateMachineDriver<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> extends
 		AbstractStateMachineDriver<TStateMachine, TState, TEvent> {
 
 	private static final int WAIT_FOR_TERMINATION_MS = 10000;
@@ -51,19 +54,14 @@ public class ActiveStateMachine<TStateMachine extends StateMachine<TState, TEven
 	private final Runnable worker = new Runnable() {
 		@Override
 		public void run() {
-			ActiveStateMachine.this.execute();
+			ActiveStateMachineDriver.this.execute();
 		}
 	};
 
 	/**
-	 * Initializes the state machine.
-	 * 
-	 * @param name
-	 *            the name of the state machine used in the logs.
-	 * @param states
-	 *            the states
+	 * Create an active state machine.
 	 */
-	public ActiveStateMachine() {
+	public ActiveStateMachineDriver() {
 		this.events = new LinkedBlockingDeque<EventInformation<TEvent>>();
 		this.executorService = Executors.newFixedThreadPool(1);
 	}

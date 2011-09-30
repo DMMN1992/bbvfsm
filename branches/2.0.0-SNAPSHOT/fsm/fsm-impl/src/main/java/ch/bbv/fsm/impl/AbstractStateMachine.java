@@ -9,6 +9,8 @@ import ch.bbv.fsm.StateMachine;
  *            the type of the states.
  * @param <TEvent>
  *            the type of the events.
+ * @param <TStateMachine>
+ *            the type of state machine
  */
 public class AbstractStateMachine<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
 		implements StateMachine<TState, TEvent> {

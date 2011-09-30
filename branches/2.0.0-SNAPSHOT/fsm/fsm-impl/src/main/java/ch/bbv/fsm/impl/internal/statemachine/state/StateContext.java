@@ -30,8 +30,13 @@ import com.google.common.collect.Lists;
  * State Context.
  * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
+ * 
+ * @param <TStateMachine>
+ *            the type of state machine
  * @param <TState>
+ *            the type of the states
  * @param <TEvent>
+ *            the type of the events
  */
 public class StateContext<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
 
@@ -136,6 +141,8 @@ public class StateContext<TStateMachine extends StateMachine<TState, TEvent>, TS
 	/**
 	 * Creates a new instance.
 	 * 
+	 * @param stateMachine
+	 *            the custom state machine
 	 * @param sourceState
 	 *            the source state of the transition.
 	 * @param stateMachineImpl
@@ -243,6 +250,9 @@ public class StateContext<TStateMachine extends StateMachine<TState, TEvent>, TS
 		stateMachineInterpreter.setLastActiveSubState(superState, subState);
 	}
 
+	/**
+	 * Returns the custom's state machine.
+	 */
 	public TStateMachine getStateMachine() {
 		return stateMachine;
 	}

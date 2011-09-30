@@ -30,6 +30,9 @@ import com.google.common.collect.MapMaker;
  * The mapping between state id's and the corresponding state instance.
  * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
+ * 
+ * @param <TStateMachine>
+ *            the type of state machine
  * @param <TState>
  *            the type of the states
  * @param <TEvent>

@@ -28,10 +28,13 @@ import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
  * State Machine Initializer.
  * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
+ * 
+ * @param <TStateMachine>
+ *            the type of state machine
  * @param <TState>
- *            the state type.
+ *            the type of the states
  * @param <TEvent>
- *            the event type.
+ *            the type of the events
  */
 class StateMachineInitializer<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
 
@@ -47,7 +50,8 @@ class StateMachineInitializer<TStateMachine extends StateMachine<TState, TEvent>
 	 * @param stateContext
 	 *            the state context.
 	 */
-	public StateMachineInitializer(final State<TStateMachine, TState, TEvent> initialState, final StateContext<TStateMachine, TState, TEvent> stateContext) {
+	public StateMachineInitializer(final State<TStateMachine, TState, TEvent> initialState,
+			final StateContext<TStateMachine, TState, TEvent> stateContext) {
 		this.initialState = initialState;
 		this.stateContext = stateContext;
 	}

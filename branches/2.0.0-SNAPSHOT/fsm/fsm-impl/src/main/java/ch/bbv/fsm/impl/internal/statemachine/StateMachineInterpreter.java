@@ -44,10 +44,13 @@ import com.google.common.collect.Maps;
  * State Machine Implementation.
  * 
  * @author Ueli Kurmann (bbv Software Services AG)
+ * 
+ * @param <TStateMachine>
+ *            the type of state machine
  * @param <TState>
- *            the type of the states.
+ *            the type of the states
  * @param <TEvent>
- *            the type of the events.
+ *            the type of the events
  */
 public class StateMachineInterpreter<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
 		implements Notifier<TStateMachine, TState, TEvent> {
@@ -80,10 +83,14 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<TState, 
 	/**
 	 * Initializes a new instance of the StateMachineImpl<TState,TEvent> class.
 	 * 
+	 * @param stateMachine
+	 *            the custom's state machine
 	 * @param name
 	 *            The name of this state machine used in log messages.
 	 * @param states
 	 *            the states
+	 * @param initialState
+	 *            the initial state
 	 */
 	public StateMachineInterpreter(final TStateMachine stateMachine, final String name,
 			final StateDictionary<TStateMachine, TState, TEvent> states, final TState initialState) {
@@ -186,10 +193,7 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<TState, 
 	}
 
 	/**
-	 * Initializes the state machine by setting the specified initial state.
-	 * 
-	 * @param initialState
-	 *            the initial state.
+	 * Initializes the state machine.
 	 */
 	public void initialize() {
 		LOG.info("State machine {} initializes to state {}.", this, initialStateId);

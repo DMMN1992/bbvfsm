@@ -24,6 +24,8 @@ import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 /**
  * Action Holder. A wrapper class for different action types. It allows to execute all actions with the same method call.
  * 
+ * @param <TStateMachine>
+ *            the type of state machine
  * @param <TState>
  *            the type of the states
  * @param <TEvent>

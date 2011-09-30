@@ -24,10 +24,10 @@ import ch.bbv.fsm.impl.StatesAndEvents.States;
 /**
  * Base for state machine test fixtures.
  */
-public class ActiveStateMachineTest extends BaseStateMachineTest {
+public class PassiveStateMachineDriverTest extends BaseStateMachineTest {
 
 	@Override
 	protected StateMachine<States, Events> createTestee(final StateMachineDefinition<States, Events> definition, final States states) {
-		return definition.createActiveStateMachine("Testee", states);
+		return definition.createPassiveStateMachine("testee", states);
 	}
 }

@@ -28,6 +28,9 @@ import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionInfo;
  * State Machine Report.
  * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
+ * 
+ * @param <TStateMachine>
+ *            the type of state machine
  * @param <TState>
  *            the type of the states
  * @param <TEvent>
@@ -118,7 +121,8 @@ public class StateMachineReport<TStateMachine extends StateMachine<TState, TEven
 	 * @param transition
 	 *            the transition.
 	 */
-	private void reportTransition(final StringBuilder report, final String indentation, final TransitionInfo<TStateMachine, TState, TEvent> transition) {
+	private void reportTransition(final StringBuilder report, final String indentation,
+			final TransitionInfo<TStateMachine, TState, TEvent> transition) {
 		report.append(String.format("%s%s -> %s actions: %s guard:%s%s", indentation, transition.getEventId(),
 				transition.getTarget() != null ? transition.getTarget().toString() : "internal", transition.getActions(),
 				transition.hasGuard(), NEWLINE));

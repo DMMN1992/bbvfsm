@@ -27,12 +27,15 @@ import ch.bbv.fsm.impl.internal.report.EventInformation;
  * A passive state machine. This state machine reacts to events on the current thread.
  * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
+ * 
  * @param <TState>
- *            the type of the states. (Enum)
+ *            the enumeration type of the states.
  * @param <TEvent>
- *            the type of the events. (Enum)
+ *            the enumeration type of the events.
+ * @param <TStateMachine>
+ *            the type of state machine
  */
-public class PassiveStateMachine<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
+public class PassiveStateMachineDriver<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
 		extends AbstractStateMachineDriver<TStateMachine, TState, TEvent> {
 
 	/**
@@ -41,15 +44,9 @@ public class PassiveStateMachine<TStateMachine extends StateMachine<TState, TEve
 	private final LinkedList<EventInformation<TEvent>> events;
 
 	/**
-	 * Initializes the state machine.
-	 * 
-	 * @param name
-	 *            the name of the state machine used in the logs.
-	 * 
-	 * @param states
-	 *            the states
+	 * Creates the state machine.
 	 */
-	public PassiveStateMachine() {
+	public PassiveStateMachineDriver() {
 		this.events = new LinkedList<EventInformation<TEvent>>();
 	}
 

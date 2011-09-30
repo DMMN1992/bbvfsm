@@ -27,6 +27,8 @@ import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 /**
  * Context during a transition.
  * 
+ * @param <TStateMachine>
+ *            the type of state machine
  * @param <TState>
  *            the type of the states
  * @param <TEvent>
@@ -48,14 +50,16 @@ public class TransitionContext<TStateMachine extends StateMachine<TState, TEvent
 	/**
 	 * Creates a new instance.
 	 * 
+	 * @param stateMachine
+	 *            the custom's state machine
 	 * @param state
 	 *            the source state
 	 * @param eventId
 	 *            the event id
 	 * @param eventArguments
 	 *            the event arguments
-	 * @param stateMachine
-	 *            the state machine
+	 * @param stateMachineInterpreter
+	 *            the state machine's interpreter
 	 * @param notifier
 	 *            the notifier
 	 */

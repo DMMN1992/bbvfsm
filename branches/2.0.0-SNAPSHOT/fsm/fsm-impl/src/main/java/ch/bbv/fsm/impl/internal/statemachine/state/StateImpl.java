@@ -41,10 +41,16 @@ import com.google.common.collect.Lists;
  * Implementation of the state.
  * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
+ * 
+ * @param <TStateMachine>
+ *            the type of state machine
  * @param <TState>
+ *            the type of the states
  * @param <TEvent>
+ *            the type of the events
  */
-public class StateImpl<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> implements State<TStateMachine, TState, TEvent> {
+public class StateImpl<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> implements
+		State<TStateMachine, TState, TEvent> {
 
 	private static final Logger LOG = LoggerFactory.getLogger(StateImpl.class);
 

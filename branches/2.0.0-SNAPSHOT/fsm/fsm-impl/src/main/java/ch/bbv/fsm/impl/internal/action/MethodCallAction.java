@@ -27,6 +27,8 @@ import ch.bbv.fsm.action.MethodCall;
 /**
  * Calls a method.
  * 
+ * @param <TStateMachine>
+ *            the type of state machine
  * @param <TState>
  *            the type of the states
  * @param <TEvent>

@@ -26,12 +26,15 @@ import ch.bbv.fsm.impl.internal.statemachine.state.State;
 /**
  * The implementation of {@link TransitionResult}.
  * 
+ * @param <TStateMachine>
+ *            the type of state machine
  * @param <TState>
- *            the type of states
+ *            the type of the states
  * @param <TEvent>
- *            the type of events
+ *            the type of the events
  */
-public class TransitionResultImpl<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> implements TransitionResult<TStateMachine, TState, TEvent> {
+public class TransitionResultImpl<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
+		implements TransitionResult<TStateMachine, TState, TEvent> {
 
 	/**
 	 * This value represents that no transition was fired.
@@ -50,7 +53,8 @@ public class TransitionResultImpl<TStateMachine extends StateMachine<TState, TEv
 	 * @param exceptions
 	 *            the exceptions
 	 */
-	public TransitionResultImpl(final boolean fired, final State<TStateMachine, TState, TEvent> newState, final List<? extends Throwable> exceptions) {
+	public TransitionResultImpl(final boolean fired, final State<TStateMachine, TState, TEvent> newState,
+			final List<? extends Throwable> exceptions) {
 		this.fired = fired;
 		this.newState = newState;
 		this.exceptions = exceptions;
@@ -78,10 +82,12 @@ public class TransitionResultImpl<TStateMachine extends StateMachine<TState, TEv
 	/**
 	 * Creates a not fired result.
 	 * 
+	 * @param <TStateMachine>
+	 *            the type of state machine
 	 * @param <TState>
-	 *            the type of states
+	 *            the type of the states
 	 * @param <TEvent>
-	 *            the type of events
+	 *            the type of the events
 	 */
 	public static <TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> TransitionResult<TStateMachine, TState, TEvent> getNotFired() {
 		return new TransitionResultImpl<TStateMachine, TState, TEvent>(false, null, null);

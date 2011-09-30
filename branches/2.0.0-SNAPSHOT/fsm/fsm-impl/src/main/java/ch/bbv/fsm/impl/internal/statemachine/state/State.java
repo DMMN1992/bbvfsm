@@ -29,8 +29,13 @@ import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionResult;
  * Represents a state of the state machine.
  * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
+ * 
+ * @param <TStateMachine>
+ *            the type of state machine
  * @param <TState>
+ *            the type of the states
  * @param <TEvent>
+ *            the type of the events
  */
 public interface State<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
 

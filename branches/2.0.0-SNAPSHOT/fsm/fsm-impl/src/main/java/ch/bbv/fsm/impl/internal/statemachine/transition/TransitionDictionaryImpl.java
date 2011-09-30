@@ -33,12 +33,16 @@ import com.google.common.collect.Multimap;
  * Mapping between a state and its transitions.
  * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
+ * 
+ * @param <TStateMachine>
+ *            the type of state machine
  * @param <TState>
- *            the type of states
+ *            the type of the states
  * @param <TEvent>
- *            the type of events
+ *            the type of the events
  */
-public class TransitionDictionaryImpl<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> implements TransitionDictionary<TStateMachine, TState, TEvent> {
+public class TransitionDictionaryImpl<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
+		implements TransitionDictionary<TStateMachine, TState, TEvent> {
 
 	/**
 	 * The state this transitions belong to.
@@ -89,8 +93,8 @@ public class TransitionDictionaryImpl<TStateMachine extends StateMachine<TState,
 	 */
 	private void getTransitionsOfEvent(final TEvent eventId, final List<TransitionInfo<TStateMachine, TState, TEvent>> list) {
 		for (final Transition<TStateMachine, TState, TEvent> transition : this.transitions.get(eventId)) {
-			list.add(new TransitionInfo<TStateMachine, TState, TEvent>(eventId, transition.getSource(), transition.getTarget(),
-					transition.getGuard() != null, transition.getActions().size()));
+			list.add(new TransitionInfo<TStateMachine, TState, TEvent>(eventId, transition.getSource(), transition.getTarget(), transition
+					.getGuard() != null, transition.getActions().size()));
 		}
 	}
 }

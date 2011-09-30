@@ -24,10 +24,12 @@ import ch.bbv.fsm.impl.internal.statemachine.state.State;
 /**
  * The result of a transition.
  * 
+ * @param <TStateMachine>
+ *            the type of state machine
  * @param <TState>
- *            the type of states
+ *            the type of the states
  * @param <TEvent>
- *            the type of events
+ *            the type of the events
  */
 public interface TransitionResult<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
 

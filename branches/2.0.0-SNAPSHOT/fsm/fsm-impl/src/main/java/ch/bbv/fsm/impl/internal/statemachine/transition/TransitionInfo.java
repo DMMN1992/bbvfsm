@@ -25,6 +25,9 @@ import ch.bbv.fsm.impl.internal.statemachine.state.State;
  * Describes a transition.
  * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
+ * 
+ * @param <TStateMachine>
+ *            the type of state machine
  * @param <TState>
  *            the type of the states
  * @param <TEvent>
@@ -51,8 +54,8 @@ public class TransitionInfo<TStateMachine extends StateMachine<TState, TEvent>, 
 	 * @param actions
 	 *            the number of actions
 	 */
-	public TransitionInfo(final TEvent eventId, final State<TStateMachine, TState, TEvent> source, final State<TStateMachine, TState, TEvent> target,
-			final boolean hasGuard, final int actions) {
+	public TransitionInfo(final TEvent eventId, final State<TStateMachine, TState, TEvent> source,
+			final State<TStateMachine, TState, TEvent> target, final boolean hasGuard, final int actions) {
 		this.eventId = eventId;
 		this.source = source;
 		this.target = target;
