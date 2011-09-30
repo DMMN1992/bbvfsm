@@ -20,6 +20,7 @@ package ch.bbv.fsm.impl.internal.report;
 
 import java.util.List;
 
+import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.impl.internal.statemachine.state.State;
 import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionInfo;
 
@@ -32,7 +33,7 @@ import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionInfo;
  * @param <TEvent>
  *            the type of the events
  */
-public class StateMachineReport<TState extends Enum<?>, TEvent extends Enum<?>> {
+public class StateMachineReport<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
 	private static final String INDENTATION = "    ";
 	private static final String NEWLINE = System.getProperty("line.separator");
 
@@ -47,7 +48,7 @@ public class StateMachineReport<TState extends Enum<?>, TEvent extends Enum<?>> 
 	 *            the initial state
 	 * @return description of the state machine.
 	 */
-	public String report(final String name, final List<State<TState, TEvent>> states, final TState initialStateId) {
+	public String report(final String name, final List<State<TStateMachine, TState, TEvent>> states, final TState initialStateId) {
 		final StringBuilder report = new StringBuilder();
 
 		final String indentation = INDENTATION;
@@ -55,7 +56,7 @@ public class StateMachineReport<TState extends Enum<?>, TEvent extends Enum<?>> 
 		report.append(String.format("%s: initial state = %s%s", name, initialStateId.toString(), NEWLINE));
 
 		// write states
-		for (final State<TState, TEvent> state : states) {
+		for (final State<TStateMachine, TState, TEvent> state : states) {
 			if (state.getSuperState() == null) {
 				this.reportState(state, report, indentation);
 			}
@@ -74,16 +75,16 @@ public class StateMachineReport<TState extends Enum<?>, TEvent extends Enum<?>> 
 	 * @param indentation
 	 *            the current indentation level.
 	 */
-	private void reportState(final State<TState, TEvent> state, final StringBuilder report, final String indentation) {
+	private void reportState(final State<TStateMachine, TState, TEvent> state, final StringBuilder report, final String indentation) {
 		this.reportStateNameInitialStateHistoryTypeEntryAndExitAction(report, indentation, state);
 
 		final String nextIndentation = indentation + INDENTATION;
 
-		for (final TransitionInfo<TState, TEvent> transition : state.getTransitions().getTransitions()) {
+		for (final TransitionInfo<TStateMachine, TState, TEvent> transition : state.getTransitions().getTransitions()) {
 			this.reportTransition(report, nextIndentation, transition);
 		}
 
-		for (final State<TState, TEvent> subState : state.getSubStates()) {
+		for (final State<TStateMachine, TState, TEvent> subState : state.getSubStates()) {
 			this.reportState(subState, report, nextIndentation);
 		}
 	}
@@ -99,7 +100,7 @@ public class StateMachineReport<TState extends Enum<?>, TEvent extends Enum<?>> 
 	 *            the state
 	 */
 	private void reportStateNameInitialStateHistoryTypeEntryAndExitAction(final StringBuilder report, final String indentation,
-			final State<TState, TEvent> state) {
+			final State<TStateMachine, TState, TEvent> state) {
 		report.append(String.format("%s %s: initial state = %s history type = %s %s", indentation, state,
 				state.getInitialState() != null ? state.getInitialState().toString() : "None", state.getHistoryType(), NEWLINE));
 		final String newIndentation = indentation + INDENTATION;
@@ -117,7 +118,7 @@ public class StateMachineReport<TState extends Enum<?>, TEvent extends Enum<?>> 
 	 * @param transition
 	 *            the transition.
 	 */
-	private void reportTransition(final StringBuilder report, final String indentation, final TransitionInfo<TState, TEvent> transition) {
+	private void reportTransition(final StringBuilder report, final String indentation, final TransitionInfo<TStateMachine, TState, TEvent> transition) {
 		report.append(String.format("%s%s -> %s actions: %s guard:%s%s", indentation, transition.getEventId(),
 				transition.getTarget() != null ? transition.getTarget().toString() : "internal", transition.getActions(),
 				transition.hasGuard(), NEWLINE));

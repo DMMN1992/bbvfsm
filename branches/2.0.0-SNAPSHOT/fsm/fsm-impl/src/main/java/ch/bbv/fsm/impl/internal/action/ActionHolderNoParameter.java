@@ -18,6 +18,7 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl.internal.action;
 
+import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.action.Action;
 import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 
@@ -31,12 +32,13 @@ import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
  * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
  */
-public class ActionHolderNoParameter<TState extends Enum<?>, TEvent extends Enum<?>> implements ActionHolder<TState, TEvent> {
+public class ActionHolderNoParameter<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
+		implements ActionHolder<TStateMachine, TState, TEvent> {
 
 	/**
 	 * the wrapped action.
 	 */
-	private final Action<TState, TEvent> action;
+	private final Action<TStateMachine, TState, TEvent> action;
 
 	/**
 	 * Initializes a new instance.
@@ -44,12 +46,12 @@ public class ActionHolderNoParameter<TState extends Enum<?>, TEvent extends Enum
 	 * @param action
 	 *            the action to wrap.
 	 */
-	public ActionHolderNoParameter(final Action<TState, TEvent> action) {
+	public ActionHolderNoParameter(final Action<TStateMachine, TState, TEvent> action) {
 		this.action = action;
 	}
 
 	@Override
-	public void execute(final StateContext<TState, TEvent> stateContext) {
+	public void execute(final StateContext<TStateMachine, TState, TEvent> stateContext) {
 		this.action.execute(stateContext.getStateMachine());
 	}
 }

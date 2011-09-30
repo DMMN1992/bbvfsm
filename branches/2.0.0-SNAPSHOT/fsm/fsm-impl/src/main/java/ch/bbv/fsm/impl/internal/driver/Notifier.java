@@ -18,6 +18,7 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl.internal.driver;
 
+import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionContext;
 
@@ -30,7 +31,7 @@ import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionContext;
  * @param <TEvent>
  *            the type of the events.
  */
-public interface Notifier<TState extends Enum<?>, TEvent extends Enum<?>> {
+public interface Notifier<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
 
 	/**
 	 * Called when an exception was thrown.
@@ -40,7 +41,7 @@ public interface Notifier<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param exception
 	 *            the exception.
 	 */
-	void onExceptionThrown(StateContext<TState, TEvent> stateContext, Exception exception);
+	void onExceptionThrown(StateContext<TStateMachine, TState, TEvent> stateContext, Exception exception);
 
 	/**
 	 * Called when an exception was thrown in a transition.
@@ -50,7 +51,7 @@ public interface Notifier<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param exception
 	 *            the exception.
 	 */
-	void onExceptionThrown(TransitionContext<TState, TEvent> context, Exception exception);
+	void onExceptionThrown(TransitionContext<TStateMachine, TState, TEvent> context, Exception exception);
 
 	/**
 	 * Called before a transition is executed.
@@ -58,5 +59,5 @@ public interface Notifier<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param context
 	 *            the context.
 	 */
-	void onTransitionBegin(TransitionContext<TState, TEvent> context);
+	void onTransitionBegin(StateContext<TStateMachine, TState, TEvent> context);
 }

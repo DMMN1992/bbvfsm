@@ -18,6 +18,7 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl.internal.action;
 
+import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.action.MethodCall;
 import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 
@@ -30,7 +31,8 @@ import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
  *            the type of the events
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
  */
-public class ActionHolderMethodCall<TState extends Enum<?>, TEvent extends Enum<?>> implements ActionHolder<TState, TEvent> {
+public class ActionHolderMethodCall<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
+		implements ActionHolder<TStateMachine, TState, TEvent> {
 
 	private final MethodCall methodCall;
 
@@ -45,7 +47,7 @@ public class ActionHolderMethodCall<TState extends Enum<?>, TEvent extends Enum<
 	}
 
 	@Override
-	public void execute(final StateContext<TState, TEvent> stateContext) {
-		this.methodCall.execute();
+	public void execute(final StateContext<TStateMachine, TState, TEvent> stateContext) {
+		this.methodCall.execute(stateContext.getStateMachine());
 	}
 }

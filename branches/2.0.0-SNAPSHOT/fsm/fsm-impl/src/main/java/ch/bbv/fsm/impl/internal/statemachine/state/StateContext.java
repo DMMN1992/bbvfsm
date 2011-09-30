@@ -20,6 +20,7 @@ package ch.bbv.fsm.impl.internal.statemachine.state;
 
 import java.util.List;
 
+import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.impl.internal.driver.Notifier;
 import ch.bbv.fsm.impl.internal.statemachine.StateMachineInterpreter;
 
@@ -32,7 +33,7 @@ import com.google.common.collect.Lists;
  * @param <TState>
  * @param <TEvent>
  */
-public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
+public class StateContext<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
 
 	/**
 	 * A record of a state exit or entry. Used to log the way taken by transitions and initialization.
@@ -114,7 +115,7 @@ public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
 		Exit
 	}
 
-	private final State<TState, TEvent> sourceState;
+	private final State<TStateMachine, TState, TEvent> sourceState;
 
 	/**
 	 * The exceptions that occurred during performing an operation.
@@ -126,9 +127,11 @@ public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 */
 	private final List<Record> records;
 
-	private final StateMachineInterpreter<TState, TEvent> stateMachineInterpreter;
+	private final StateMachineInterpreter<TStateMachine, TState, TEvent> stateMachineInterpreter;
 
-	private final Notifier<TState, TEvent> notifier;
+	private final Notifier<TStateMachine, TState, TEvent> notifier;
+
+	private final TStateMachine stateMachine;
 
 	/**
 	 * Creates a new instance.
@@ -140,11 +143,13 @@ public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param notifier
 	 *            the notifier
 	 */
-	public StateContext(final State<TState, TEvent> sourceState, final StateMachineInterpreter<TState, TEvent> stateMachineImpl,
-			final Notifier<TState, TEvent> notifier) {
+	public StateContext(final TStateMachine stateMachine, final State<TStateMachine, TState, TEvent> sourceState,
+			final StateMachineInterpreter<TStateMachine, TState, TEvent> stateMachineImpl,
+			final Notifier<TStateMachine, TState, TEvent> notifier) {
 		this.sourceState = sourceState;
 		this.stateMachineInterpreter = stateMachineImpl;
 		this.notifier = notifier;
+		this.stateMachine = stateMachine;
 		this.exceptions = Lists.newArrayList();
 		this.records = Lists.newArrayList();
 	}
@@ -190,21 +195,21 @@ public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * 
 	 * @return the source state of the transition.
 	 */
-	public State<TState, TEvent> getState() {
+	public State<TStateMachine, TState, TEvent> getState() {
 		return this.sourceState;
 	}
 
 	/**
 	 * Returns the state machine's implementation.
 	 */
-	public StateMachineInterpreter<TState, TEvent> getStateMachineInterpreter() {
+	public StateMachineInterpreter<TStateMachine, TState, TEvent> getStateMachineInterpreter() {
 		return stateMachineInterpreter;
 	}
 
 	/**
 	 * Returns the notifier.
 	 */
-	public Notifier<TState, TEvent> getNotifier() {
+	public Notifier<TStateMachine, TState, TEvent> getNotifier() {
 		return notifier;
 	}
 
@@ -214,8 +219,8 @@ public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param superState
 	 *            the super state
 	 */
-	public State<TState, TEvent> getLastActiveSubState(final State<TState, TEvent> superState) {
-		State<TState, TEvent> result = null;
+	public State<TStateMachine, TState, TEvent> getLastActiveSubState(final State<TStateMachine, TState, TEvent> superState) {
+		State<TStateMachine, TState, TEvent> result = null;
 		if (superState != null) {
 			result = stateMachineInterpreter.getLastActiveSubState(superState);
 			if (result == null) {
@@ -233,8 +238,13 @@ public class StateContext<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param subState
 	 *            the last active sub state
 	 */
-	public void setLastActiveSubState(final State<TState, TEvent> superState, final State<TState, TEvent> subState) {
+	public void setLastActiveSubState(final State<TStateMachine, TState, TEvent> superState,
+			final State<TStateMachine, TState, TEvent> subState) {
 		stateMachineInterpreter.setLastActiveSubState(superState, subState);
+	}
+
+	public TStateMachine getStateMachine() {
+		return stateMachine;
 	}
 
 }

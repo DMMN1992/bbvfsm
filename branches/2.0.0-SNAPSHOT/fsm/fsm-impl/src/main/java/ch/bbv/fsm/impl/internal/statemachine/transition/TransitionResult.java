@@ -18,6 +18,7 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl.internal.statemachine.transition;
 
+import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.impl.internal.statemachine.state.State;
 
 /**
@@ -28,14 +29,14 @@ import ch.bbv.fsm.impl.internal.statemachine.state.State;
  * @param <TEvent>
  *            the type of events
  */
-public interface TransitionResult<TState extends Enum<?>, TEvent extends Enum<?>> {
+public interface TransitionResult<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
 
 	/**
 	 * Returns the new state.
 	 * 
 	 * @return the new state.
 	 */
-	State<TState, TEvent> getNewState();
+	State<TStateMachine, TState, TEvent> getNewState();
 
 	/**
 	 * Gets a value indicating whether this transition is fired.

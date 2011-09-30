@@ -52,11 +52,11 @@ public class PingPongStateMachine extends AbstractStateMachine<PingPongStateMach
 		return log.toString();
 	}
 
-	public boolean checkTermination() {
-		return false;
+	public boolean checkNotTermination() {
+		return true;
 	}
 
 	public void sayActionCalled() {
-		log.append("actionCalled");
+		log.append("actionCalled\n");
 	}
 }

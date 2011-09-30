@@ -20,6 +20,7 @@ package ch.bbv.fsm.impl.internal.statemachine.transition;
 
 import java.util.List;
 
+import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.action.Action;
 import ch.bbv.fsm.guard.Function;
 import ch.bbv.fsm.impl.internal.statemachine.state.State;
@@ -33,7 +34,7 @@ import ch.bbv.fsm.impl.internal.statemachine.state.State;
  * @param <TEvent>
  *            the type of the events
  */
-public interface Transition<TState extends Enum<?>, TEvent extends Enum<?>> {
+public interface Transition<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
 
 	/**
 	 * Fires the transition.
@@ -42,28 +43,28 @@ public interface Transition<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 *            the event context.
 	 * @return The result of the transition.
 	 */
-	TransitionResult<TState, TEvent> fire(TransitionContext<TState, TEvent> context);
+	TransitionResult<TStateMachine, TState, TEvent> fire(TransitionContext<TStateMachine, TState, TEvent> context);
 
 	/**
 	 * Gets the actions of this transition.
 	 * 
 	 * @return the actions of this transition.
 	 */
-	List<Action<TState, TEvent>> getActions();
+	List<Action<TStateMachine, TState, TEvent>> getActions();
 
 	/**
 	 * Gets or sets the guard of this transition.
 	 * 
 	 * @return the guard.
 	 */
-	Function<TState, TEvent, Object[], Boolean> getGuard();
+	Function<TStateMachine, TState, TEvent, Object[], Boolean> getGuard();
 
 	/**
 	 * Returns the source state of the transition.
 	 * 
 	 * @return the source state of the transition.
 	 */
-	State<TState, TEvent> getSource();
+	State<TStateMachine, TState, TEvent> getSource();
 
 	/**
 	 * Gets the target state of the transition.
@@ -71,7 +72,7 @@ public interface Transition<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @return the target state of the transition.
 	 */
 
-	State<TState, TEvent> getTarget();
+	State<TStateMachine, TState, TEvent> getTarget();
 
 	/**
 	 * Sets the guard function.
@@ -79,7 +80,7 @@ public interface Transition<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param guard
 	 *            the guard function.
 	 */
-	void setGuard(Function<TState, TEvent, Object[], Boolean> guard);
+	void setGuard(Function<TStateMachine, TState, TEvent, Object[], Boolean> guard);
 
 	/**
 	 * Sets the source state of the transition.
@@ -87,7 +88,7 @@ public interface Transition<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param sourceState
 	 *            the source state of the transition.
 	 */
-	void setSource(State<TState, TEvent> sourceState);
+	void setSource(State<TStateMachine, TState, TEvent> sourceState);
 
 	/**
 	 * Sets the target state.
@@ -95,7 +96,7 @@ public interface Transition<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param target
 	 *            the target state.
 	 */
-	void setTarget(State<TState, TEvent> target);
+	void setTarget(State<TStateMachine, TState, TEvent> target);
 
 	/**
 	 * Sets the target state of the transition.
@@ -103,6 +104,6 @@ public interface Transition<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param targetState
 	 *            the target state of the transition.
 	 */
-	void setTargetState(State<TState, TEvent> targetState);
+	void setTargetState(State<TStateMachine, TState, TEvent> targetState);
 
 }

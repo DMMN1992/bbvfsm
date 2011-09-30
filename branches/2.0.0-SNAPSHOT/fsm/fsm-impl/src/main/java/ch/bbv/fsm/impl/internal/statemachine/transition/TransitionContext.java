@@ -18,6 +18,7 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl.internal.statemachine.transition;
 
+import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.impl.internal.driver.Notifier;
 import ch.bbv.fsm.impl.internal.statemachine.StateMachineInterpreter;
 import ch.bbv.fsm.impl.internal.statemachine.state.State;
@@ -31,7 +32,8 @@ import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
  * @param <TEvent>
  *            the type of the events
  */
-public class TransitionContext<TState extends Enum<?>, TEvent extends Enum<?>> extends StateContext<TState, TEvent> {
+public class TransitionContext<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> extends
+		StateContext<TStateMachine, TState, TEvent> {
 
 	/**
 	 * The event that causes the transition.
@@ -57,9 +59,10 @@ public class TransitionContext<TState extends Enum<?>, TEvent extends Enum<?>> e
 	 * @param notifier
 	 *            the notifier
 	 */
-	public TransitionContext(final State<TState, TEvent> state, final TEvent eventId, final Object[] eventArguments,
-			final StateMachineInterpreter<TState, TEvent> stateMachine, final Notifier<TState, TEvent> notifier) {
-		super(state, stateMachine, notifier);
+	public TransitionContext(final TStateMachine stateMachine, final State<TStateMachine, TState, TEvent> state, final TEvent eventId,
+			final Object[] eventArguments, final StateMachineInterpreter<TStateMachine, TState, TEvent> stateMachineInterpreter,
+			final Notifier<TStateMachine, TState, TEvent> notifier) {
+		super(stateMachine, state, stateMachineInterpreter, notifier);
 		this.eventId = eventId;
 		this.eventArguments = eventArguments;
 	}

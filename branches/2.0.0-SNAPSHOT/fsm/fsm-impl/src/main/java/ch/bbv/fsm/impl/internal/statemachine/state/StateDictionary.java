@@ -21,6 +21,8 @@ package ch.bbv.fsm.impl.internal.statemachine.state;
 import java.util.List;
 import java.util.concurrent.ConcurrentMap;
 
+import ch.bbv.fsm.StateMachine;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.MapMaker;
 
@@ -33,9 +35,9 @@ import com.google.common.collect.MapMaker;
  * @param <TEvent>
  *            the type of the events
  */
-public class StateDictionary<TState extends Enum<?>, TEvent extends Enum<?>> {
+public class StateDictionary<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
 
-	private final ConcurrentMap<TState, State<TState, TEvent>> dictionary;
+	private final ConcurrentMap<TState, State<TStateMachine, TState, TEvent>> dictionary;
 
 	/**
 	 * Creates a new instance of the state dictionary.
@@ -51,9 +53,9 @@ public class StateDictionary<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 *            the state id.
 	 * @return the state instance.
 	 */
-	public State<TState, TEvent> getState(final TState stateId) {
+	public State<TStateMachine, TState, TEvent> getState(final TState stateId) {
 		if (!this.dictionary.containsKey(stateId)) {
-			this.dictionary.putIfAbsent(stateId, new StateImpl<TState, TEvent>(stateId));
+			this.dictionary.putIfAbsent(stateId, new StateImpl<TStateMachine, TState, TEvent>(stateId));
 		}
 
 		return this.dictionary.get(stateId);
@@ -64,7 +66,7 @@ public class StateDictionary<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * 
 	 * @return a list of all defined states.
 	 */
-	public List<State<TState, TEvent>> getStates() {
+	public List<State<TStateMachine, TState, TEvent>> getStates() {
 		return Lists.newArrayList(this.dictionary.values());
 	}
 

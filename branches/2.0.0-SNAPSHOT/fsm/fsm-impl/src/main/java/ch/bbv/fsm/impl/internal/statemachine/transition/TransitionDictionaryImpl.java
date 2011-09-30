@@ -20,6 +20,7 @@ package ch.bbv.fsm.impl.internal.statemachine.transition;
 
 import java.util.List;
 
+import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.impl.internal.statemachine.state.State;
 import ch.bbv.fsm.impl.internal.statemachine.state.StateImpl;
 
@@ -37,14 +38,14 @@ import com.google.common.collect.Multimap;
  * @param <TEvent>
  *            the type of events
  */
-public class TransitionDictionaryImpl<TState extends Enum<?>, TEvent extends Enum<?>> implements TransitionDictionary<TState, TEvent> {
+public class TransitionDictionaryImpl<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> implements TransitionDictionary<TStateMachine, TState, TEvent> {
 
 	/**
 	 * The state this transitions belong to.
 	 */
-	private final State<TState, TEvent> state;
+	private final State<TStateMachine, TState, TEvent> state;
 
-	private final Multimap<TEvent, Transition<TState, TEvent>> transitions;
+	private final Multimap<TEvent, Transition<TStateMachine, TState, TEvent>> transitions;
 
 	/**
 	 * Creates a new instance.
@@ -52,20 +53,20 @@ public class TransitionDictionaryImpl<TState extends Enum<?>, TEvent extends Enu
 	 * @param state
 	 *            the state this transitions belong to.
 	 */
-	public TransitionDictionaryImpl(final StateImpl<TState, TEvent> state) {
+	public TransitionDictionaryImpl(final StateImpl<TStateMachine, TState, TEvent> state) {
 		this.state = state;
 		this.transitions = HashMultimap.create();
 	}
 
 	@Override
-	public void add(final TEvent eventId, final Transition<TState, TEvent> transition) {
+	public void add(final TEvent eventId, final Transition<TStateMachine, TState, TEvent> transition) {
 		transition.setSource(this.state);
 		this.transitions.put(eventId, transition);
 	}
 
 	@Override
-	public List<TransitionInfo<TState, TEvent>> getTransitions() {
-		final List<TransitionInfo<TState, TEvent>> list = Lists.newArrayList();
+	public List<TransitionInfo<TStateMachine, TState, TEvent>> getTransitions() {
+		final List<TransitionInfo<TStateMachine, TState, TEvent>> list = Lists.newArrayList();
 		for (final TEvent eventId : this.transitions.keySet()) {
 			this.getTransitionsOfEvent(eventId, list);
 		}
@@ -74,7 +75,7 @@ public class TransitionDictionaryImpl<TState extends Enum<?>, TEvent extends Enu
 	}
 
 	@Override
-	public List<Transition<TState, TEvent>> getTransitions(final TEvent eventId) {
+	public List<Transition<TStateMachine, TState, TEvent>> getTransitions(final TEvent eventId) {
 		return ImmutableList.copyOf(this.transitions.get(eventId));
 	}
 
@@ -86,9 +87,9 @@ public class TransitionDictionaryImpl<TState extends Enum<?>, TEvent extends Enu
 	 * @param list
 	 *            the list of transitions
 	 */
-	private void getTransitionsOfEvent(final TEvent eventId, final List<TransitionInfo<TState, TEvent>> list) {
-		for (final Transition<TState, TEvent> transition : this.transitions.get(eventId)) {
-			list.add(new TransitionInfo<TState, TEvent>(eventId, transition.getSource(), transition.getTarget(),
+	private void getTransitionsOfEvent(final TEvent eventId, final List<TransitionInfo<TStateMachine, TState, TEvent>> list) {
+		for (final Transition<TStateMachine, TState, TEvent> transition : this.transitions.get(eventId)) {
+			list.add(new TransitionInfo<TStateMachine, TState, TEvent>(eventId, transition.getSource(), transition.getTarget(),
 					transition.getGuard() != null, transition.getActions().size()));
 		}
 	}

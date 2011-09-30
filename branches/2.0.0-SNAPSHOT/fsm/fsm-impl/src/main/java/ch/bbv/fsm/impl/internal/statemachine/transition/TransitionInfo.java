@@ -18,6 +18,7 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl.internal.statemachine.transition;
 
+import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.impl.internal.statemachine.state.State;
 
 /**
@@ -29,10 +30,10 @@ import ch.bbv.fsm.impl.internal.statemachine.state.State;
  * @param <TEvent>
  *            the type of the events
  */
-public class TransitionInfo<TState extends Enum<?>, TEvent extends Enum<?>> {
+public class TransitionInfo<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
 	private TEvent eventId;
-	private State<TState, TEvent> source;
-	private State<TState, TEvent> target;
+	private State<TStateMachine, TState, TEvent> source;
+	private State<TStateMachine, TState, TEvent> target;
 	private boolean hasGuard;
 	private int actions;
 
@@ -50,7 +51,7 @@ public class TransitionInfo<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param actions
 	 *            the number of actions
 	 */
-	public TransitionInfo(final TEvent eventId, final State<TState, TEvent> source, final State<TState, TEvent> target,
+	public TransitionInfo(final TEvent eventId, final State<TStateMachine, TState, TEvent> source, final State<TStateMachine, TState, TEvent> target,
 			final boolean hasGuard, final int actions) {
 		this.eventId = eventId;
 		this.source = source;
@@ -82,7 +83,7 @@ public class TransitionInfo<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * 
 	 * @return the source state.
 	 */
-	public State<TState, TEvent> getSource() {
+	public State<TStateMachine, TState, TEvent> getSource() {
 		return this.source;
 	}
 
@@ -91,7 +92,7 @@ public class TransitionInfo<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * 
 	 * @return the target state.
 	 */
-	public State<TState, TEvent> getTarget() {
+	public State<TStateMachine, TState, TEvent> getTarget() {
 		return this.target;
 	}
 
@@ -140,7 +141,7 @@ public class TransitionInfo<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param source
 	 *            the source state.
 	 */
-	public void setSource(final State<TState, TEvent> source) {
+	public void setSource(final State<TStateMachine, TState, TEvent> source) {
 		this.source = source;
 	}
 
@@ -150,7 +151,7 @@ public class TransitionInfo<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param target
 	 *            the target state.
 	 */
-	public void setTarget(final State<TState, TEvent> target) {
+	public void setTarget(final State<TStateMachine, TState, TEvent> target) {
 		this.target = target;
 	}
 

@@ -34,8 +34,6 @@ public class MethodCallImpl implements MethodCall {
 
 	private final Method method;
 
-	private final Object owner;
-
 	private static ThreadLocal<Stack<MethodCall>> methodCalls = new ThreadLocal<Stack<MethodCall>>() {
 		@Override
 		protected Stack<MethodCall> initialValue() {
@@ -73,15 +71,14 @@ public class MethodCallImpl implements MethodCall {
 	 *            the arguments of the method.
 	 */
 	public MethodCallImpl(final Object owner, final Method method, final Object[] args) {
-		this.owner = owner;
 		this.method = method;
 		this.args = args;
 	}
 
 	@Override
-	public void execute() {
+	public void execute(final Object owner) {
 		try {
-			this.method.invoke(this.owner, this.args);
+			this.method.invoke(owner, this.args);
 		} catch (final Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -95,10 +92,5 @@ public class MethodCallImpl implements MethodCall {
 	@Override
 	public Method getMethod() {
 		return this.method;
-	}
-
-	@Override
-	public Object getOwner() {
-		return this.owner;
 	}
 }

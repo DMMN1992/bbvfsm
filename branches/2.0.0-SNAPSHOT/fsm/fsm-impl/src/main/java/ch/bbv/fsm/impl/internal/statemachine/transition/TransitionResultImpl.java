@@ -20,6 +20,7 @@ package ch.bbv.fsm.impl.internal.statemachine.transition;
 
 import java.util.List;
 
+import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.impl.internal.statemachine.state.State;
 
 /**
@@ -30,13 +31,13 @@ import ch.bbv.fsm.impl.internal.statemachine.state.State;
  * @param <TEvent>
  *            the type of events
  */
-public class TransitionResultImpl<TState extends Enum<?>, TEvent extends Enum<?>> implements TransitionResult<TState, TEvent> {
+public class TransitionResultImpl<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> implements TransitionResult<TStateMachine, TState, TEvent> {
 
 	/**
 	 * This value represents that no transition was fired.
 	 */
 	private final boolean fired;
-	private final State<TState, TEvent> newState;
+	private final State<TStateMachine, TState, TEvent> newState;
 	private final List<? extends Throwable> exceptions;
 
 	/**
@@ -49,7 +50,7 @@ public class TransitionResultImpl<TState extends Enum<?>, TEvent extends Enum<?>
 	 * @param exceptions
 	 *            the exceptions
 	 */
-	public TransitionResultImpl(final boolean fired, final State<TState, TEvent> newState, final List<? extends Throwable> exceptions) {
+	public TransitionResultImpl(final boolean fired, final State<TStateMachine, TState, TEvent> newState, final List<? extends Throwable> exceptions) {
 		this.fired = fired;
 		this.newState = newState;
 		this.exceptions = exceptions;
@@ -65,7 +66,7 @@ public class TransitionResultImpl<TState extends Enum<?>, TEvent extends Enum<?>
 	}
 
 	@Override
-	public State<TState, TEvent> getNewState() {
+	public State<TStateMachine, TState, TEvent> getNewState() {
 		return this.newState;
 	}
 
@@ -82,8 +83,8 @@ public class TransitionResultImpl<TState extends Enum<?>, TEvent extends Enum<?>
 	 * @param <TEvent>
 	 *            the type of events
 	 */
-	public static <TState extends Enum<?>, TEvent extends Enum<?>> TransitionResult<TState, TEvent> getNotFired() {
-		return new TransitionResultImpl<TState, TEvent>(false, null, null);
+	public static <TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> TransitionResult<TStateMachine, TState, TEvent> getNotFired() {
+		return new TransitionResultImpl<TStateMachine, TState, TEvent>(false, null, null);
 
 	}
 }

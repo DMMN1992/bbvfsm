@@ -20,6 +20,8 @@ package ch.bbv.fsm.impl.internal.statemachine.transition;
 
 import java.util.List;
 
+import ch.bbv.fsm.StateMachine;
+
 /**
  * Interface for the mapping between states and their transitions.
  * 
@@ -29,7 +31,7 @@ import java.util.List;
  * @param <TEvent>
  *            the type of the events
  */
-public interface TransitionDictionary<TState extends Enum<?>, TEvent extends Enum<?>> {
+public interface TransitionDictionary<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
 
 	/**
 	 * Adds a transition to an event.
@@ -39,14 +41,14 @@ public interface TransitionDictionary<TState extends Enum<?>, TEvent extends Enu
 	 * @param transition
 	 *            the transition
 	 */
-	void add(TEvent eventId, Transition<TState, TEvent> transition);
+	void add(TEvent eventId, Transition<TStateMachine, TState, TEvent> transition);
 
 	/**
 	 * Returns all transitions.
 	 * 
 	 * @return all transitions.
 	 */
-	List<TransitionInfo<TState, TEvent>> getTransitions();
+	List<TransitionInfo<TStateMachine, TState, TEvent>> getTransitions();
 
 	/**
 	 * Returns a list of transitions for the given event.
@@ -55,6 +57,6 @@ public interface TransitionDictionary<TState extends Enum<?>, TEvent extends Enu
 	 *            the event id
 	 * @return a list of transitions
 	 */
-	List<Transition<TState, TEvent>> getTransitions(TEvent eventId);
+	List<Transition<TStateMachine, TState, TEvent>> getTransitions(TEvent eventId);
 
 }

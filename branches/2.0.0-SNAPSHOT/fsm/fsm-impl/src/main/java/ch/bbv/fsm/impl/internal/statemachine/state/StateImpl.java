@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ch.bbv.fsm.HistoryType;
+import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.impl.internal.action.ActionHolder;
 import ch.bbv.fsm.impl.internal.statemachine.state.StateContext.RecordType;
 import ch.bbv.fsm.impl.internal.statemachine.transition.Transition;
@@ -43,7 +44,7 @@ import com.google.common.collect.Lists;
  * @param <TState>
  * @param <TEvent>
  */
-public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>> implements State<TState, TEvent> {
+public class StateImpl<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> implements State<TStateMachine, TState, TEvent> {
 
 	private static final Logger LOG = LoggerFactory.getLogger(StateImpl.class);
 
@@ -52,22 +53,22 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>> implement
 	 */
 	private int level;
 
-	private final List<State<TState, TEvent>> subStates;
+	private final List<State<TStateMachine, TState, TEvent>> subStates;
 
 	/**
 	 * The super-state of this state. Null for states with <code>level</code> equal to 1.
 	 */
-	private State<TState, TEvent> superState;
+	private State<TStateMachine, TState, TEvent> superState;
 
 	/**
 	 * Collection of transitions that start in this . (Transition<TState,TEvent>.getSource() is equal to this state)
 	 */
-	private final TransitionDictionary<TState, TEvent> transitions;
+	private final TransitionDictionary<TStateMachine, TState, TEvent> transitions;
 
 	/**
 	 * The initial sub-state of this state.
 	 */
-	private State<TState, TEvent> initialState;
+	private State<TStateMachine, TState, TEvent> initialState;
 
 	/**
 	 * The HistoryType of this state.
@@ -82,12 +83,12 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>> implement
 	/**
 	 * The entry action.
 	 */
-	private ActionHolder<TState, TEvent> entryAction;
+	private ActionHolder<TStateMachine, TState, TEvent> entryAction;
 
 	/**
 	 * The exit action.
 	 */
-	private ActionHolder<TState, TEvent> exitAction;
+	private ActionHolder<TStateMachine, TState, TEvent> exitAction;
 
 	/**
 	 * Initializes a new instance of the state.
@@ -100,11 +101,11 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>> implement
 		this.level = 1;
 
 		this.subStates = Lists.newArrayList();
-		this.transitions = new TransitionDictionaryImpl<TState, TEvent>(this);
+		this.transitions = new TransitionDictionaryImpl<TStateMachine, TState, TEvent>(this);
 	}
 
 	@Override
-	public void addSubState(final State<TState, TEvent> state) {
+	public void addSubState(final State<TStateMachine, TState, TEvent> state) {
 		this.subStates.add(state);
 
 	}
@@ -114,7 +115,7 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>> implement
 	 * 
 	 * @param value
 	 */
-	private void checkInitialStateIsASubState(final State<TState, TEvent> value) {
+	private void checkInitialStateIsASubState(final State<TStateMachine, TState, TEvent> value) {
 		if (value.getSuperState() != this) {
 			throw new IllegalArgumentException(String.format(
 					"State {0} cannot be the initial state of super state {1} because it is not a direct sub-state.", value, this));
@@ -127,7 +128,7 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>> implement
 	 * @param newInitialState
 	 *            the new initial state.
 	 */
-	private void checkInitialStateIsNotThisInstance(final State<TState, TEvent> newInitialState) {
+	private void checkInitialStateIsNotThisInstance(final State<TStateMachine, TState, TEvent> newInitialState) {
 		if (this == newInitialState) {
 			throw new IllegalArgumentException(String.format("State {0} cannot be the initial sub-state to itself.", this));
 		}
@@ -139,7 +140,7 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>> implement
 	 * @param newSuperState
 	 *            the super state.
 	 */
-	private void checkSuperStateIsNotThisInstance(final State<TState, TEvent> newSuperState) {
+	private void checkSuperStateIsNotThisInstance(final State<TStateMachine, TState, TEvent> newSuperState) {
 		if (this == newSuperState) {
 			throw new IllegalArgumentException(String.format(
 
@@ -148,9 +149,9 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>> implement
 	}
 
 	@Override
-	public State<TState, TEvent> enterByHistory(final StateContext<TState, TEvent> stateContext) {
+	public State<TStateMachine, TState, TEvent> enterByHistory(final StateContext<TStateMachine, TState, TEvent> stateContext) {
 
-		State<TState, TEvent> result = this;
+		State<TStateMachine, TState, TEvent> result = this;
 
 		switch (this.historyType) {
 		case NONE:
@@ -170,9 +171,9 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>> implement
 	}
 
 	@Override
-	public State<TState, TEvent> enterDeep(final StateContext<TState, TEvent> stateContext) {
+	public State<TStateMachine, TState, TEvent> enterDeep(final StateContext<TStateMachine, TState, TEvent> stateContext) {
 		this.entry(stateContext);
-		final State<TState, TEvent> lastActiveState = stateContext.getLastActiveSubState(this);
+		final State<TStateMachine, TState, TEvent> lastActiveState = stateContext.getLastActiveSubState(this);
 		return lastActiveState == null ? this : lastActiveState.enterDeep(stateContext);
 	}
 
@@ -183,8 +184,8 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>> implement
 	 *            the state context.
 	 * @return the state
 	 */
-	private State<TState, TEvent> enterHistoryDeep(final StateContext<TState, TEvent> stateContext) {
-		final State<TState, TEvent> lastActiveState = stateContext.getLastActiveSubState(this);
+	private State<TStateMachine, TState, TEvent> enterHistoryDeep(final StateContext<TStateMachine, TState, TEvent> stateContext) {
+		final State<TStateMachine, TState, TEvent> lastActiveState = stateContext.getLastActiveSubState(this);
 		return lastActiveState != null ? lastActiveState.enterDeep(stateContext) : this;
 	}
 
@@ -195,7 +196,7 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>> implement
 	 *            state context
 	 * @return the entered state.
 	 */
-	private State<TState, TEvent> enterHistoryNone(final StateContext<TState, TEvent> stateContext) {
+	private State<TStateMachine, TState, TEvent> enterHistoryNone(final StateContext<TStateMachine, TState, TEvent> stateContext) {
 		return this.initialState != null ? this.getInitialState().enterShallow(stateContext) : this;
 	}
 
@@ -206,13 +207,13 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>> implement
 	 *            state context
 	 * @return the entered state
 	 */
-	private State<TState, TEvent> enterHistoryShallow(final StateContext<TState, TEvent> stateContext) {
-		final State<TState, TEvent> lastActiveState = stateContext.getLastActiveSubState(this);
+	private State<TStateMachine, TState, TEvent> enterHistoryShallow(final StateContext<TStateMachine, TState, TEvent> stateContext) {
+		final State<TStateMachine, TState, TEvent> lastActiveState = stateContext.getLastActiveSubState(this);
 		return lastActiveState != null ? lastActiveState.enterShallow(stateContext) : this;
 	}
 
 	@Override
-	public State<TState, TEvent> enterShallow(final StateContext<TState, TEvent> stateContext) {
+	public State<TStateMachine, TState, TEvent> enterShallow(final StateContext<TStateMachine, TState, TEvent> stateContext) {
 		this.entry(stateContext);
 
 		return this.initialState == null ? this : this.initialState.enterShallow(stateContext);
@@ -220,7 +221,7 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>> implement
 	}
 
 	@Override
-	public void entry(final StateContext<TState, TEvent> stateContext) {
+	public void entry(final StateContext<TStateMachine, TState, TEvent> stateContext) {
 		stateContext.addRecord(this.getId(), RecordType.Enter);
 		if (this.entryAction != null) {
 			try {
@@ -233,7 +234,7 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>> implement
 	}
 
 	@Override
-	public void exit(final StateContext<TState, TEvent> stateContext) {
+	public void exit(final StateContext<TStateMachine, TState, TEvent> stateContext) {
 		stateContext.addRecord(this.getId(), StateContext.RecordType.Exit);
 		if (this.exitAction != null) {
 			try {
@@ -245,19 +246,19 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>> implement
 		this.setThisStateAsLastStateOfSuperState(stateContext);
 	}
 
-	private void setThisStateAsLastStateOfSuperState(final StateContext<TState, TEvent> stateContext) {
+	private void setThisStateAsLastStateOfSuperState(final StateContext<TStateMachine, TState, TEvent> stateContext) {
 		if (superState != null && !HistoryType.NONE.equals(superState.getHistoryType())) {
 			stateContext.setLastActiveSubState(superState, this);
 		}
 	}
 
 	@Override
-	public TransitionResult<TState, TEvent> fire(final TransitionContext<TState, TEvent> context) {
-		TransitionResult<TState, TEvent> result = TransitionResultImpl.getNotFired();
+	public TransitionResult<TStateMachine, TState, TEvent> fire(final TransitionContext<TStateMachine, TState, TEvent> context) {
+		TransitionResult<TStateMachine, TState, TEvent> result = TransitionResultImpl.getNotFired();
 
-		final List<Transition<TState, TEvent>> transitionsForEvent = this.transitions.getTransitions(context.getEventId());
+		final List<Transition<TStateMachine, TState, TEvent>> transitionsForEvent = this.transitions.getTransitions(context.getEventId());
 		if (transitionsForEvent != null) {
-			for (final Transition<TState, TEvent> transition : transitionsForEvent) {
+			for (final Transition<TStateMachine, TState, TEvent> transition : transitionsForEvent) {
 				result = transition.fire(context);
 				if (result.isFired()) {
 					return result;
@@ -275,12 +276,12 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>> implement
 	}
 
 	@Override
-	public ActionHolder<TState, TEvent> getEntryAction() {
+	public ActionHolder<TStateMachine, TState, TEvent> getEntryAction() {
 		return this.entryAction;
 	}
 
 	@Override
-	public ActionHolder<TState, TEvent> getExitAction() {
+	public ActionHolder<TStateMachine, TState, TEvent> getExitAction() {
 		return this.exitAction;
 	}
 
@@ -295,7 +296,7 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>> implement
 	}
 
 	@Override
-	public State<TState, TEvent> getInitialState() {
+	public State<TStateMachine, TState, TEvent> getInitialState() {
 		return this.initialState;
 	}
 
@@ -305,17 +306,17 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>> implement
 	}
 
 	@Override
-	public List<State<TState, TEvent>> getSubStates() {
+	public List<State<TStateMachine, TState, TEvent>> getSubStates() {
 		return ImmutableList.copyOf(this.subStates);
 	}
 
 	@Override
-	public State<TState, TEvent> getSuperState() {
+	public State<TStateMachine, TState, TEvent> getSuperState() {
 		return this.superState;
 	}
 
 	@Override
-	public TransitionDictionary<TState, TEvent> getTransitions() {
+	public TransitionDictionary<TStateMachine, TState, TEvent> getTransitions() {
 		return this.transitions;
 	}
 
@@ -327,19 +328,19 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>> implement
 	 * @param stateContext
 	 *            the state context.
 	 */
-	private void handleException(final Exception exception, final StateContext<TState, TEvent> stateContext) {
+	private void handleException(final Exception exception, final StateContext<TStateMachine, TState, TEvent> stateContext) {
 		stateContext.getExceptions().add(exception);
 		stateContext.getNotifier().onExceptionThrown(stateContext, exception);
 	}
 
 	@Override
-	public void setEntryAction(final ActionHolder<TState, TEvent> action) {
+	public void setEntryAction(final ActionHolder<TStateMachine, TState, TEvent> action) {
 		this.entryAction = action;
 
 	}
 
 	@Override
-	public void setExitAction(final ActionHolder<TState, TEvent> action) {
+	public void setExitAction(final ActionHolder<TStateMachine, TState, TEvent> action) {
 		this.exitAction = action;
 
 	}
@@ -358,7 +359,7 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>> implement
 	}
 
 	@Override
-	public void setInitialState(final State<TState, TEvent> initialState) {
+	public void setInitialState(final State<TStateMachine, TState, TEvent> initialState) {
 		this.checkInitialStateIsNotThisInstance(initialState);
 		this.checkInitialStateIsASubState(initialState);
 		this.initialState = initialState;
@@ -374,13 +375,13 @@ public class StateImpl<TState extends Enum<?>, TEvent extends Enum<?>> implement
 	 * Sets the level of all sub states.
 	 */
 	private void setLevelOfSubStates() {
-		for (final State<TState, TEvent> state : this.getSubStates()) {
+		for (final State<TStateMachine, TState, TEvent> state : this.getSubStates()) {
 			state.setLevel(this.level + 1);
 		}
 	}
 
 	@Override
-	public void setSuperState(final State<TState, TEvent> superState) {
+	public void setSuperState(final State<TStateMachine, TState, TEvent> superState) {
 		this.checkSuperStateIsNotThisInstance(superState);
 		this.superState = superState;
 		this.setInitialLevel();

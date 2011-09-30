@@ -23,6 +23,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.action.Action;
 import ch.bbv.fsm.guard.Function;
 import ch.bbv.fsm.impl.internal.statemachine.state.State;
@@ -38,20 +39,21 @@ import com.google.common.collect.Lists;
  * @param <TEvent>
  *            the type of the events
  */
-public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>> implements Transition<TState, TEvent> {
+public class TransitionImpl<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> implements
+		Transition<TStateMachine, TState, TEvent> {
 
 	private static final Logger LOG = LoggerFactory.getLogger(TransitionImpl.class);
 
 	/**
 	 * The actions that are executed when this transition is fired.
 	 */
-	private final List<Action<TState, TEvent>> actions;
+	private final List<Action<TStateMachine, TState, TEvent>> actions;
 
-	private State<TState, TEvent> source;
+	private State<TStateMachine, TState, TEvent> source;
 
-	private State<TState, TEvent> target;
+	private State<TStateMachine, TState, TEvent> target;
 
-	private Function<TState, TEvent, Object[], Boolean> guard;
+	private Function<TStateMachine, TState, TEvent, Object[], Boolean> guard;
 
 	/**
 	 * Creates a new instance.
@@ -92,8 +94,8 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>> impl
 	 * @param context
 	 *            the state context
 	 */
-	private void fire(final State<TState, TEvent> source, final State<TState, TEvent> target, final Object[] eventArguments,
-			final TransitionContext<TState, TEvent> context) {
+	private void fire(final State<TStateMachine, TState, TEvent> source, final State<TStateMachine, TState, TEvent> target,
+			final Object[] eventArguments, final StateContext<TStateMachine, TState, TEvent> context) {
 		if (source == this.getTarget()) {
 			// Handles 1.
 			// Handles 3. after traversing from the source to the target.
@@ -134,14 +136,14 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>> impl
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public TransitionResult<TState, TEvent> fire(final TransitionContext<TState, TEvent> context) {
+	public TransitionResult<TStateMachine, TState, TEvent> fire(final TransitionContext<TStateMachine, TState, TEvent> context) {
 		if (!this.shouldFire(context.getEventArguments(), context)) {
-			return (TransitionResult<TState, TEvent>) TransitionResultImpl.getNotFired();
+			return (TransitionResult<TStateMachine, TState, TEvent>) TransitionResultImpl.getNotFired();
 		}
 
 		context.getNotifier().onTransitionBegin(context);
 
-		State<TState, TEvent> newState = context.getState();
+		State<TStateMachine, TState, TEvent> newState = context.getState();
 
 		if (!this.isInternalTransition()) {
 			this.unwindSubStates(context.getState(), context);
@@ -153,26 +155,26 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>> impl
 			this.performActions(context.getEventArguments(), context);
 		}
 
-		return new TransitionResultImpl<TState, TEvent>(true, newState, context.getExceptions());
+		return new TransitionResultImpl<TStateMachine, TState, TEvent>(true, newState, context.getExceptions());
 	}
 
 	@Override
-	public List<Action<TState, TEvent>> getActions() {
+	public List<Action<TStateMachine, TState, TEvent>> getActions() {
 		return this.actions;
 	}
 
 	@Override
-	public Function<TState, TEvent, Object[], Boolean> getGuard() {
+	public Function<TStateMachine, TState, TEvent, Object[], Boolean> getGuard() {
 		return this.guard;
 	}
 
 	@Override
-	public State<TState, TEvent> getSource() {
+	public State<TStateMachine, TState, TEvent> getSource() {
 		return this.source;
 	}
 
 	@Override
-	public State<TState, TEvent> getTarget() {
+	public State<TStateMachine, TState, TEvent> getTarget() {
 		return this.target;
 	}
 
@@ -184,7 +186,7 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>> impl
 	 * @param context
 	 *            the transition context
 	 */
-	private void handleException(final Exception exception, final TransitionContext<TState, TEvent> context) {
+	private void handleException(final Exception exception, final StateContext<TStateMachine, TState, TEvent> context) {
 		context.getExceptions().add(exception);
 		context.getNotifier().onExceptionThrown(context, exception);
 	}
@@ -204,8 +206,8 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>> impl
 	 * @param context
 	 *            the transition context
 	 */
-	private void performActions(final Object[] eventArguments, final TransitionContext<TState, TEvent> context) {
-		for (final Action<TState, TEvent> action : this.getActions()) {
+	private void performActions(final Object[] eventArguments, final StateContext<TStateMachine, TState, TEvent> context) {
+		for (final Action<TStateMachine, TState, TEvent> action : this.getActions()) {
 			try {
 				action.execute(context.getStateMachine(), eventArguments);
 			} catch (final Exception exception) {
@@ -216,22 +218,22 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>> impl
 	}
 
 	@Override
-	public void setGuard(final Function<TState, TEvent, Object[], Boolean> guard) {
+	public void setGuard(final Function<TStateMachine, TState, TEvent, Object[], Boolean> guard) {
 		this.guard = guard;
 	}
 
 	@Override
-	public void setSource(final State<TState, TEvent> source) {
+	public void setSource(final State<TStateMachine, TState, TEvent> source) {
 		this.source = source;
 	}
 
 	@Override
-	public void setTarget(final State<TState, TEvent> target) {
+	public void setTarget(final State<TStateMachine, TState, TEvent> target) {
 		this.target = target;
 	}
 
 	@Override
-	public void setTargetState(final State<TState, TEvent> targetState) {
+	public void setTargetState(final State<TStateMachine, TState, TEvent> targetState) {
 		this.target = targetState;
 	}
 
@@ -244,7 +246,7 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>> impl
 	 *            the context
 	 * @return true if the transition should fire
 	 */
-	private boolean shouldFire(final Object[] eventArguments, final TransitionContext<TState, TEvent> context) {
+	private boolean shouldFire(final Object[] eventArguments, final StateContext<TStateMachine, TState, TEvent> context) {
 		try {
 			return this.getGuard() == null || this.getGuard().execute(context.getStateMachine(), eventArguments);
 		} catch (final Exception exception) {
@@ -267,8 +269,9 @@ public class TransitionImpl<TState extends Enum<?>, TEvent extends Enum<?>> impl
 	 * @param stateContext
 	 *            the state context
 	 */
-	private void unwindSubStates(final State<TState, TEvent> origin, final StateContext<TState, TEvent> stateContext) {
-		for (State<TState, TEvent> o = origin; o != this.getSource(); o = o.getSuperState()) {
+	private void unwindSubStates(final State<TStateMachine, TState, TEvent> origin,
+			final StateContext<TStateMachine, TState, TEvent> stateContext) {
+		for (State<TStateMachine, TState, TEvent> o = origin; o != this.getSource(); o = o.getSuperState()) {
 			o.exit(stateContext);
 		}
 	}

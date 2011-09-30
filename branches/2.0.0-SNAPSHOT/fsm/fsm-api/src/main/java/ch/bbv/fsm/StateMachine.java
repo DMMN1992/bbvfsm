@@ -29,6 +29,14 @@ package ch.bbv.fsm;
 public interface StateMachine<TState extends Enum<?>, TEvent extends Enum<?>> {
 
 	/**
+	 * The state of this state machine.
+	 * 
+	 */
+	public enum RunningState {
+		Created, Running, Terminated
+	}
+
+	/**
 	 * Fires the specified event.
 	 * 
 	 * @param eventId
@@ -49,18 +57,9 @@ public interface StateMachine<TState extends Enum<?>, TEvent extends Enum<?>> {
 	void firePriority(TEvent eventId, Object... eventArguments);
 
 	/**
-	 * Returns true if the state machine is executing events.
-	 * 
-	 * @return true if the state machine is executing events.
+	 * Returns the running state of this state machine.
 	 */
-	boolean isExecuting();
-
-	/**
-	 * Gets a value indicating whether this instance is running. The state machine is running if if was started and not yet stopped.
-	 * 
-	 * @return true if this instance is running.
-	 */
-	boolean isRunning();
+	RunningState getRunningState();
 
 	/**
 	 * Returns the number of queued events.

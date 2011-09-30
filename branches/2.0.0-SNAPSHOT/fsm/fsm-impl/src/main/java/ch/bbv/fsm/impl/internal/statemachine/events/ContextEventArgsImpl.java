@@ -38,7 +38,7 @@ public class ContextEventArgsImpl<TStateMachine extends StateMachine<TState, TEv
 	/**
 	 * The context.
 	 */
-	private final StateContext<TState, TEvent> stateContext;
+	private final StateContext<TStateMachine, TState, TEvent> stateContext;
 
 	/**
 	 * Initializes a new instance.
@@ -46,7 +46,7 @@ public class ContextEventArgsImpl<TStateMachine extends StateMachine<TState, TEv
 	 * @param stateContext
 	 *            the state context.
 	 */
-	public ContextEventArgsImpl(final StateContext<TState, TEvent> stateContext) {
+	public ContextEventArgsImpl(final StateContext<TStateMachine, TState, TEvent> stateContext) {
 		this.stateContext = stateContext;
 	}
 
@@ -55,7 +55,7 @@ public class ContextEventArgsImpl<TStateMachine extends StateMachine<TState, TEv
 	 * 
 	 * @return the state context.
 	 */
-	public StateContext<TState, TEvent> getStateContext() {
+	public StateContext<TStateMachine, TState, TEvent> getStateContext() {
 		return this.stateContext;
 	}
 

@@ -20,6 +20,7 @@ package ch.bbv.fsm.impl.internal.statemachine;
 
 import java.util.Stack;
 
+import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.impl.internal.statemachine.state.State;
 import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 
@@ -32,11 +33,11 @@ import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
  * @param <TEvent>
  *            the event type.
  */
-class StateMachineInitializer<TState extends Enum<?>, TEvent extends Enum<?>> {
+class StateMachineInitializer<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
 
-	private final State<TState, TEvent> initialState;
+	private final State<TStateMachine, TState, TEvent> initialState;
 
-	private final StateContext<TState, TEvent> stateContext;
+	private final StateContext<TStateMachine, TState, TEvent> stateContext;
 
 	/**
 	 * Initializes a new instance.
@@ -46,7 +47,7 @@ class StateMachineInitializer<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param stateContext
 	 *            the state context.
 	 */
-	public StateMachineInitializer(final State<TState, TEvent> initialState, final StateContext<TState, TEvent> stateContext) {
+	public StateMachineInitializer(final State<TStateMachine, TState, TEvent> initialState, final StateContext<TStateMachine, TState, TEvent> stateContext) {
 		this.initialState = initialState;
 		this.stateContext = stateContext;
 	}
@@ -56,8 +57,8 @@ class StateMachineInitializer<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * 
 	 * @return The entered state. The initial state or a sub state of the initial state.
 	 */
-	public State<TState, TEvent> enterInitialState() {
-		final Stack<State<TState, TEvent>> stack = this.traverseUpTheStateHierarchy();
+	public State<TStateMachine, TState, TEvent> enterInitialState() {
+		final Stack<State<TStateMachine, TState, TEvent>> stack = this.traverseUpTheStateHierarchy();
 		this.traverseDownTheStateHierarchyAndEnterStates(stack);
 		return this.initialState.enterByHistory(this.stateContext);
 	}
@@ -68,8 +69,8 @@ class StateMachineInitializer<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param stack
 	 *            The stack containing the state hierarchy.
 	 */
-	private void traverseDownTheStateHierarchyAndEnterStates(final Stack<State<TState, TEvent>> stack) {
-		State<TState, TEvent> state;
+	private void traverseDownTheStateHierarchyAndEnterStates(final Stack<State<TStateMachine, TState, TEvent>> stack) {
+		State<TStateMachine, TState, TEvent> state;
 		while (stack.size() > 0) {
 			state = stack.pop();
 			state.entry(this.stateContext);
@@ -81,10 +82,10 @@ class StateMachineInitializer<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * 
 	 * @return The stack containing all states up the state hierarchy.
 	 */
-	private Stack<State<TState, TEvent>> traverseUpTheStateHierarchy() {
-		final Stack<State<TState, TEvent>> stack = new Stack<State<TState, TEvent>>();
+	private Stack<State<TStateMachine, TState, TEvent>> traverseUpTheStateHierarchy() {
+		final Stack<State<TStateMachine, TState, TEvent>> stack = new Stack<State<TStateMachine, TState, TEvent>>();
 
-		State<TState, TEvent> state = this.initialState;
+		State<TStateMachine, TState, TEvent> state = this.initialState;
 		while (state != null) {
 			stack.push(state);
 			state = state.getSuperState();

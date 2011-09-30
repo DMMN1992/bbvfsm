@@ -25,10 +25,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 
 import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.events.StateMachineEventHandler;
 import ch.bbv.fsm.impl.internal.report.EventInformation;
-import ch.bbv.fsm.impl.internal.statemachine.StateMachineInterpreter;
-import ch.bbv.fsm.impl.internal.statemachine.state.StateDictionary;
 
 /**
  * An active state machine. This state machine reacts to events on a separate worker thread.
@@ -39,14 +36,10 @@ import ch.bbv.fsm.impl.internal.statemachine.state.StateDictionary;
  * @param <TEvent>
  *            the type of the events.
  */
-public class ActiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>> implements StateMachine<TState, TEvent> {
+public class ActiveStateMachine<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> extends
+		AbstractStateMachineDriver<TStateMachine, TState, TEvent> {
 
 	private static final int WAIT_FOR_TERMINATION_MS = 10000;
-
-	/**
-	 * The internal state machine.
-	 */
-	private final StateMachineInterpreter<TState, TEvent> stateMachine;
 
 	/**
 	 * List of all queued events.
@@ -54,16 +47,6 @@ public class ActiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>> 
 	private final BlockingDeque<EventInformation<TEvent>> events;
 
 	private ExecutorService executorService;
-
-	/**
-	 * Whether this state machine is executing an event. Allows that events can be added while executing.
-	 */
-	private volatile boolean executing;
-
-	/**
-	 * Indicates if the state machine is running.
-	 */
-	private volatile boolean isRunning;
 
 	private final Runnable worker = new Runnable() {
 		@Override
@@ -80,8 +63,7 @@ public class ActiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>> 
 	 * @param states
 	 *            the states
 	 */
-	public ActiveStateMachine(final String name, final StateDictionary<TState, TEvent> states) {
-		this.stateMachine = new StateMachineInterpreter<TState, TEvent>(this, name, states);
+	public ActiveStateMachine() {
 		this.events = new LinkedBlockingDeque<EventInformation<TEvent>>();
 		this.executorService = Executors.newFixedThreadPool(1);
 	}
@@ -90,25 +72,12 @@ public class ActiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>> 
 	 * Executes all queued events.
 	 */
 	private void execute() {
-		if (this.executing || !this.isRunning) {
-			return;
-		}
-
-		while (this.isRunning) {
-			try {
-				/**
-				 * FIXME kuu
-				 * <p>
-				 * this implementation is not thread safe. this.executing should be true before fetching the next event. after switching the
-				 * lines, the machine is "always" executing and it could not be interrupted.
-				 */
-				final EventInformation<TEvent> eventToProcess = this.getNextEventToProcess();
-				this.executing = true;
-				if (eventToProcess != null) {
-					this.fireEventOnStateMachine(eventToProcess);
-				}
-			} finally {
-				this.executing = false;
+		while (RunningState.Running.equals(getRunningState())) {
+			final EventInformation<TEvent> eventToProcess = this.getNextEventToProcess();
+			if (eventToProcess != null) {
+				this.fireEventOnStateMachine(eventToProcess);
+			} else {
+				break; // Interrupted
 			}
 		}
 
@@ -118,16 +87,6 @@ public class ActiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>> 
 	public void fire(final TEvent eventId, final Object... eventArguments) {
 		this.events.addLast(new EventInformation<TEvent>(eventId, eventArguments));
 
-	}
-
-	/**
-	 * Fires the event on the state machine.
-	 * 
-	 * @param e
-	 *            the event to be fired on the state machine.
-	 */
-	private void fireEventOnStateMachine(final EventInformation<TEvent> e) {
-		this.stateMachine.fire(e.getEventId(), e.getEventArguments());
 	}
 
 	@Override
@@ -145,29 +104,9 @@ public class ActiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>> 
 		try {
 			final EventInformation<TEvent> e = this.events.pollFirst(10, TimeUnit.MILLISECONDS);
 			return e;
-		} catch (final Exception e) {
+		} catch (final InterruptedException e) {
 			return null;
 		}
-	}
-
-	/**
-	 * Initializes the state machine.
-	 * 
-	 * @param initialState
-	 *            the initial state to use
-	 */
-	public void initialize(final TState initialState) {
-		this.stateMachine.initialize(initialState);
-	}
-
-	@Override
-	public boolean isExecuting() {
-		return this.executing;
-	}
-
-	@Override
-	public boolean isRunning() {
-		return this.isRunning;
 	}
 
 	@Override
@@ -176,41 +115,20 @@ public class ActiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>> 
 	}
 
 	@Override
-	public void start() {
-		this.isRunning = true;
+	public synchronized void start() {
+		super.start();
 		this.executorService = Executors.newFixedThreadPool(1);
 		this.executorService.execute(this.worker);
 	}
 
-	/**
-	 * This method blocks until the termination of the worker thread. After a timeout of 10 seconds the thread is interrupted.
-	 * 
-	 * @see ch.bbv.fsm.StateMachineDefinition#stop()
-	 */
 	@Override
-	public void stop() {
-		this.isRunning = false;
+	public synchronized void terminate() {
 		this.executorService.shutdown();
 		try {
 			this.executorService.awaitTermination(WAIT_FOR_TERMINATION_MS, TimeUnit.MILLISECONDS);
 		} catch (final InterruptedException e) {
-			e.printStackTrace();
+			return;
 		}
+		super.terminate();
 	}
-
-	@Override
-	public TState getCurrentState() {
-		return stateMachine.getCurrentStateId();
-	}
-
-	@Override
-	public void addEventHandler(final StateMachineEventHandler<TState, TEvent> handler) {
-		stateMachine.addEventHandler(handler);
-	}
-
-	@Override
-	public void removeEventHandler(final StateMachineEventHandler<TState, TEvent> handler) {
-		stateMachine.removeEventHandler(handler);
-	}
-
 }

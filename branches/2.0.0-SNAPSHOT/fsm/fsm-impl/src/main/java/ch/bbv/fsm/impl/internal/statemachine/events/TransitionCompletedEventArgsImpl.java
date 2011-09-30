@@ -20,7 +20,7 @@ package ch.bbv.fsm.impl.internal.statemachine.events;
 
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.events.TransitionCompletedEventArgs;
-import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionContext;
+import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 
 /**
  * See {@link TransitionEventArgsImpl}.
@@ -49,7 +49,7 @@ public class TransitionCompletedEventArgsImpl<TStateMachine extends StateMachine
 	 * @param context
 	 *            the current context
 	 */
-	public TransitionCompletedEventArgsImpl(final TState newStateId, final TransitionContext<TState, TEvent> context) {
+	public TransitionCompletedEventArgsImpl(final TState newStateId, final StateContext<TStateMachine, TState, TEvent> context) {
 		super(context);
 		this.newStateId = newStateId;
 	}

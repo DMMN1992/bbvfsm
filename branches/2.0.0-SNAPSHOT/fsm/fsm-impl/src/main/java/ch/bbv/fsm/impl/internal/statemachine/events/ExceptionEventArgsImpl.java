@@ -48,7 +48,7 @@ public class ExceptionEventArgsImpl<TStateMachine extends StateMachine<TState, T
 	 * @param exception
 	 *            the exception.
 	 */
-	public ExceptionEventArgsImpl(final StateContext<TState, TEvent> stateContext, final Exception exception) {
+	public ExceptionEventArgsImpl(final StateContext<TStateMachine, TState, TEvent> stateContext, final Exception exception) {
 		super(stateContext);
 		this.exception = exception;
 	}

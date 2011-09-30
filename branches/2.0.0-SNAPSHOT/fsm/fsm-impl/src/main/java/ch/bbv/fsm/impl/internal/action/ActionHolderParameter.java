@@ -18,6 +18,7 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl.internal.action;
 
+import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.action.Action;
 import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 
@@ -33,9 +34,10 @@ import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
  * @param <T>
  *            the type of the parameter.
  */
-public class ActionHolderParameter<TState extends Enum<?>, TEvent extends Enum<?>, T> implements ActionHolder<TState, TEvent> {
+public class ActionHolderParameter<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>, T>
+		implements ActionHolder<TStateMachine, TState, TEvent> {
 
-	private final Action<TState, TEvent> action;
+	private final Action<TStateMachine, TState, TEvent> action;
 	private final T parameter;
 
 	/**
@@ -46,13 +48,13 @@ public class ActionHolderParameter<TState extends Enum<?>, TEvent extends Enum<?
 	 * @param parameter
 	 *            the parameter
 	 */
-	public ActionHolderParameter(final Action<TState, TEvent> action, final T parameter) {
+	public ActionHolderParameter(final Action<TStateMachine, TState, TEvent> action, final T parameter) {
 		this.action = action;
 		this.parameter = parameter;
 	}
 
 	@Override
-	public void execute(final StateContext<TState, TEvent> stateContext) {
+	public void execute(final StateContext<TStateMachine, TState, TEvent> stateContext) {
 		this.action.execute(stateContext.getStateMachine(), this.parameter);
 	}
 }

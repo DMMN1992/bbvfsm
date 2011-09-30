@@ -19,6 +19,7 @@
 package ch.bbv.fsm.impl.internal.statemachine.state;
 
 import ch.bbv.fsm.HistoryType;
+import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.impl.internal.action.ActionHolder;
 import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionContext;
 import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionDictionary;
@@ -31,7 +32,7 @@ import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionResult;
  * @param <TState>
  * @param <TEvent>
  */
-public interface State<TState extends Enum<?>, TEvent extends Enum<?>> {
+public interface State<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
 
 	/**
 	 * Adds a sub state.
@@ -39,7 +40,7 @@ public interface State<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param state
 	 *            a sub state.
 	 */
-	void addSubState(State<TState, TEvent> state);
+	void addSubState(State<TStateMachine, TState, TEvent> state);
 
 	/**
 	 * Enters this state by its history depending on its <code>HistoryType</code>. The <code>Entry</code> method has to be called already.
@@ -48,7 +49,7 @@ public interface State<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 *            the state context.
 	 * @return the active state. (depends on this states <code>HistoryType</code>)
 	 */
-	State<TState, TEvent> enterByHistory(StateContext<TState, TEvent> stateContext);
+	State<TStateMachine, TState, TEvent> enterByHistory(StateContext<TStateMachine, TState, TEvent> stateContext);
 
 	/**
 	 * Enters this state is deep mode: mode if there is one.
@@ -57,7 +58,7 @@ public interface State<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 *            the event context.
 	 * @return the active state.
 	 */
-	State<TState, TEvent> enterDeep(StateContext<TState, TEvent> stateContext);
+	State<TStateMachine, TState, TEvent> enterDeep(StateContext<TStateMachine, TState, TEvent> stateContext);
 
 	/**
 	 * Enters this state is shallow mode: The entry action is executed and the initial state is entered in shallow mode if there is one.
@@ -66,7 +67,7 @@ public interface State<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 *            the event context.
 	 * @return the active state.
 	 */
-	State<TState, TEvent> enterShallow(StateContext<TState, TEvent> stateContext);
+	State<TStateMachine, TState, TEvent> enterShallow(StateContext<TStateMachine, TState, TEvent> stateContext);
 
 	/**
 	 * Enters this state.
@@ -74,7 +75,7 @@ public interface State<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param stateContext
 	 *            the state context.
 	 */
-	void entry(StateContext<TState, TEvent> stateContext);
+	void entry(StateContext<TStateMachine, TState, TEvent> stateContext);
 
 	/**
 	 * Exits this state.
@@ -82,7 +83,7 @@ public interface State<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param stateContext
 	 *            the state context.
 	 */
-	void exit(StateContext<TState, TEvent> stateContext);
+	void exit(StateContext<TStateMachine, TState, TEvent> stateContext);
 
 	/**
 	 * Fires the specified event id on this state.
@@ -91,21 +92,21 @@ public interface State<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 *            the event context.
 	 * @return the result of the transition.
 	 */
-	TransitionResult<TState, TEvent> fire(TransitionContext<TState, TEvent> context);
+	TransitionResult<TStateMachine, TState, TEvent> fire(TransitionContext<TStateMachine, TState, TEvent> context);
 
 	/**
 	 * Returns the entry action.
 	 * 
 	 * @return the entry action.
 	 */
-	ActionHolder<TState, TEvent> getEntryAction();
+	ActionHolder<TStateMachine, TState, TEvent> getEntryAction();
 
 	/**
 	 * Gets the exit action.
 	 * 
 	 * @return the exit action.
 	 */
-	ActionHolder<TState, TEvent> getExitAction();
+	ActionHolder<TStateMachine, TState, TEvent> getExitAction();
 
 	/**
 	 * Returns the history type of this state.
@@ -126,7 +127,7 @@ public interface State<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * 
 	 * @return the initial sub-state or Null if this state has no sub-states.
 	 */
-	State<TState, TEvent> getInitialState();
+	State<TStateMachine, TState, TEvent> getInitialState();
 
 	/**
 	 * Returns the level in the hierarchy.
@@ -140,21 +141,21 @@ public interface State<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * 
 	 * @return the sub-states.
 	 */
-	Iterable<State<TState, TEvent>> getSubStates();
+	Iterable<State<TStateMachine, TState, TEvent>> getSubStates();
 
 	/**
 	 * Returns the super-state. Null if this is a root state.
 	 * 
 	 * @return the super-state.
 	 */
-	State<TState, TEvent> getSuperState();
+	State<TStateMachine, TState, TEvent> getSuperState();
 
 	/**
 	 * Returns the transitions.
 	 * 
 	 * @return the transitions.
 	 */
-	TransitionDictionary<TState, TEvent> getTransitions();
+	TransitionDictionary<TStateMachine, TState, TEvent> getTransitions();
 
 	/**
 	 * Sets the entry action.
@@ -163,7 +164,7 @@ public interface State<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param action
 	 *            the entry action.
 	 */
-	void setEntryAction(ActionHolder<TState, TEvent> action);
+	void setEntryAction(ActionHolder<TStateMachine, TState, TEvent> action);
 
 	/**
 	 * Sets the exit action.
@@ -172,7 +173,7 @@ public interface State<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param action
 	 *            the exit action.
 	 */
-	void setExitAction(ActionHolder<TState, TEvent> action);
+	void setExitAction(ActionHolder<TStateMachine, TState, TEvent> action);
 
 	/**
 	 * Sets the history type of this state.
@@ -188,7 +189,7 @@ public interface State<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param initialState
 	 *            the initial sub-state.
 	 */
-	void setInitialState(State<TState, TEvent> initialState);
+	void setInitialState(State<TStateMachine, TState, TEvent> initialState);
 
 	/**
 	 * Sets the level in the hierarchy.
@@ -204,6 +205,6 @@ public interface State<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param superState
 	 *            the super-state.
 	 */
-	void setSuperState(State<TState, TEvent> superState);
+	void setSuperState(State<TStateMachine, TState, TEvent> superState);
 
 }

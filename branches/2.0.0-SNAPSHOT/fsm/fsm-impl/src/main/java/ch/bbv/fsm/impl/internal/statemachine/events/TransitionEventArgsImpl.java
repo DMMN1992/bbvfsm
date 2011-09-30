@@ -20,6 +20,7 @@ package ch.bbv.fsm.impl.internal.statemachine.events;
 
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.events.TransitionEventArgs;
+import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 import ch.bbv.fsm.impl.internal.statemachine.transition.TransitionContext;
 
 /**
@@ -40,7 +41,7 @@ public class TransitionEventArgsImpl<TStateMachine extends StateMachine<TState, 
 	 * @param transitionContext
 	 *            the transition context.
 	 */
-	public TransitionEventArgsImpl(final TransitionContext<TState, TEvent> transitionContext) {
+	public TransitionEventArgsImpl(final StateContext<TStateMachine, TState, TEvent> transitionContext) {
 		super(transitionContext);
 	}
 
@@ -64,8 +65,8 @@ public class TransitionEventArgsImpl<TStateMachine extends StateMachine<TState, 
 	 * 
 	 * @return the transition context.
 	 */
-	private TransitionContext<TState, TEvent> getTransitionContext() {
-		return (TransitionContext<TState, TEvent>) this.getStateContext();
+	private TransitionContext<TStateMachine, TState, TEvent> getTransitionContext() {
+		return (TransitionContext<TStateMachine, TState, TEvent>) this.getStateContext();
 	}
 
 	/**

@@ -18,6 +18,7 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl.internal.action;
 
+import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 
 /**
@@ -29,7 +30,7 @@ import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
  *            the type of the events
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
  */
-public interface ActionHolder<TState extends Enum<?>, TEvent extends Enum<?>> {
+public interface ActionHolder<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
 
 	/**
 	 * Executes the wrapped action.
@@ -37,5 +38,5 @@ public interface ActionHolder<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @param stateContext
 	 *            the calling state machine
 	 */
-	void execute(StateContext<TState, TEvent> stateContext);
+	void execute(StateContext<TStateMachine, TState, TEvent> stateContext);
 }

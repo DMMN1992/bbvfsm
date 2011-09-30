@@ -21,10 +21,7 @@ package ch.bbv.fsm.impl.internal.driver;
 import java.util.LinkedList;
 
 import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.events.StateMachineEventHandler;
 import ch.bbv.fsm.impl.internal.report.EventInformation;
-import ch.bbv.fsm.impl.internal.statemachine.StateMachineInterpreter;
-import ch.bbv.fsm.impl.internal.statemachine.state.StateDictionary;
 
 /**
  * A passive state machine. This state machine reacts to events on the current thread.
@@ -35,27 +32,13 @@ import ch.bbv.fsm.impl.internal.statemachine.state.StateDictionary;
  * @param <TEvent>
  *            the type of the events. (Enum)
  */
-public class PassiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>> implements StateMachine<TState, TEvent> {
-
-	/**
-	 * The internal state machine.
-	 */
-	private final StateMachineInterpreter<TState, TEvent> stateMachine;
+public class PassiveStateMachine<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
+		extends AbstractStateMachineDriver<TStateMachine, TState, TEvent> {
 
 	/**
 	 * List of all queued events.
 	 */
 	private final LinkedList<EventInformation<TEvent>> events;
-
-	/**
-	 * Whether this state machine is executing an event. Allows that events can be added while executing.
-	 */
-	private boolean executing;
-
-	/**
-	 * Indicates if the state machine is running.
-	 */
-	private boolean isRunning;
 
 	/**
 	 * Initializes the state machine.
@@ -66,31 +49,20 @@ public class PassiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>>
 	 * @param states
 	 *            the states
 	 */
-	public PassiveStateMachine(final String name, final StateDictionary<TState, TEvent> states) {
-		this.stateMachine = new StateMachineInterpreter<TState, TEvent>(this, name, states);
+	public PassiveStateMachine() {
 		this.events = new LinkedList<EventInformation<TEvent>>();
 	}
 
 	@Override
-	public void fire(final TEvent eventId, final Object... eventArguments) {
+	public synchronized void fire(final TEvent eventId, final Object... eventArguments) {
 		this.events.addLast(new EventInformation<TEvent>(eventId, eventArguments));
 		this.execute();
 	}
 
 	@Override
-	public void firePriority(final TEvent eventId, final Object... eventArguments) {
+	public synchronized void firePriority(final TEvent eventId, final Object... eventArguments) {
 		this.events.addFirst(new EventInformation<TEvent>(eventId, eventArguments));
 		this.execute();
-	}
-
-	@Override
-	public boolean isExecuting() {
-		return this.executing;
-	}
-
-	@Override
-	public boolean isRunning() {
-		return this.isRunning;
 	}
 
 	@Override
@@ -99,50 +71,17 @@ public class PassiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>>
 	}
 
 	@Override
-	public void start() {
-		this.isRunning = true;
-
+	public synchronized void start() {
+		super.start();
 		this.execute();
-	}
-
-	@Override
-	public void stop() {
-		this.isRunning = false;
-	}
-
-	/**
-	 * Initializes the state machine.
-	 * 
-	 * @param initialState
-	 *            the initial state to use
-	 */
-	public void initialize(final TState initialState) {
-		this.stateMachine.initialize(initialState);
-	}
-
-	/**
-	 * Returns the current internal state of the state machine.
-	 * 
-	 * @return the current internal state of the state machine.
-	 */
-	@Override
-	public TState getCurrentState() {
-		return this.stateMachine.getCurrentStateId();
 	}
 
 	/**
 	 * Executes all queued events.
 	 */
 	private void execute() {
-		if (this.executing || !this.isRunning) {
-			return;
-		}
-
-		this.executing = true;
-		try {
-			this.processQueuedEvents();
-		} finally {
-			this.executing = false;
+		if (RunningState.Running.equals(getRunningState())) {
+			processQueuedEvents();
 		}
 	}
 
@@ -158,16 +97,6 @@ public class PassiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>>
 	}
 
 	/**
-	 * Fires the event on the state machine.
-	 * 
-	 * @param e
-	 *            the event to be fired on the state machine.
-	 */
-	private void fireEventOnStateMachine(final EventInformation<TEvent> e) {
-		this.stateMachine.fire(e.getEventId(), e.getEventArguments());
-	}
-
-	/**
 	 * Processes the queued events.
 	 */
 	private void processQueuedEvents() {
@@ -175,15 +104,5 @@ public class PassiveStateMachine<TState extends Enum<?>, TEvent extends Enum<?>>
 			final EventInformation<TEvent> eventToProcess = this.getNextEventToProcess();
 			this.fireEventOnStateMachine(eventToProcess);
 		}
-	}
-
-	@Override
-	public void addEventHandler(final StateMachineEventHandler<TState, TEvent> handler) {
-		stateMachine.addEventHandler(handler);
-	}
-
-	@Override
-	public void removeEventHandler(final StateMachineEventHandler<TState, TEvent> handler) {
-		stateMachine.removeEventHandler(handler);
 	}
 }

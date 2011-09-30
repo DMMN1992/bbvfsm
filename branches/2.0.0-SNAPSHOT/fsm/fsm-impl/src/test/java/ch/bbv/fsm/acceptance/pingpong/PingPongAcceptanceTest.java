@@ -21,7 +21,7 @@ public class PingPongAcceptanceTest {
 
 		pingPongStateMachine.fire(Event.Out);
 
-		pingPongStateMachine.stop();
+		pingPongStateMachine.terminate();
 
 		System.out.println(pingPongStateMachine.getLog());
 	}
