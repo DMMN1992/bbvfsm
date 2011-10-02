@@ -122,6 +122,42 @@ public class RadioStateMachine extends AbstractStateMachine<RadioStateMachine, S
 		return null;
 	}
 
+	public Void logTransitionFromPlayToAutoTune() {
+		addOptionalDot();
+		log.append("PlayToAutoTune");
+		return null;
+	}
+
+	public Void logPlayEntry() {
+		addOptionalDot();
+		log.append("entryPlay");
+		return null;
+	}
+
+	public Void logPlayExit() {
+		addOptionalDot();
+		log.append("exitPlay");
+		return null;
+	}
+
+	public Void logTransitionFromAutoTuneToPlay() {
+		addOptionalDot();
+		log.append("AutoTuneToPlay");
+		return null;
+	}
+
+	public Void logAutoTuneEntry() {
+		addOptionalDot();
+		log.append("entryAutoTune");
+		return null;
+	}
+
+	public Void logAutoTuneExit() {
+		addOptionalDot();
+		log.append("exitAutoTune");
+		return null;
+	}
+
 	public String consumeLog() {
 		final String result = log.toString();
 		log = new StringBuilder();

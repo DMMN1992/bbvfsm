@@ -76,7 +76,6 @@ public abstract class AbstractStateMachineDefinition<TStateMachine extends Abstr
 		this.states = new StateDictionary<TStateMachine, TState, TEvent>();
 		this.eventHandler = Lists.newArrayList();
 		this.initialState = initialState;
-		define();
 	}
 
 	@Override
@@ -197,8 +196,6 @@ public abstract class AbstractStateMachineDefinition<TStateMachine extends Abstr
 		final TStateMachine prototype = createStateMachine(null);
 		return Tool.from(prototype);
 	}
-
-	protected abstract void define();
 
 	protected abstract TStateMachine createStateMachine(StateMachine<TState, TEvent> driver);
 }

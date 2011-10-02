@@ -27,8 +27,18 @@ public class RadioStateMachineDefinion extends
 		StationFound // Found a station's frequency
 	}
 
+	private final HistoryType historyTypeForOn;
+	private final HistoryType historyTypeForAM;
+
 	public RadioStateMachineDefinion() {
+		this(HistoryType.DEEP, HistoryType.NONE);
+	}
+
+	public RadioStateMachineDefinion(final HistoryType historyTypeForOn, final HistoryType historyTypeForAM) {
 		super(State.Off);
+		this.historyTypeForOn = historyTypeForOn;
+		this.historyTypeForAM = historyTypeForAM;
+		define();
 	}
 
 	@Override
@@ -36,8 +46,7 @@ public class RadioStateMachineDefinion extends
 		return new RadioStateMachine(driver);
 	}
 
-	@Override
-	protected void define() {
+	private void define() {
 		final RadioStateMachine radioStateMachinePrototype = getPrototype();
 
 		in(State.Off).on(Event.TogglePower).goTo(State.On).execute(radioStateMachinePrototype.logTransitionFromOffToOn())
@@ -60,7 +69,7 @@ public class RadioStateMachineDefinion extends
 	}
 
 	private void defineOn(final RadioStateMachine radioStateMachinePrototype) {
-		defineHierarchyOn(State.On, State.FM, HistoryType.DEEP, State.FM, State.AM);
+		defineHierarchyOn(State.On, State.FM, historyTypeForOn, State.FM, State.AM);
 
 		in(State.FM).on(Event.ToggleMode).goTo(State.AM).execute(radioStateMachinePrototype.logTransitionFromFMToAM());
 		in(State.FM).executeOnEntry(radioStateMachinePrototype.logFMEntry());
@@ -70,13 +79,18 @@ public class RadioStateMachineDefinion extends
 		in(State.AM).executeOnEntry(radioStateMachinePrototype.logAMEntry());
 		in(State.AM).executeOnExit(radioStateMachinePrototype.logAMExit());
 
-		defineAm(radioStateMachinePrototype);
+		defineAM(radioStateMachinePrototype);
 	}
 
-	private void defineAm(final RadioStateMachine radioStateMachinePrototype) {
-		defineHierarchyOn(State.AM, State.Play, HistoryType.NONE, State.Play, State.AutoTune);
+	private void defineAM(final RadioStateMachine radioStateMachinePrototype) {
+		defineHierarchyOn(State.AM, State.Play, historyTypeForAM, State.Play, State.AutoTune);
 
-		in(State.Play).on(Event.StationLost).goTo(State.AutoTune);
-		in(State.AutoTune).on(Event.StationFound).goTo(State.Play);
+		in(State.Play).on(Event.StationLost).goTo(State.AutoTune).execute(radioStateMachinePrototype.logTransitionFromPlayToAutoTune());
+		in(State.Play).executeOnEntry(radioStateMachinePrototype.logPlayEntry());
+		in(State.Play).executeOnExit(radioStateMachinePrototype.logPlayExit());
+
+		in(State.AutoTune).on(Event.StationFound).goTo(State.Play).execute(radioStateMachinePrototype.logTransitionFromAutoTuneToPlay());
+		in(State.AutoTune).executeOnEntry(radioStateMachinePrototype.logAutoTuneEntry());
+		in(State.AutoTune).executeOnExit(radioStateMachinePrototype.logAutoTuneExit());
 	}
 }
