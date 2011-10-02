@@ -59,6 +59,7 @@ abstract class AbstractStateMachineDriver<TStateMachine extends StateMachine<TSt
 
 	@Override
 	public void terminate() {
+		stateMachineInterpreter.terminate();
 		runningState = RunningState.Terminated;
 	}
 

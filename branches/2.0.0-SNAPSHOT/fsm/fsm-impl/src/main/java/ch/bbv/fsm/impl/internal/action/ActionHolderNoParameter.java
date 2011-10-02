@@ -22,6 +22,8 @@ import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.action.Action;
 import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 
+import com.google.common.base.Preconditions;
+
 /**
  * Wraps an action without parameters.
  * 
@@ -49,6 +51,7 @@ public class ActionHolderNoParameter<TStateMachine extends StateMachine<TState, 
 	 *            the action to wrap.
 	 */
 	public ActionHolderNoParameter(final Action<TStateMachine, TState, TEvent> action) {
+		Preconditions.checkNotNull(action, "action must not be null.");
 		this.action = action;
 	}
 

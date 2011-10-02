@@ -65,4 +65,8 @@ public class MethodCallFunction<TStateMachine extends StateMachine<TState, TEven
 		}
 	}
 
+	@Override
+	public String toString() {
+		return "Guard: " + methodCall;
+	}
 }

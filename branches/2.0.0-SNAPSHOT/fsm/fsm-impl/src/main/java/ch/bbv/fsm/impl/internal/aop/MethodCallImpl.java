@@ -93,4 +93,9 @@ public class MethodCallImpl implements MethodCall {
 	public Method getMethod() {
 		return this.method;
 	}
+
+	@Override
+	public String toString() {
+		return method.toGenericString();
+	}
 }

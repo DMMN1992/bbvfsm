@@ -64,5 +64,5 @@ public interface EntryActionSyntax<TStateMachine extends StateMachine<TState, TE
 	 * @param methodCall
 	 *            the method called on entry.
 	 */
-	ExitActionSyntax<TStateMachine, TState, TEvent> executeOnEntry(Object methodCall);
+	ExitActionSyntax<TStateMachine, TState, TEvent> executeOnEntry(Void methodCall);
 }

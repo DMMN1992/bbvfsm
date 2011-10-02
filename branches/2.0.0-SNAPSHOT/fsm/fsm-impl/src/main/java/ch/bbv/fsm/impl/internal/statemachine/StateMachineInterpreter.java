@@ -204,6 +204,19 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<TState, 
 	}
 
 	/**
+	 * Terminates the state machine.
+	 */
+	public void terminate() {
+		final StateContext<TStateMachine, TState, TEvent> stateContext = new StateContext<TStateMachine, TState, TEvent>(stateMachine,
+				null, this, this);
+		State<TStateMachine, TState, TEvent> o = getCurrentState();
+		while (o != null) {
+			o.exit(stateContext);
+			o = o.getSuperState();
+		}
+	}
+
+	/**
 	 * Adds an event handler.
 	 * 
 	 * @param handler

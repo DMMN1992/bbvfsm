@@ -18,8 +18,12 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl.internal.dsl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.action.Action;
+import ch.bbv.fsm.action.MethodCall;
 import ch.bbv.fsm.dsl.EntryActionSyntax;
 import ch.bbv.fsm.dsl.EventActionSyntax;
 import ch.bbv.fsm.dsl.EventSyntax;
@@ -54,6 +58,8 @@ public class StateBuilder<TStateMachine extends StateMachine<TState, TEvent>, TS
 		EntryActionSyntax<TStateMachine, TState, TEvent>, EventActionSyntax<TStateMachine, TState, TEvent>,
 		ExecuteSyntax<TStateMachine, TState, TEvent>, GotoSyntax<TStateMachine, TState, TEvent> {
 
+	private static final Logger LOG = LoggerFactory.getLogger(StateBuilder.class);
+
 	private final State<TStateMachine, TState, TEvent> state;
 	private final StateDictionary<TStateMachine, TState, TEvent> stateDictionary;
 	private Transition<TStateMachine, TState, TEvent> currentTransition;
@@ -80,7 +86,9 @@ public class StateBuilder<TStateMachine extends StateMachine<TState, TEvent>, TS
 
 	@Override
 	public ExecuteSyntax<TStateMachine, TState, TEvent> execute(final Object methodCall) {
-		this.currentTransition.getActions().add(new MethodCallAction<TStateMachine, TState, TEvent>(MethodCallImpl.pop()));
+		final MethodCall call = MethodCallImpl.pop();
+		LOG.debug(currentTransition.toString() + " use action " + call);
+		this.currentTransition.getActions().add(new MethodCallAction<TStateMachine, TState, TEvent>(call));
 		return this;
 	}
 
@@ -98,7 +106,7 @@ public class StateBuilder<TStateMachine extends StateMachine<TState, TEvent>, TS
 	}
 
 	@Override
-	public ExitActionSyntax<TStateMachine, TState, TEvent> executeOnEntry(final Object action) {
+	public ExitActionSyntax<TStateMachine, TState, TEvent> executeOnEntry(final Void action) {
 		this.state.setEntryAction(new ActionHolderMethodCall<TStateMachine, TState, TEvent>(MethodCallImpl.pop()));
 		return this;
 	}
@@ -137,7 +145,9 @@ public class StateBuilder<TStateMachine extends StateMachine<TState, TEvent>, TS
 
 	@Override
 	public EventSyntax<TStateMachine, TState, TEvent> onlyIf(final boolean guard) {
-		this.currentTransition.setGuard(new MethodCallFunction<TStateMachine, TState, TEvent>(MethodCallImpl.pop()));
+		final MethodCall call = MethodCallImpl.pop();
+		LOG.debug(currentTransition.toString() + " use guard " + call);
+		this.currentTransition.setGuard(new MethodCallFunction<TStateMachine, TState, TEvent>(call));
 		return this;
 
 	}

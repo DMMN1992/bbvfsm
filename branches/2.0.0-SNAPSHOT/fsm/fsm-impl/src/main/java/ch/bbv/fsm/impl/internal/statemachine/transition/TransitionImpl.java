@@ -137,11 +137,13 @@ public class TransitionImpl<TStateMachine extends StateMachine<TState, TEvent>, 
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public TransitionResult<TStateMachine, TState, TEvent> fire(final TransitionContext<TStateMachine, TState, TEvent> context) {
+		LOG.debug("Start transition1 {}", this);
 		if (!this.shouldFire(context.getEventArguments(), context)) {
-			return (TransitionResult<TStateMachine, TState, TEvent>) TransitionResultImpl.getNotFired();
+			LOG.debug("Start transition2 {}", this);
+			return TransitionResultImpl.getNotFired();
 		}
+		LOG.debug("Start transition3 {}", this);
 
 		context.getNotifier().onTransitionBegin(context);
 
@@ -250,7 +252,12 @@ public class TransitionImpl<TStateMachine extends StateMachine<TState, TEvent>, 
 	 */
 	private boolean shouldFire(final Object[] eventArguments, final StateContext<TStateMachine, TState, TEvent> context) {
 		try {
-			return this.getGuard() == null || this.getGuard().execute(context.getStateMachine(), eventArguments);
+			boolean result = true;
+			if (this.getGuard() != null) {
+				result = this.getGuard().execute(context.getStateMachine(), eventArguments);
+				LOG.debug("Checked guard: {} for {}, result is " + result, getGuard(), this);
+			}
+			return result;
 		} catch (final Exception exception) {
 			LOG.error("Exception in guard of transition {}: {}", this, exception);
 			this.handleException(exception, context);
