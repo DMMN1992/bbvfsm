@@ -21,8 +21,6 @@ package ch.bbv.fsm.impl.internal.aop;
 import java.lang.reflect.Method;
 import java.util.Stack;
 
-import ch.bbv.fsm.action.MethodCall;
-
 /**
  * Implementation of a Method Call.
  * 
@@ -63,14 +61,12 @@ public class MethodCallImpl implements MethodCall {
 	/**
 	 * Creates a new instance.
 	 * 
-	 * @param owner
-	 *            the object owner.
 	 * @param method
 	 *            the method.
 	 * @param args
 	 *            the arguments of the method.
 	 */
-	public MethodCallImpl(final Object owner, final Method method, final Object[] args) {
+	public MethodCallImpl(final Method method, final Object[] args) {
 		this.method = method;
 		this.args = args;
 	}

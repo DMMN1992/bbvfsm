@@ -22,7 +22,6 @@ import java.lang.reflect.Method;
 
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
-import ch.bbv.fsm.action.MethodCall;
 
 /**
  * The method call interceptor.
@@ -30,24 +29,13 @@ import ch.bbv.fsm.action.MethodCall;
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
  */
 public class MethodCallInterceptor implements MethodInterceptor {
-	private final Object owner;
-
-	/**
-	 * Creates a new instance.
-	 * 
-	 * @param owner
-	 *            the owner of the method.
-	 */
-	public MethodCallInterceptor(final Object owner) {
-		this.owner = owner;
-	}
 
 	@Override
 	public Object intercept(final Object object, final Method method, final Object[] args, final MethodProxy methodProxy) throws Throwable {
 		if (!method.isAccessible()) {
 			method.setAccessible(true);
 		}
-		final MethodCall methodCall = new MethodCallImpl(this.owner, method, args);
+		final MethodCall methodCall = new MethodCallImpl(method, args);
 		MethodCallImpl.push(methodCall);
 		return null;
 	}

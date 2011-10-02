@@ -16,10 +16,9 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.impl.internal;
+package ch.bbv.fsm.impl.internal.aop;
 
-import static ch.bbv.fsm.impl.Tool.any;
-import static ch.bbv.fsm.impl.Tool.from;
+import static ch.bbv.fsm.impl.internal.aop.MethodCallInterceptorDetectorBuilder.build;
 
 import java.util.EmptyStackException;
 
@@ -28,10 +27,7 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import ch.bbv.fsm.action.MethodCall;
-import ch.bbv.fsm.impl.internal.aop.MethodCallImpl;
-
-public class ToolTest {
+public class MethodCallInterceptorDetectorBuilderTest {
 
 	private boolean isFooExecuted;
 	private String p1;
@@ -50,16 +46,10 @@ public class ToolTest {
 	}
 
 	@Test
-	public void testAny() {
-
-		Assert.assertEquals(null, any(String.class));
-	}
-
-	@Test
 	public void testFromExecution() {
-		from(this).foo("String1", new Integer(99));
+		build(MethodCallInterceptorDetectorBuilderTest.class).foo("String1", new Integer(99));
 		final MethodCall methodCall = MethodCallImpl.pop();
-		methodCall.execute();
+		methodCall.execute(this);
 
 		Assert.assertEquals("String1", this.p1);
 		Assert.assertEquals(new Integer(99), this.p2);
@@ -68,7 +58,7 @@ public class ToolTest {
 
 	@Test
 	public void testFromMethodCallInstance() {
-		from(this).foo("String1", new Integer(99));
+		build(MethodCallInterceptorDetectorBuilderTest.class).foo("String1", new Integer(99));
 		final MethodCall methodCall = MethodCallImpl.pop();
 
 		Assert.assertEquals("String1", methodCall.getArguments()[0]);
@@ -78,7 +68,7 @@ public class ToolTest {
 
 	@Test(expected = EmptyStackException.class)
 	public void testFromStack() {
-		from(this).foo("String1", new Integer(99));
+		build(MethodCallInterceptorDetectorBuilderTest.class).foo("String1", new Integer(99));
 		MethodCallImpl.pop();
 		MethodCallImpl.pop();
 	}

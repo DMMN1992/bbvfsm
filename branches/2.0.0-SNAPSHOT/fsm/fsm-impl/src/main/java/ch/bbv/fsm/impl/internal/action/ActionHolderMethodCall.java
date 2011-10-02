@@ -19,7 +19,7 @@
 package ch.bbv.fsm.impl.internal.action;
 
 import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.action.MethodCall;
+import ch.bbv.fsm.impl.internal.aop.MethodCall;
 import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 
 /**

@@ -22,10 +22,10 @@ import org.junit.Test;
 
 import ch.bbv.fsm.HistoryType;
 import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.StateMachineDefinition;
 import ch.bbv.fsm.action.Action;
 import ch.bbv.fsm.guard.Function;
-import ch.bbv.fsm.impl.AbstractStateMachineDefinition;
+import ch.bbv.fsm.impl.SimpleStateMachine;
+import ch.bbv.fsm.impl.SimpleStateMachineDefinition;
 
 /**
  * Sample showing usage of state machine.
@@ -34,9 +34,9 @@ public class PassiveStateMachineSample {
 	/**
 	 * Announces the floor.
 	 */
-	private final Action<States, Events> announceFloor = new Action<States, Events>() {
+	private final Action<SimpleStateMachine<States, Events>, States, Events> announceFloor = new Action<SimpleStateMachine<States, Events>, States, Events>() {
 		@Override
-		public void execute(final StateMachine<States, Events> stateMachine, final Object... arguments) {
+		public void execute(final SimpleStateMachine<States, Events> stateMachine, final Object... arguments) {
 			System.out.println("announceFloor: 1");
 		}
 	};
@@ -44,9 +44,9 @@ public class PassiveStateMachineSample {
 	/**
 	 * Announces that the elevator is overloaded.
 	 */
-	private final Action<States, Events> announceOverload = new Action<States, Events>() {
+	private final Action<SimpleStateMachine<States, Events>, States, Events> announceOverload = new Action<SimpleStateMachine<States, Events>, States, Events>() {
 		@Override
-		public void execute(final StateMachine<States, Events> stateMachine, final Object... arguments) {
+		public void execute(final SimpleStateMachine<States, Events> stateMachine, final Object... arguments) {
 			System.out.println("announceOverload...");
 		};
 	};
@@ -54,9 +54,9 @@ public class PassiveStateMachineSample {
 	/**
 	 * Checks whether the elevator is overloaded.
 	 */
-	private final Function<States, Events, Object[], Boolean> checkOverload = new Function<States, Events, Object[], Boolean>() {
+	private final Function<SimpleStateMachine<States, Events>, States, Events, Object[], Boolean> checkOverload = new Function<SimpleStateMachine<States, Events>, States, Events, Object[], Boolean>() {
 		@Override
-		public Boolean execute(final StateMachine<States, Events> stateMachine, final Object[] arguments) {
+		public Boolean execute(final SimpleStateMachine<States, Events> stateMachine, final Object[] arguments) {
 			return true;
 		};
 	};
@@ -67,7 +67,8 @@ public class PassiveStateMachineSample {
 	@Test
 	public void sample() {
 
-		final StateMachineDefinition<States, Events> elevator = new AbstractStateMachineDefinition<States, Events>("Elevator");
+		final SimpleStateMachineDefinition<States, Events> elevator = new SimpleStateMachineDefinition<States, Events>("Elevator",
+				States.Healthy);
 
 		elevator.defineHierarchyOn(States.Healthy, States.OnFloor, HistoryType.DEEP, States.OnFloor, States.Moving);
 		elevator.defineHierarchyOn(States.Moving, States.MovingUp, HistoryType.SHALLOW, States.MovingUp, States.MovingDown);
@@ -97,7 +98,7 @@ public class PassiveStateMachineSample {
 		testee.fire(Events.Stop);
 		testee.fire(Events.OpenDoor);
 
-		testee.stop();
+		testee.terminate();
 
 		System.out.println("log messages:");
 

@@ -18,9 +18,6 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl;
 
-import net.sf.cglib.proxy.Enhancer;
-import ch.bbv.fsm.impl.internal.aop.MethodCallInterceptor;
-
 /**
  * Static helper methods used to define state machines.
  * 
@@ -38,25 +35,6 @@ public final class Tool {
 	 */
 	public static <T> T any(final Class<T> type) {
 		return null;
-	}
-
-	/**
-	 * Intercepts a type to simulate delegates.
-	 * 
-	 * @param <T>
-	 *            the type
-	 * @param obj
-	 *            the instance to call
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T> T from(final T obj) {
-		final MethodCallInterceptor interceptor = new MethodCallInterceptor(obj);
-		final Class<?> clazz = obj.getClass();
-		final Enhancer enhancer = new Enhancer();
-		enhancer.setSuperclass(clazz);
-		enhancer.setCallback(interceptor);
-		final T instance = (T) enhancer.create();
-		return instance;
 	}
 
 	/**

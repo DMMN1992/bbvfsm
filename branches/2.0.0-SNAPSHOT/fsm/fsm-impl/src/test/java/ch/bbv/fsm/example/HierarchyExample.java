@@ -25,8 +25,7 @@ import org.junit.Test;
 
 import ch.bbv.fsm.HistoryType;
 import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.StateMachineDefinition;
-import ch.bbv.fsm.impl.AbstractStateMachineDefinition;
+import ch.bbv.fsm.impl.SimpleStateMachineDefinition;
 
 /**
  * Sample showing the usage of state machine.
@@ -41,27 +40,28 @@ public class HierarchyExample {
 		A, B, B_1, B_2, C, D, D_1, D_2
 	}
 
-	private StateMachineDefinition<States, Events> stateMachineDefinition;
+	private SimpleStateMachineDefinition<States, Events> hierarchyExampleStateMachineDefinition;
 
 	@Before
 	public void setup() {
-		stateMachineDefinition = new AbstractStateMachineDefinition<HierarchyExample.States, HierarchyExample.Events>();
+		hierarchyExampleStateMachineDefinition = new SimpleStateMachineDefinition<HierarchyExample.States, HierarchyExample.Events>(
+				"hierarchyExampleStateMachine", States.A);
 
-		stateMachineDefinition.defineHierarchyOn(States.B, States.B_1, HistoryType.NONE, States.B_1, States.B_2);
-		stateMachineDefinition.defineHierarchyOn(States.D, States.D_1, HistoryType.SHALLOW, States.D_1, States.D_2);
+		hierarchyExampleStateMachineDefinition.defineHierarchyOn(States.B, States.B_1, HistoryType.NONE, States.B_1, States.B_2);
+		hierarchyExampleStateMachineDefinition.defineHierarchyOn(States.D, States.D_1, HistoryType.SHALLOW, States.D_1, States.D_2);
 
-		stateMachineDefinition.in(States.A).on(Events.toB).goTo(States.B);
-		stateMachineDefinition.in(States.B).on(Events.toB).goTo(States.B);
-		stateMachineDefinition.in(States.B).on(Events.toC).goTo(States.C);
-		stateMachineDefinition.in(States.C).on(Events.toD).goTo(States.D);
-		stateMachineDefinition.in(States.D).on(Events.toA).goTo(States.A);
-		stateMachineDefinition.in(States.B_1).on(Events.toB2).goTo(States.B_2);
-		stateMachineDefinition.in(States.D_1).on(Events.toD2).goTo(States.D_2);
+		hierarchyExampleStateMachineDefinition.in(States.A).on(Events.toB).goTo(States.B);
+		hierarchyExampleStateMachineDefinition.in(States.B).on(Events.toB).goTo(States.B);
+		hierarchyExampleStateMachineDefinition.in(States.B).on(Events.toC).goTo(States.C);
+		hierarchyExampleStateMachineDefinition.in(States.C).on(Events.toD).goTo(States.D);
+		hierarchyExampleStateMachineDefinition.in(States.D).on(Events.toA).goTo(States.A);
+		hierarchyExampleStateMachineDefinition.in(States.B_1).on(Events.toB2).goTo(States.B_2);
+		hierarchyExampleStateMachineDefinition.in(States.D_1).on(Events.toD2).goTo(States.D_2);
 	}
 
 	@Test
 	public void testDeep() {
-		final StateMachine<States, Events> testee = stateMachineDefinition.createPassiveStateMachine("testDeep", States.A);
+		final StateMachine<States, Events> testee = hierarchyExampleStateMachineDefinition.createPassiveStateMachine("testDeep", States.A);
 		testee.start();
 
 		testee.fire(Events.toB, true);
@@ -76,7 +76,7 @@ public class HierarchyExample {
 		testee.fire(Events.toD);
 		final States stateD2_2 = testee.getCurrentState();
 
-		testee.stop();
+		testee.terminate();
 
 		Assert.assertEquals(States.D_1, stateD1);
 		Assert.assertEquals(States.D_2, stateD2);
@@ -85,8 +85,8 @@ public class HierarchyExample {
 
 	@Test
 	public void testGoDownAndEventsInSuperState() {
-		final StateMachine<States, Events> testee = stateMachineDefinition.createPassiveStateMachine("testGoDownAndEventsInSuperState",
-				States.A);
+		final StateMachine<States, Events> testee = hierarchyExampleStateMachineDefinition.createPassiveStateMachine(
+				"testGoDownAndEventsInSuperState", States.A);
 
 		testee.start();
 		testee.fire(Events.toB, true);
@@ -94,7 +94,7 @@ public class HierarchyExample {
 		testee.fire(Events.toC);
 		final States stateC = testee.getCurrentState();
 
-		testee.stop();
+		testee.terminate();
 
 		Assert.assertEquals(States.B_1, stateB1);
 		Assert.assertEquals(States.C, stateC);
@@ -102,7 +102,8 @@ public class HierarchyExample {
 
 	@Test
 	public void testShallow() {
-		final StateMachine<States, Events> testee = stateMachineDefinition.createPassiveStateMachine("testShallow", States.A);
+		final StateMachine<States, Events> testee = hierarchyExampleStateMachineDefinition.createPassiveStateMachine("testShallow",
+				States.A);
 
 		testee.start();
 		testee.fire(Events.toB, true);
@@ -115,7 +116,7 @@ public class HierarchyExample {
 		testee.fire(Events.toA);
 		testee.fire(Events.toB);
 		final States stateB1_2 = testee.getCurrentState();
-		testee.stop();
+		testee.terminate();
 
 		Assert.assertEquals(States.B_1, stateB1);
 		Assert.assertEquals(States.B_2, stateB2);

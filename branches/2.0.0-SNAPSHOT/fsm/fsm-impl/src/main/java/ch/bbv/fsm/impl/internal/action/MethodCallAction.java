@@ -22,7 +22,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.action.Action;
-import ch.bbv.fsm.action.MethodCall;
+import ch.bbv.fsm.impl.internal.aop.MethodCall;
 
 /**
  * Calls a method.

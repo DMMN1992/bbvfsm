@@ -19,8 +19,8 @@
 package ch.bbv.fsm.impl.internal.action;
 
 import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.action.MethodCall;
 import ch.bbv.fsm.guard.Function;
+import ch.bbv.fsm.impl.internal.aop.MethodCall;
 
 /**
  * Implementation of a function that wraps a MethodCall.

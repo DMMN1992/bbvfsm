@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory;
 
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.action.Action;
-import ch.bbv.fsm.action.MethodCall;
 import ch.bbv.fsm.dsl.EntryActionSyntax;
 import ch.bbv.fsm.dsl.EventActionSyntax;
 import ch.bbv.fsm.dsl.EventSyntax;
@@ -36,6 +35,7 @@ import ch.bbv.fsm.impl.internal.action.ActionHolderNoParameter;
 import ch.bbv.fsm.impl.internal.action.ActionHolderParameter;
 import ch.bbv.fsm.impl.internal.action.MethodCallAction;
 import ch.bbv.fsm.impl.internal.action.MethodCallFunction;
+import ch.bbv.fsm.impl.internal.aop.MethodCall;
 import ch.bbv.fsm.impl.internal.aop.MethodCallImpl;
 import ch.bbv.fsm.impl.internal.statemachine.state.State;
 import ch.bbv.fsm.impl.internal.statemachine.state.StateDictionary;
