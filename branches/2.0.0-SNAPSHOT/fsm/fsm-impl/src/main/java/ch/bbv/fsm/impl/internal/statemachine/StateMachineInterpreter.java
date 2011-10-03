@@ -297,19 +297,6 @@ public class StateMachineInterpreter<TStateMachine extends StateMachine<TState, 
 	}
 
 	/**
-	 * Returns the report of the execution.
-	 * 
-	 * @return
-	 */
-	public String report() {
-		// final StateMachineReport<TStateMachine, TState, TEvent> report = new
-		// StateMachineReport<TStateMachine, TState, TEvent>();
-		// return report.report(this.toString(), this.states.getStates(),
-		// this.initialStateId);
-		return "";
-	}
-
-	/**
 	 * Sets the current state.
 	 * 
 	 * @param state

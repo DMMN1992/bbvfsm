@@ -21,7 +21,6 @@ package ch.bbv.fsm.impl.internal.driver;
 import java.util.LinkedList;
 
 import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.impl.internal.report.EventInformation;
 
 /**
  * A passive state machine. This state machine reacts to events on the current thread.

@@ -118,9 +118,4 @@ public interface StateMachineDefinition<TStateMachine extends StateMachine<TStat
 	 *            the state machine's name
 	 */
 	TStateMachine createPassiveStateMachine(String name);
-
-	/**
-	 * Returns a report of this state machine with all states and transitions.
-	 */
-	String report();
 }

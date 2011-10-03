@@ -16,7 +16,7 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.impl.internal.report;
+package ch.bbv.fsm.impl.internal.driver;
 
 /**
  * Provides information about an event: event-id and arguments.
@@ -25,7 +25,7 @@ package ch.bbv.fsm.impl.internal.report;
  * @param <TEvent>
  *            the type of the event.
  */
-public class EventInformation<TEvent> {
+class EventInformation<TEvent> {
 	private TEvent eventId;
 	private Object[] eventArguments;
 

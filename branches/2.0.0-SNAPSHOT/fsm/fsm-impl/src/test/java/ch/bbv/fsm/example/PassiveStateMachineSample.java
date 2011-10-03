@@ -101,9 +101,6 @@ public class PassiveStateMachineSample {
 		testee.terminate();
 
 		System.out.println("log messages:");
-
-		System.out.println("report:");
-		System.out.println(elevator.report());
 	}
 
 }

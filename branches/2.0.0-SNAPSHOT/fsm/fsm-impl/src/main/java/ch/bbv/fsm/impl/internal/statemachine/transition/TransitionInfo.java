@@ -33,7 +33,7 @@ import ch.bbv.fsm.impl.internal.statemachine.state.State;
  * @param <TEvent>
  *            the type of the events
  */
-public class TransitionInfo<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
+class TransitionInfo<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> {
 	private TEvent eventId;
 	private State<TStateMachine, TState, TEvent> source;
 	private State<TStateMachine, TState, TEvent> target;
@@ -54,8 +54,8 @@ public class TransitionInfo<TStateMachine extends StateMachine<TState, TEvent>, 
 	 * @param actions
 	 *            the number of actions
 	 */
-	public TransitionInfo(final TEvent eventId, final State<TStateMachine, TState, TEvent> source,
-			final State<TStateMachine, TState, TEvent> target, final boolean hasGuard, final int actions) {
+	public TransitionInfo(final TEvent eventId, final State<TStateMachine, TState, TEvent> source, final State<TStateMachine, TState, TEvent> target, final boolean hasGuard,
+			final int actions) {
 		this.eventId = eventId;
 		this.source = source;
 		this.target = target;

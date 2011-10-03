@@ -15,8 +15,7 @@ public class RadioAcceptanceTest {
 	public void radioWhenSimplingTurnOnAndOffThenPlayFM() {
 		final RadioStateMachineDefinion radioStateMachineDefinion = new RadioStateMachineDefinion();
 
-		final RadioStateMachine radioStateMachine = radioStateMachineDefinion
-				.createPassiveStateMachine("radioWhenSimplingTurnOnAndOffThenPlayFM");
+		final RadioStateMachine radioStateMachine = radioStateMachineDefinion.createPassiveStateMachine("radioWhenSimplingTurnOnAndOffThenPlayFM");
 
 		radioStateMachine.start();
 
@@ -25,16 +24,14 @@ public class RadioAcceptanceTest {
 
 		radioStateMachine.terminate();
 
-		assertThat(radioStateMachine.consumeLog(),
-				is(equalTo("entryOff.exitOff.OffToOn.entryOn.entryFM.exitFM.exitOn.OnToOff.entryOff.exitOff")));
+		assertThat(radioStateMachine.consumeLog(), is(equalTo("entryOff.exitOff.OffToOn.entryOn.entryFM.exitFM.exitOn.OnToOff.entryOff.exitOff")));
 	}
 
 	@Test
 	public void radioWhenSetAMAutoTuningAndHistoryNoneThenPlayMustBeRestored() {
 		final RadioStateMachineDefinion radioStateMachineDefinion = new RadioStateMachineDefinion();
 
-		final RadioStateMachine radioStateMachine = radioStateMachineDefinion
-				.createPassiveStateMachine("radioWhenSimplingTurnOnAndOffThenPlayFM");
+		final RadioStateMachine radioStateMachine = radioStateMachineDefinion.createPassiveStateMachine("radioWhenSimplingTurnOnAndOffThenPlayFM");
 
 		radioStateMachine.start();
 
@@ -64,8 +61,7 @@ public class RadioAcceptanceTest {
 	public void radioWhenSetAMAutoTuningAndHistoryShallowOnAMThenAutoTuneMustBeRestored() {
 		final RadioStateMachineDefinion radioStateMachineDefinion = new RadioStateMachineDefinion(HistoryType.DEEP, HistoryType.SHALLOW);
 
-		final RadioStateMachine radioStateMachine = radioStateMachineDefinion
-				.createPassiveStateMachine("radioWhenSimplingTurnOnAndOffThenPlayFM");
+		final RadioStateMachine radioStateMachine = radioStateMachineDefinion.createPassiveStateMachine("radioWhenSimplingTurnOnAndOffThenPlayFM");
 
 		radioStateMachine.start();
 
@@ -95,8 +91,7 @@ public class RadioAcceptanceTest {
 	public void radioWhenSetAMAutoTuningAndHistoryShallowOnOnThenAutoTuneMustBeRestored() {
 		final RadioStateMachineDefinion radioStateMachineDefinion = new RadioStateMachineDefinion(HistoryType.SHALLOW, HistoryType.SHALLOW);
 
-		final RadioStateMachine radioStateMachine = radioStateMachineDefinion
-				.createPassiveStateMachine("radioWhenSimplingTurnOnAndOffThenPlayFM");
+		final RadioStateMachine radioStateMachine = radioStateMachineDefinion.createPassiveStateMachine("radioWhenSimplingTurnOnAndOffThenPlayFM");
 
 		radioStateMachine.start();
 
@@ -126,8 +121,7 @@ public class RadioAcceptanceTest {
 	public void radioWhenMaintenanceThenStateMustBeMaintenance() {
 		final RadioStateMachineDefinion radioStateMachineDefinion = new RadioStateMachineDefinion();
 
-		final RadioStateMachine radioStateMachine = radioStateMachineDefinion
-				.createPassiveStateMachine("radioWhenSimplingTurnOnAndOffThenPlayFM");
+		final RadioStateMachine radioStateMachine = radioStateMachineDefinion.createPassiveStateMachine("radioWhenSimplingTurnOnAndOffThenPlayFM");
 
 		radioStateMachine.start();
 
@@ -137,4 +131,26 @@ public class RadioAcceptanceTest {
 
 		assertThat(turnOnLog, is(equalTo("entryOff.exitOff.OffToMaintenance.entryMaintenance")));
 	}
+
+	@Test
+	public void parallelUsageMustNotInfluenceEachOther() {
+		final RadioStateMachineDefinion radioStateMachineDefinion = new RadioStateMachineDefinion();
+
+		final RadioStateMachine radioStateMachine1 = radioStateMachineDefinion.createPassiveStateMachine("fsm1");
+		final RadioStateMachine radioStateMachine2 = radioStateMachineDefinion.createPassiveStateMachine("fsm2");
+
+		radioStateMachine1.start();
+		radioStateMachine2.start();
+
+		radioStateMachine1.setMaintenance(true);
+		radioStateMachine1.fire(Event.TogglePower);
+		final String turnOnLog1 = radioStateMachine1.consumeLog();
+
+		radioStateMachine2.fire(Event.TogglePower);
+		final String turnOnLog2 = radioStateMachine2.consumeLog();
+
+		assertThat(turnOnLog1, is(equalTo("entryOff.exitOff.OffToMaintenance.entryMaintenance")));
+		assertThat(turnOnLog2, is(equalTo("entryOff.exitOff.OffToOn.entryOn.entryFM")));
+	}
+
 }

@@ -1,7 +1,6 @@
 package ch.bbv.fsm.impl.internal.driver;
 
 import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.impl.internal.report.EventInformation;
 import ch.bbv.fsm.impl.internal.statemachine.StateMachineInterpreter;
 import ch.bbv.fsm.impl.internal.statemachine.state.StateDictionary;
 

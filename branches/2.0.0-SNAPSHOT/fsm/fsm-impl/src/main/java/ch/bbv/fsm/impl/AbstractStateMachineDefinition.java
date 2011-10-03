@@ -153,11 +153,6 @@ public abstract class AbstractStateMachineDefinition<TStateMachine extends Abstr
 	}
 
 	@Override
-	public String report() {
-		return "";
-	}
-
-	@Override
 	public void onExceptionThrown(final StateContext<TStateMachine, TState, TEvent> stateContext, final Exception exception) {
 		try {
 			for (final StateMachineEventHandler<TStateMachine, TState, TEvent> handler : this.eventHandler) {

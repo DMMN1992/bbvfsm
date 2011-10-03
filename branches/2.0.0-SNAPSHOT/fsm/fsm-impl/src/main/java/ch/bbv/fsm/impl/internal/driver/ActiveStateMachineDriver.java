@@ -25,7 +25,6 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 
 import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.impl.internal.report.EventInformation;
 
 /**
  * An active state machine. This state machine reacts to events on a separate worker thread.
