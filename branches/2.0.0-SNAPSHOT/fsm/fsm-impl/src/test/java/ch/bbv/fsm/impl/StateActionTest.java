@@ -22,7 +22,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.StateMachineDefinition;
 import ch.bbv.fsm.action.Action;
 import ch.bbv.fsm.impl.StatesAndEvents.Events;
 import ch.bbv.fsm.impl.StatesAndEvents.States;
@@ -33,14 +32,14 @@ public class StateActionTest {
 	 */
 	@Test
 	public void entryAction() {
-		final StateMachineDefinition<States, Events> stateMachineDefinition = new AbstractStateMachineDefinition<States, Events>();
+		final SimpleStateMachineDefinition<States, Events> stateMachineDefinition = new SimpleStateMachineDefinition<States, Events>("entryAction", States.A);
 
 		final boolean[] entered = new boolean[1];
 
-		final Action<States, Events> action = new Action<States, Events>() {
+		final Action<SimpleStateMachine<States, Events>, States, Events> action = new Action<SimpleStateMachine<States, Events>, States, Events>() {
 
 			@Override
-			public void execute(final StateMachine<States, Events> stateMachine, final Object... arguments) {
+			public void execute(final SimpleStateMachine<States, Events> stateMachine, final Object... arguments) {
 				entered[0] = true;
 			}
 
@@ -48,7 +47,8 @@ public class StateActionTest {
 
 		stateMachineDefinition.in(States.A).executeOnEntry(action);
 
-		stateMachineDefinition.createPassiveStateMachine("entryAction", States.A);
+		final StateMachine<States, Events> fsm = stateMachineDefinition.createPassiveStateMachine("entryAction", States.A);
+		fsm.start();
 
 		Assert.assertTrue(entered[0]);
 	}
@@ -58,14 +58,14 @@ public class StateActionTest {
 	 */
 	@Test
 	public void exitAction() {
-		final StateMachineDefinition<States, Events> stateMachineDefinition = new AbstractStateMachineDefinition<States, Events>();
+		final SimpleStateMachineDefinition<States, Events> stateMachineDefinition = new SimpleStateMachineDefinition<States, Events>("exitAction", States.A);
 
 		final boolean[] entered = new boolean[1];
 
-		final Action<States, Events> action = new Action<States, Events>() {
+		final Action<SimpleStateMachine<States, Events>, States, Events> action = new Action<SimpleStateMachine<States, Events>, States, Events>() {
 
 			@Override
-			public void execute(final StateMachine<States, Events> stateMachine, final Object... arguments) {
+			public void execute(final SimpleStateMachine<States, Events> stateMachine, final Object... arguments) {
 				entered[0] = true;
 			}
 
@@ -85,15 +85,15 @@ public class StateActionTest {
 	 */
 	@Test
 	public void parameterizedEntryAction() {
-		final StateMachineDefinition<States, Events> stateMachineDefinition = new AbstractStateMachineDefinition<States, Events>();
+		final SimpleStateMachineDefinition<States, Events> stateMachineDefinition = new SimpleStateMachineDefinition<States, Events>("parameterizedEntryAction", States.A);
 
 		final int[] argument = new int[1];
 		argument[0] = 0;
 
-		final Action<States, Events> action = new Action<States, Events>() {
+		final Action<SimpleStateMachine<States, Events>, States, Events> action = new Action<SimpleStateMachine<States, Events>, States, Events>() {
 
 			@Override
-			public void execute(final StateMachine<States, Events> stateMachine, final Object... arguments) {
+			public void execute(final SimpleStateMachine<States, Events> stateMachine, final Object... arguments) {
 				argument[0] = (Integer) arguments[0];
 			}
 
@@ -101,7 +101,9 @@ public class StateActionTest {
 
 		stateMachineDefinition.in(States.A).executeOnEntry(action, 3);
 
-		stateMachineDefinition.createPassiveStateMachine("parameterizedEntryAction", States.A);
+		final StateMachine<States, Events> fsm = stateMachineDefinition.createPassiveStateMachine("parameterizedEntryAction", States.A);
+
+		fsm.start();
 
 		Assert.assertEquals(3, argument[0]);
 	}
@@ -111,15 +113,15 @@ public class StateActionTest {
 	 */
 	@Test
 	public void parametrizedExitAction() {
-		final StateMachineDefinition<States, Events> stateMachineDefinition = new AbstractStateMachineDefinition<States, Events>();
+		final SimpleStateMachineDefinition<States, Events> stateMachineDefinition = new SimpleStateMachineDefinition<States, Events>("parametrizedExitAction", States.A);
 
 		final int[] argument = new int[1];
 		argument[0] = 0;
 
-		final Action<States, Events> action = new Action<States, Events>() {
+		final Action<SimpleStateMachine<States, Events>, States, Events> action = new Action<SimpleStateMachine<States, Events>, States, Events>() {
 
 			@Override
-			public void execute(final StateMachine<States, Events> stateMachine, final Object... arguments) {
+			public void execute(final SimpleStateMachine<States, Events> stateMachine, final Object... arguments) {
 				argument[0] = (Integer) arguments[0];
 			}
 

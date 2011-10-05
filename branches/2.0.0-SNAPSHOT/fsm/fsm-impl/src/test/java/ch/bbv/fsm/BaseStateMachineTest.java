@@ -1,5 +1,7 @@
 /*******************************************************************************
- *  Copyright 2010, 2011 bbv Software Services AG, Ueli Kurmann
+ *  C
+import ch.bbv.fsm.impl.SimpleStateMachineDefinition;
+opyright 2010, 2011 bbv Software Services AG, Ueli Kurmann
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -31,6 +33,7 @@ import ch.bbv.fsm.events.StateMachineEventAdapter;
 import ch.bbv.fsm.events.TransitionCompletedEventArgs;
 import ch.bbv.fsm.events.TransitionEventArgs;
 import ch.bbv.fsm.impl.AbstractStateMachineDefinition;
+import ch.bbv.fsm.impl.SimpleStateMachineDefinition;
 import ch.bbv.fsm.impl.StatesAndEvents;
 import ch.bbv.fsm.impl.StatesAndEvents.Events;
 import ch.bbv.fsm.impl.StatesAndEvents.States;
@@ -41,6 +44,7 @@ import com.google.common.collect.Lists;
  * Base for state machine test fixtures.
  */
 public abstract class BaseStateMachineTest {
+
 	private class Handler extends StateMachineEventAdapter<States, Events> {
 
 		@Override
@@ -101,8 +105,7 @@ public abstract class BaseStateMachineTest {
 		Assert.assertEquals("wrong number of begin transition messages.", 1, this.transitionBeginMessages.size());
 		Assert.assertEquals("wrong state in transition begin message.", origin, this.transitionBeginMessages.get(0).getStateId());
 		Assert.assertEquals("wrong event in transition begin message.", eventId, this.transitionBeginMessages.get(0).getEventId());
-		Assert.assertArrayEquals("wrong event arguments in transition begin message.", eventArguments, this.transitionBeginMessages.get(0)
-				.getEventArguments());
+		Assert.assertArrayEquals("wrong event arguments in transition begin message.", eventArguments, this.transitionBeginMessages.get(0).getEventArguments());
 	}
 
 	/**
@@ -122,8 +125,7 @@ public abstract class BaseStateMachineTest {
 	/**
 	 * Checks the transition completed message.
 	 */
-	protected void checkTransitionCompletedMessage(final Object[] eventArguments, final States origin, final Events eventId,
-			final States newState) {
+	protected void checkTransitionCompletedMessage(final Object[] eventArguments, final States origin, final Events eventId, final States newState) {
 		Assert.assertEquals(1, this.transitionCompletedMessages.size());
 		Assert.assertEquals(origin, this.transitionCompletedMessages.get(0).getStateId());
 		Assert.assertEquals(eventId, this.transitionCompletedMessages.get(0).getEventId());
@@ -147,7 +149,7 @@ public abstract class BaseStateMachineTest {
 	 */
 	@Test
 	public void fireEvent() {
-		final StateMachineDefinition<States, Events> definition = new AbstractStateMachineDefinition<StatesAndEvents.States, StatesAndEvents.Events>();
+		final SimpleStateMachineDefinition<States, Events> definition = new SimpleStateMachineDefinitionStates, Events>();
 
 		definition.defineHierarchyOn(States.B, States.B1, HistoryType.NONE, States.B1, States.B2);
 		definition.defineHierarchyOn(States.C, States.C2, HistoryType.SHALLOW, States.C1, States.C2);

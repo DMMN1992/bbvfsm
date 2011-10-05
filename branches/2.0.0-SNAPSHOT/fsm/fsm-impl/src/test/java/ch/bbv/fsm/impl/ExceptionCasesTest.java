@@ -22,7 +22,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.StateMachineDefinition;
 import ch.bbv.fsm.action.Action;
 import ch.bbv.fsm.events.ExceptionEventArgs;
 import ch.bbv.fsm.events.StateMachineEventAdapter;
@@ -33,10 +32,10 @@ import ch.bbv.fsm.impl.StatesAndEvents.Events;
 import ch.bbv.fsm.impl.StatesAndEvents.States;
 
 public class ExceptionCasesTest {
-	private class Handler extends StateMachineEventAdapter<States, Events> {
+	private class Handler extends StateMachineEventAdapter<SimpleStateMachine<States, Events>, States, Events> {
 
 		@Override
-		public void onExceptionThrown(final ExceptionEventArgs<States, Events> eventArgs) {
+		public void onExceptionThrown(final ExceptionEventArgs<SimpleStateMachine<States, Events>, States, Events> eventArgs) {
 			if (eventArgs != null) {
 				ExceptionCasesTest.this.recordedException = eventArgs.getException();
 			}
@@ -44,13 +43,13 @@ public class ExceptionCasesTest {
 		}
 
 		@Override
-		public void onTransitionDeclined(final TransitionEventArgs<States, Events> arg) {
+		public void onTransitionDeclined(final TransitionEventArgs<SimpleStateMachine<States, Events>, States, Events> arg) {
 			ExceptionCasesTest.this.transitionDeclined = true;
 
 		}
 
 		@Override
-		public void onTransitionThrowsException(final TransitionExceptionEventArgs<States, Events> eventArgs) {
+		public void onTransitionThrowsException(final TransitionExceptionEventArgs<SimpleStateMachine<States, Events>, States, Events> eventArgs) {
 
 			ExceptionCasesTest.this.recordedStateId = eventArgs.getStateId();
 			ExceptionCasesTest.this.recordedEventId = eventArgs.getEventId();
@@ -72,14 +71,12 @@ public class ExceptionCasesTest {
 	private Events recordedEventId;
 
 	/**
-	 * The event arguments that was provided in the {@link ch.bbv.fsm.events.StateMachineEventHandler#onExceptionThrown(ExceptionEventArgs)}
-	 * event.
+	 * The event arguments that was provided in the {@link ch.bbv.fsm.events.StateMachineEventHandler#onExceptionThrown(ExceptionEventArgs)} event.
 	 */
 	private Object[] recordedEventArguments;
 
 	/**
-	 * The exception that was provided in the {@link ch.bbv.fsm.events.StateMachineEventHandler#onExceptionThrown(ExceptionEventArgs)}
-	 * event.
+	 * The exception that was provided in the {@link ch.bbv.fsm.events.StateMachineEventHandler#onExceptionThrown(ExceptionEventArgs)} event.
 	 */
 	private Exception recordedException;
 
@@ -88,8 +85,7 @@ public class ExceptionCasesTest {
 	/**
 	 * Asserts that the correct exception was notified.
 	 */
-	private void assertException(final States expectedStateId, final Events expectedEventId, final Object[] expectedEventArguments,
-			final Exception expectedException) {
+	private void assertException(final States expectedStateId, final Events expectedEventId, final Object[] expectedEventArguments, final Exception expectedException) {
 		Assert.assertEquals(expectedStateId, this.recordedStateId);
 		Assert.assertEquals(expectedEventId, this.recordedEventId);
 		Assert.assertArrayEquals(expectedEventArguments, this.recordedEventArguments);
@@ -97,24 +93,23 @@ public class ExceptionCasesTest {
 	}
 
 	/**
-	 * When a transition throws an exception then the exception is catched and the
-	 * {@link ch.bbv.fsm.events.StateMachineEventHandler#onExceptionThrown(ExceptionEventArgs)} event is fired. The transition is executed
-	 * and the state machine is in the target state.
+	 * When a transition throws an exception then the exception is catched and the {@link ch.bbv.fsm.events.StateMachineEventHandler#onExceptionThrown(ExceptionEventArgs)} event is
+	 * fired. The transition is executed and the state machine is in the target state.
 	 */
 	@Test
 	public void exceptionThrowingAction() {
 		final Object[] eventArguments = new Object[] { 1, 2, "test" };
 		final RuntimeException e = new RuntimeException();
 
-		final Action<States, Events> throwException = new Action<States, Events>() {
+		final Action<SimpleStateMachine<States, Events>, States, Events> throwException = new Action<SimpleStateMachine<States, Events>, States, Events>() {
 
 			@Override
-			public void execute(final StateMachine<States, Events> stateMachine, final Object... arguments) {
+			public void execute(final SimpleStateMachine<States, Events> stateMachine, final Object... arguments) {
 				throw e;
 			}
 		};
 
-		final StateMachineDefinition<States, Events> def = new AbstractStateMachineDefinition<States, Events>();
+		final SimpleStateMachineDefinition<States, Events> def = new SimpleStateMachineDefinition<States, Events>("exceptionThrowingAction", States.A);
 
 		def.in(States.A).on(Events.B).goTo(States.B).execute(throwException);
 		def.addEventHandler(new Handler());
@@ -135,15 +130,15 @@ public class ExceptionCasesTest {
 
 		final RuntimeException e = new RuntimeException();
 
-		final Action<States, Events> throwException = new Action<States, Events>() {
+		final Action<SimpleStateMachine<States, Events>, States, Events> throwException = new Action<SimpleStateMachine<States, Events>, States, Events>() {
 
 			@Override
-			public void execute(final StateMachine<States, Events> stateMachine, final Object... arguments) {
+			public void execute(final SimpleStateMachine<States, Events> stateMachine, final Object... arguments) {
 				throw e;
 			}
 		};
 
-		final StateMachineDefinition<States, Events> def = new AbstractStateMachineDefinition<States, Events>();
+		final SimpleStateMachineDefinition<States, Events> def = new SimpleStateMachineDefinition<States, Events>("exceptionThrowingEntryAction", States.A);
 		def.addEventHandler(new Handler());
 		def.in(States.A).on(Events.B).goTo(States.B);
 
@@ -165,15 +160,15 @@ public class ExceptionCasesTest {
 		final Object[] eventArguments = new Object[] { 1, 2, "test" };
 		final RuntimeException exception = new RuntimeException();
 
-		final Action<States, Events> throwException = new Action<States, Events>() {
+		final Action<SimpleStateMachine<States, Events>, States, Events> throwException = new Action<SimpleStateMachine<States, Events>, States, Events>() {
 
 			@Override
-			public void execute(final StateMachine<States, Events> stateMachine, final Object... arguments) {
+			public void execute(final SimpleStateMachine<States, Events> stateMachine, final Object... arguments) {
 				throw exception;
 			}
 		};
 
-		final StateMachineDefinition<States, Events> def = new AbstractStateMachineDefinition<States, Events>();
+		final SimpleStateMachineDefinition<States, Events> def = new SimpleStateMachineDefinition<States, Events>("exceptionThrowingExitAction", States.A);
 		def.addEventHandler(new Handler());
 		def.in(States.A).executeOnExit(throwException).on(Events.B).goTo(States.B);
 
@@ -186,23 +181,22 @@ public class ExceptionCasesTest {
 	}
 
 	/**
-	 * When a guard throws an exception then it is catched and the
-	 * {@link ch.bbv.fsm.events.StateMachineEventHandler#onExceptionThrown(ExceptionEventArgs)} event is fired. The transition is not
-	 * executed and if there is no other transition then the state machine remains in the same state.
+	 * When a guard throws an exception then it is catched and the {@link ch.bbv.fsm.events.StateMachineEventHandler#onExceptionThrown(ExceptionEventArgs)} event is fired. The
+	 * transition is not executed and if there is no other transition then the state machine remains in the same state.
 	 */
 	@Test
 	public void exceptionThrowingGuard() {
 		final Object[] eventArguments = new Object[] { 1, 2, "test" };
 		final RuntimeException e = new RuntimeException();
 
-		final Function<States, Events, Object[], Boolean> f1 = new Function<States, Events, Object[], Boolean>() {
+		final Function<SimpleStateMachine<States, Events>, States, Events, Object[], Boolean> f1 = new Function<SimpleStateMachine<States, Events>, States, Events, Object[], Boolean>() {
 			@Override
-			public Boolean execute(final StateMachine<States, Events> stateMachine, final Object[] parameter) {
+			public Boolean execute(final SimpleStateMachine<States, Events> stateMachine, final Object[] parameter) {
 				throw e;
 			}
 		};
 
-		final StateMachineDefinition<States, Events> def = new AbstractStateMachineDefinition<States, Events>();
+		final SimpleStateMachineDefinition<States, Events> def = new SimpleStateMachineDefinition<States, Events>("exceptionThrowingGuard", States.A);
 		def.in(States.A).on(Events.B).goTo(States.B).onlyIf(f1);
 
 		def.addEventHandler(new Handler());

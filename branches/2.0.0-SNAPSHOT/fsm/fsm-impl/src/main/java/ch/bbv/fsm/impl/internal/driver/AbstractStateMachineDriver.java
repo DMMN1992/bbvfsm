@@ -1,6 +1,9 @@
 package ch.bbv.fsm.impl.internal.driver;
 
+import java.util.List;
+
 import ch.bbv.fsm.StateMachine;
+import ch.bbv.fsm.events.StateMachineEventHandler;
 import ch.bbv.fsm.impl.internal.statemachine.StateMachineInterpreter;
 import ch.bbv.fsm.impl.internal.statemachine.state.StateDictionary;
 
@@ -14,8 +17,8 @@ import ch.bbv.fsm.impl.internal.statemachine.state.StateDictionary;
  * @param <TEvent>
  *            the enumeration type of the events.
  */
-abstract class AbstractStateMachineDriver<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
-		implements StateMachine<TState, TEvent> {
+abstract class AbstractStateMachineDriver<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> implements
+		StateMachine<TState, TEvent> {
 
 	private RunningState runningState = RunningState.Created;
 
@@ -37,9 +40,12 @@ abstract class AbstractStateMachineDriver<TStateMachine extends StateMachine<TSt
 	 * @param states
 	 *            the states
 	 */
-	public void initialize(final TStateMachine stateMachine, final String name,
-			final StateDictionary<TStateMachine, TState, TEvent> states, final TState initialState) {
+	public void initialize(final TStateMachine stateMachine, final String name, final StateDictionary<TStateMachine, TState, TEvent> states, final TState initialState,
+			final List<StateMachineEventHandler<TStateMachine, TState, TEvent>> eventHandlers) {
 		this.stateMachineInterpreter = new StateMachineInterpreter<TStateMachine, TState, TEvent>(stateMachine, name, states, initialState);
+		for (StateMachineEventHandler<TStateMachine, TState, TEvent> eventHandler : eventHandlers) {
+			stateMachineInterpreter.addEventHandler(eventHandler);
+		}
 	}
 
 	@Override
@@ -65,6 +71,14 @@ abstract class AbstractStateMachineDriver<TStateMachine extends StateMachine<TSt
 	@Override
 	public TState getCurrentState() {
 		return stateMachineInterpreter.getCurrentStateId();
+	}
+
+	public void addEventHandler(final StateMachineEventHandler<TStateMachine, TState, TEvent> handler) {
+		stateMachineInterpreter.addEventHandler(handler);
+	}
+
+	public void removeEventHandler(final StateMachineEventHandler<TStateMachine, TState, TEvent> handler) {
+		stateMachineInterpreter.removeEventHandler(handler);
 	}
 
 	/**

@@ -20,79 +20,11 @@ package ch.bbv.fsm.impl;
 
 public class StatesAndEvents {
 
-	// / <summary>
-	// / The events used in the test state machines.
-	// / </summary>
 	public enum Events {
-		// / <summary>Test event A.</summary>
-		A,
-
-		// / <summary>Test event B.</summary>
-		B,
-
-		// / <summary>Test event B1.</summary>
-		B1,
-
-		// / <summary>Test event B2.</summary>
-		B2,
-
-		// / <summary>Test event C.</summary>
-		C,
-
-		// / <summary>Test event C1b.</summary>
-		C1b,
-
-		// / <summary>Test event D.</summary>
-		D
+		A, B, B1, B2, C, C1b, D
 	}
 
-	// / <summary>
-	// / The states used in the test state machines
-	// / </summary>
 	public enum States {
-		// / <summary>Test state A.</summary>
-		A,
-
-		// / <summary>Test state B.</summary>
-		B,
-
-		// / <summary>Test state B1.</summary>
-		B1,
-
-		// / <summary>Test state B2.</summary>
-		B2,
-
-		// / <summary>Test state C.</summary>
-		C,
-
-		// / <summary>Test state C1.</summary>
-		C1,
-
-		// / <summary>Test state C1a.</summary>
-		C1a,
-
-		// / <summary>Test state C1b.</summary>
-		C1b,
-
-		// / <summary>Test state C2.</summary>
-		C2,
-
-		// / <summary>Test state D.</summary>
-		D,
-
-		// / <summary>Test state D1.</summary>
-		D1,
-
-		// / <summary>Test state D1a.</summary>
-		D1a,
-
-		// / <summary>Test state D1b.</summary>
-		D1b,
-
-		// / <summary>Test state D2.</summary>
-		D2,
-
-		// / <summary>Test state E.</summary>
-		E,
+		A, B, B1, B2, C, C1, C1a, C1b, C2, D, D1, D1a, D1b, D2, E,
 	}
 }
