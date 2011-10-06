@@ -34,8 +34,8 @@ import ch.bbv.fsm.StateMachine;
  * @param <TStateMachine>
  *            the type of state machine
  */
-public class PassiveStateMachineDriver<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
-		extends AbstractStateMachineDriver<TStateMachine, TState, TEvent> {
+public class PassiveStateMachineDriver<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> extends
+		AbstractStateMachineDriver<TStateMachine, TState, TEvent> {
 
 	/**
 	 * List of all queued events.
@@ -64,6 +64,12 @@ public class PassiveStateMachineDriver<TStateMachine extends StateMachine<TState
 	@Override
 	public int numberOfQueuedEvents() {
 		return this.events.size();
+	}
+
+	@Override
+	public boolean isIdle() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	@Override

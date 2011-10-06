@@ -81,6 +81,12 @@ public class ActiveStateMachineDriver<TStateMachine extends StateMachine<TState,
 	}
 
 	@Override
+	public boolean isIdle() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
 	public void fire(final TEvent eventId, final Object... eventArguments) {
 		this.events.addLast(new EventInformation<TEvent>(eventId, eventArguments));
 

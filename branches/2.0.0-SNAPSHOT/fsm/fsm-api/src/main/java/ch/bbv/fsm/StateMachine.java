@@ -18,7 +18,6 @@
  *******************************************************************************/
 package ch.bbv.fsm;
 
-
 /**
  * Interface for all finite state machines.
  * 
@@ -68,6 +67,11 @@ public interface StateMachine<TState extends Enum<?>, TEvent extends Enum<?>> {
 	 * @return the number of queued events.
 	 */
 	int numberOfQueuedEvents();
+
+	/**
+	 * Returns <code>true</code> if the state machine is running and all events are processed.
+	 */
+	boolean isIdle();
 
 	/**
 	 * Starts the state machine. Events will be processed. If the state machine is not started then the events will be queued until the state machine is started. Already queued

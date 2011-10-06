@@ -33,11 +33,10 @@ public class StateMachineBuildHierarchyTest {
 	/**
 	 * Object under test.
 	 */
-	private StateMachineDefinition<States, Events> testee;
+	private SimpleStateMachineDefinition<States, Events> testee;
 
 	/**
-	 * If a state is specified as the inital sub state that is not in the list of sub states then an {@link IllegalArgumentException} is
-	 * thrown.
+	 * If a state is specified as the inital sub state that is not in the list of sub states then an {@link IllegalArgumentException} is thrown.
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void addHierarchicalStatesInitialStateIsNotASubState() {
@@ -58,6 +57,6 @@ public class StateMachineBuildHierarchyTest {
 	 */
 	@Before
 	public void setUp() {
-		this.testee = new AbstractStateMachineDefinition<States, Events>();
+		this.testee = new SimpleStateMachineDefinition<States, Events>("StateMachineBuildHierarchyTest", States.A);
 	}
 }
