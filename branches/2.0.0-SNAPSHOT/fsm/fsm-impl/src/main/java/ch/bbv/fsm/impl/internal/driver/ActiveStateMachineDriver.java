@@ -50,6 +50,13 @@ public class ActiveStateMachineDriver<TStateMachine extends StateMachine<TState,
 
 	private ExecutorService executorService;
 
+	private final Object checkProcessingLock = new Object();
+
+	/**
+	 * <code>true</code> while the driver is processing an event.
+	 */
+	private boolean processing;
+
 	private final Runnable worker = new Runnable() {
 		@Override
 		public void run() {
@@ -69,47 +76,51 @@ public class ActiveStateMachineDriver<TStateMachine extends StateMachine<TState,
 	 * Executes all queued events.
 	 */
 	private void execute() {
-		while (RunningState.Running.equals(getRunningState())) {
-			final EventInformation<TEvent> eventToProcess = this.getNextEventToProcess();
-			if (eventToProcess != null) {
-				this.fireEventOnStateMachine(eventToProcess);
-			} else {
-				break; // Interrupted
+		try {
+			while (RunningState.Running.equals(getRunningState())) {
+				final EventInformation<TEvent> eventToProcess;
+				synchronized (checkProcessingLock) {
+					eventToProcess = this.getNextEventToProcess();
+					processing = eventToProcess != null;
+				}
+				try {
+					if (eventToProcess != null) {
+						this.fireEventOnStateMachine(eventToProcess);
+					}
+				} finally {
+					processing = false;
+				}
 			}
+		} catch (InterruptedException e) {
+			// Interrupted - just terminate
 		}
-
 	}
 
 	@Override
 	public boolean isIdle() {
-		// TODO Auto-generated method stub
-		return false;
+		synchronized (checkProcessingLock) {
+			return !processing & events.size() == 0;
+		}
 	}
 
 	@Override
 	public void fire(final TEvent eventId, final Object... eventArguments) {
 		this.events.addLast(new EventInformation<TEvent>(eventId, eventArguments));
-
 	}
 
 	@Override
 	public void firePriority(final TEvent eventId, final Object... eventArguments) {
 		this.events.addFirst(new EventInformation<TEvent>(eventId, eventArguments));
-
 	}
 
 	/**
 	 * Gets the next event to process for the queue.
 	 * 
 	 * @return The next queued event.
+	 * @throws InterruptedException
 	 */
-	private EventInformation<TEvent> getNextEventToProcess() {
-		try {
-			final EventInformation<TEvent> e = this.events.pollFirst(10, TimeUnit.MILLISECONDS);
-			return e;
-		} catch (final InterruptedException e) {
-			return null;
-		}
+	private EventInformation<TEvent> getNextEventToProcess() throws InterruptedException {
+		return this.events.pollFirst(10, TimeUnit.MILLISECONDS);
 	}
 
 	@Override
@@ -126,6 +137,7 @@ public class ActiveStateMachineDriver<TStateMachine extends StateMachine<TState,
 
 	@Override
 	public synchronized void terminate() {
+		super.terminate();
 		this.executorService.shutdown();
 		try {
 			this.executorService.awaitTermination(WAIT_FOR_TERMINATION_MS, TimeUnit.MILLISECONDS);

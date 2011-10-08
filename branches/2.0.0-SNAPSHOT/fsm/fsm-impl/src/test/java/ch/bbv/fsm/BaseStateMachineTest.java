@@ -50,25 +50,21 @@ public abstract class BaseStateMachineTest {
 		@Override
 		public void onExceptionThrown(final ExceptionEventArgs<SimpleStateMachine<States, Events>, States, Events> arg) {
 			BaseStateMachineTest.this.exceptions.add(arg.getException());
-
 		}
 
 		@Override
 		public void onTransitionBegin(final TransitionEventArgs<SimpleStateMachine<States, Events>, States, Events> args) {
 			BaseStateMachineTest.this.transitionBeginMessages.add(args);
-
 		}
 
 		@Override
 		public void onTransitionCompleted(final TransitionCompletedEventArgs<SimpleStateMachine<States, Events>, States, Events> arg) {
 			BaseStateMachineTest.this.transitionCompletedMessages.add(arg);
-
 		}
 
 		@Override
 		public void onTransitionDeclined(final TransitionEventArgs<SimpleStateMachine<States, Events>, States, Events> arg) {
 			BaseStateMachineTest.this.transitionDeclinedMessages.add(arg);
-
 		}
 
 	}
@@ -105,7 +101,8 @@ public abstract class BaseStateMachineTest {
 		Assert.assertEquals("wrong number of begin transition messages.", 1, this.transitionBeginMessages.size());
 		Assert.assertEquals("wrong state in transition begin message.", origin, this.transitionBeginMessages.get(0).getStateId());
 		Assert.assertEquals("wrong event in transition begin message.", eventId, this.transitionBeginMessages.get(0).getEventId());
-		Assert.assertArrayEquals("wrong event arguments in transition begin message.", eventArguments, this.transitionBeginMessages.get(0).getEventArguments());
+		Assert.assertArrayEquals("wrong event arguments in transition begin message.", eventArguments, this.transitionBeginMessages.get(0)
+				.getEventArguments());
 	}
 
 	/**
@@ -125,7 +122,8 @@ public abstract class BaseStateMachineTest {
 	/**
 	 * Checks the transition completed message.
 	 */
-	protected void checkTransitionCompletedMessage(final Object[] eventArguments, final States origin, final Events eventId, final States newState) {
+	protected void checkTransitionCompletedMessage(final Object[] eventArguments, final States origin, final Events eventId,
+			final States newState) {
 		Assert.assertEquals(1, this.transitionCompletedMessages.size());
 		Assert.assertEquals(origin, this.transitionCompletedMessages.get(0).getStateId());
 		Assert.assertEquals(eventId, this.transitionCompletedMessages.get(0).getEventId());
@@ -136,11 +134,12 @@ public abstract class BaseStateMachineTest {
 		Assert.assertEquals(newState, this.transitionCompletedMessages.get(0).getNewStateId());
 	}
 
-	protected abstract SimpleStateMachine<States, Events> createTestee(SimpleStateMachineDefinition<States, Events> definition, States initialState);
+	protected abstract SimpleStateMachine<States, Events> createTestee(SimpleStateMachineDefinition<States, Events> definition,
+			States initialState);
 
 	protected void initTestee(final SimpleStateMachineDefinition<States, Events> definition) {
-		testee = createTestee(definition, States.A);
 		definition.addEventHandler(new Handler());
+		testee = createTestee(definition, States.A);
 		testee.start();
 	}
 
@@ -149,7 +148,8 @@ public abstract class BaseStateMachineTest {
 	 */
 	@Test
 	public void fireEvent() {
-		final SimpleStateMachineDefinition<States, Events> definition = new SimpleStateMachineDefinition<States, Events>("fireEvent", States.A);
+		final SimpleStateMachineDefinition<States, Events> definition = new SimpleStateMachineDefinition<States, Events>("fireEvent",
+				States.A);
 
 		definition.defineHierarchyOn(States.B, States.B1, HistoryType.NONE, States.B1, States.B2);
 		definition.defineHierarchyOn(States.C, States.C2, HistoryType.SHALLOW, States.C1, States.C2);
@@ -190,7 +190,8 @@ public abstract class BaseStateMachineTest {
 
 		};
 
-		final SimpleStateMachineDefinition<States, Events> definition = new SimpleStateMachineDefinition<States, Events>("priorityFire", States.A);
+		final SimpleStateMachineDefinition<States, Events> definition = new SimpleStateMachineDefinition<States, Events>("priorityFire",
+				States.A);
 
 		definition.in(States.A).on(Events.B).goTo(States.B).execute(a);
 
@@ -209,9 +210,10 @@ public abstract class BaseStateMachineTest {
 		this.checkNoExceptionMessage();
 	}
 
-	@Test
+	@Test(expected = IllegalStateException.class)
 	public void startTwice() {
-		final SimpleStateMachineDefinition<States, Events> definition = new SimpleStateMachineDefinition<States, Events>("startTwice", States.A);
+		final SimpleStateMachineDefinition<States, Events> definition = new SimpleStateMachineDefinition<States, Events>("startTwice",
+				States.A);
 		initTestee(definition);
 		this.testee.start();
 	}
@@ -219,11 +221,11 @@ public abstract class BaseStateMachineTest {
 	/**
 	 * When the state machine is stopped then no events are processed. All events enqueued are processed when state machine is started.
 	 */
-	@Test
+	@Test(expected = IllegalStateException.class)
 	public void stopAndStart() {
-		final int transitions = 2;
 
-		final SimpleStateMachineDefinition<States, Events> definition = new SimpleStateMachineDefinition<States, Events>("startTwice", States.A);
+		final SimpleStateMachineDefinition<States, Events> definition = new SimpleStateMachineDefinition<States, Events>("startTwice",
+				States.A);
 
 		definition.in(States.A).on(Events.B).goTo(States.B);
 
@@ -241,10 +243,6 @@ public abstract class BaseStateMachineTest {
 		Assert.assertEquals(0, this.transitionBeginMessages.size());
 
 		this.testee.start();
-
-		waitUntilAllEventsAreProcessed();
-
-		Assert.assertEquals(transitions, this.transitionCompletedMessages.size());
 	}
 
 	/**
@@ -267,7 +265,7 @@ public abstract class BaseStateMachineTest {
 	}
 
 	private void waitUntilAllEventsAreProcessed() {
-		while (this.testee.isIdle()) {
+		while (!this.testee.isIdle()) {
 			try {
 				Thread.sleep(10);
 			} catch (final InterruptedException e) {

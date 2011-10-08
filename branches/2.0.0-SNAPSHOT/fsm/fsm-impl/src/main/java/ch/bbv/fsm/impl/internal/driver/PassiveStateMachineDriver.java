@@ -34,13 +34,18 @@ import ch.bbv.fsm.StateMachine;
  * @param <TStateMachine>
  *            the type of state machine
  */
-public class PassiveStateMachineDriver<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> extends
-		AbstractStateMachineDriver<TStateMachine, TState, TEvent> {
+public class PassiveStateMachineDriver<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
+		extends AbstractStateMachineDriver<TStateMachine, TState, TEvent> {
 
 	/**
 	 * List of all queued events.
 	 */
 	private final LinkedList<EventInformation<TEvent>> events;
+
+	/**
+	 * Do not process event while already processing an event. This happens if an event is fired in an state's or transition's action.
+	 */
+	private boolean processing;
 
 	/**
 	 * Creates the state machine.
@@ -62,14 +67,13 @@ public class PassiveStateMachineDriver<TStateMachine extends StateMachine<TState
 	}
 
 	@Override
-	public int numberOfQueuedEvents() {
+	public synchronized int numberOfQueuedEvents() {
 		return this.events.size();
 	}
 
 	@Override
-	public boolean isIdle() {
-		// TODO Auto-generated method stub
-		return false;
+	public synchronized boolean isIdle() {
+		return numberOfQueuedEvents() == 0;
 	}
 
 	@Override
@@ -82,8 +86,15 @@ public class PassiveStateMachineDriver<TStateMachine extends StateMachine<TState
 	 * Executes all queued events.
 	 */
 	private void execute() {
-		if (RunningState.Running.equals(getRunningState())) {
-			processQueuedEvents();
+		if (!processing) {
+			try {
+				processing = true;
+				if (RunningState.Running.equals(getRunningState())) {
+					processQueuedEvents();
+				}
+			} finally {
+				processing = false;
+			}
 		}
 	}
 

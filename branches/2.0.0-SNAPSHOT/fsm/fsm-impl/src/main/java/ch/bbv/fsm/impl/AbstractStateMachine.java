@@ -12,7 +12,8 @@ import ch.bbv.fsm.StateMachine;
  * @param <TStateMachine>
  *            the type of state machine
  */
-public class AbstractStateMachine<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> implements StateMachine<TState, TEvent> {
+public class AbstractStateMachine<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
+		implements StateMachine<TState, TEvent> {
 
 	private final StateMachine<TState, TEvent> driver;
 
@@ -33,7 +34,7 @@ public class AbstractStateMachine<TStateMachine extends StateMachine<TState, TEv
 
 	@Override
 	public final void firePriority(final TEvent eventId, final Object... eventArguments) {
-		driver.fire(eventId, eventArguments);
+		driver.firePriority(eventId, eventArguments);
 	}
 
 	@Override
