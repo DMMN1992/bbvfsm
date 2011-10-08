@@ -41,6 +41,8 @@ import ch.bbv.fsm.StateMachine;
 public class ActiveStateMachineDriver<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
 		extends AbstractStateMachineDriver<TStateMachine, TState, TEvent> {
 
+	private static final int BLOCKING_TIME_ON_EVENT_MS = 10;
+
 	private static final int WAIT_FOR_TERMINATION_MS = 10000;
 
 	/**
@@ -93,6 +95,7 @@ public class ActiveStateMachineDriver<TStateMachine extends StateMachine<TState,
 			}
 		} catch (InterruptedException e) {
 			// Interrupted - just terminate
+			return;
 		}
 	}
 
@@ -120,7 +123,7 @@ public class ActiveStateMachineDriver<TStateMachine extends StateMachine<TState,
 	 * @throws InterruptedException
 	 */
 	private EventInformation<TEvent> getNextEventToProcess() throws InterruptedException {
-		return this.events.pollFirst(10, TimeUnit.MILLISECONDS);
+		return this.events.pollFirst(BLOCKING_TIME_ON_EVENT_MS, TimeUnit.MILLISECONDS);
 	}
 
 	@Override

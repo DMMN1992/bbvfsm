@@ -37,8 +37,6 @@ public class ClassMethodCallImpl<TObject> implements MethodCall<TObject> {
 	/**
 	 * Creates a new instance.
 	 * 
-	 * @param target
-	 *            the target to call
 	 * @param method
 	 *            the method.
 	 * @param args

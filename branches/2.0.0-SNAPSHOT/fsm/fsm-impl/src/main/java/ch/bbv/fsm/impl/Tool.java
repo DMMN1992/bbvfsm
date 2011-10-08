@@ -36,7 +36,7 @@ public final class Tool {
 	 *            the type
 	 */
 	public static <T> T any(final Class<T> type) {
-		return null;
+		return CallInterceptorBuilder.any(type);
 	}
 
 	/**

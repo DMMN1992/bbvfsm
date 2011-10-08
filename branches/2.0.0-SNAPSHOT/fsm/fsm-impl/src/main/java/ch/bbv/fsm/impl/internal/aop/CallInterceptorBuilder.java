@@ -84,6 +84,14 @@ public final class CallInterceptorBuilder {
 		return proxy;
 	}
 
+	/**
+	 * Returns an argument mock for the call.
+	 * 
+	 * @param <T>
+	 *            the type to use
+	 * @param type
+	 *            the type of the argument.
+	 */
 	public static <T> T any(final Class<T> type) {
 		return null;
 	}

@@ -6,28 +6,19 @@ import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
 /**
+ * Intercepts a call to a proxy of a class.
  * 
- * 
- * @param <TStateMachine>
- *            the type of state machine
- * @param <TState>
- *            the type of the states
- * @param <TEvent>
- *            the type of the events
- * 
+ * @param <TObject>
+ *            the type of object to call
  */
-public class ClassMethodCallInterceptor<TObject> implements
-		MethodInterceptor {
+public class ClassMethodCallInterceptor<TObject> implements MethodInterceptor {
 
 	@Override
-	public Object intercept(final Object object, final Method method,
-			final Object[] args, final MethodProxy methodProxy)
-			throws Throwable {
+	public Object intercept(final Object object, final Method method, final Object[] args, final MethodProxy methodProxy) throws Throwable {
 		if (!method.isAccessible()) {
 			method.setAccessible(true);
 		}
-		final MethodCall<TObject> methodCall = new ClassMethodCallImpl<TObject>(
-				method, args);
+		final MethodCall<TObject> methodCall = new ClassMethodCallImpl<TObject>(method, args);
 		CallInterceptorBuilder.push(methodCall);
 		return null;
 	}
