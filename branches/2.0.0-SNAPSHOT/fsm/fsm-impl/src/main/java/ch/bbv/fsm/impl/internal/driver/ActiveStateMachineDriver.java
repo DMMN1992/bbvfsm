@@ -38,8 +38,8 @@ import ch.bbv.fsm.StateMachine;
  * @param <TStateMachine>
  *            the type of state machine
  */
-public class ActiveStateMachineDriver<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>> extends
-		AbstractStateMachineDriver<TStateMachine, TState, TEvent> {
+public class ActiveStateMachineDriver<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
+		extends AbstractStateMachineDriver<TStateMachine, TState, TEvent> {
 
 	private static final int WAIT_FOR_TERMINATION_MS = 10000;
 

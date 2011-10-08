@@ -18,6 +18,8 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl;
 
+import ch.bbv.fsm.impl.internal.aop.CallInterceptorBuilder;
+
 /**
  * Static helper methods used to define state machines.
  * 
@@ -35,6 +37,18 @@ public final class Tool {
 	 */
 	public static <T> T any(final Class<T> type) {
 		return null;
+	}
+
+	/**
+	 * Intercepts a type to simulate delegates.
+	 * 
+	 * @param <T>
+	 *            the type
+	 * @param instance
+	 *            the instance to call
+	 */
+	public static <T> T from(final T instance) {
+		return CallInterceptorBuilder.build(instance);
 	}
 
 	/**

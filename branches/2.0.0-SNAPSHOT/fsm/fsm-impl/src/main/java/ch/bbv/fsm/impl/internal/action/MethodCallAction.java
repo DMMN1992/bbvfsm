@@ -18,8 +18,6 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl.internal.action;
 
-import java.lang.reflect.InvocationTargetException;
-
 import ch.bbv.fsm.StateMachine;
 import ch.bbv.fsm.action.Action;
 import ch.bbv.fsm.impl.internal.aop.MethodCall;
@@ -37,7 +35,7 @@ import ch.bbv.fsm.impl.internal.aop.MethodCall;
 public class MethodCallAction<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
 		implements Action<TStateMachine, TState, TEvent> {
 
-	private final MethodCall methodCall;
+	private final MethodCall<TStateMachine> methodCall;
 
 	/**
 	 * Constructor.
@@ -45,19 +43,15 @@ public class MethodCallAction<TStateMachine extends StateMachine<TState, TEvent>
 	 * @param methodCall
 	 *            the method to call
 	 */
-	public MethodCallAction(final MethodCall methodCall) {
+	public MethodCallAction(final MethodCall<TStateMachine> methodCall) {
 		this.methodCall = methodCall;
 	}
 
 	@Override
 	public void execute(final TStateMachine stateMachine, final Object... arguments) {
 		try {
-			this.methodCall.getMethod().invoke(stateMachine, arguments);
+			this.methodCall.execute(stateMachine, arguments);
 		} catch (final IllegalArgumentException e) {
-			throw new RuntimeException(e);
-		} catch (final IllegalAccessException e) {
-			throw new RuntimeException(e);
-		} catch (final InvocationTargetException e) {
 			throw new RuntimeException(e);
 		}
 	}

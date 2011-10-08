@@ -20,23 +20,54 @@ package ch.bbv.fsm.impl.internal.aop;
 
 import java.lang.reflect.Method;
 
-import net.sf.cglib.proxy.MethodInterceptor;
-import net.sf.cglib.proxy.MethodProxy;
-
 /**
- * The method call interceptor.
+ * Implementation of a Method Call.
+ * 
+ * @param <TObject>
+ *            the type of the object to call
  * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
  */
-public class MethodCallInterceptor implements MethodInterceptor {
+public class ObjectMethodCallImpl<TObject> implements MethodCall<TObject> {
+
+	private final Object target;
+
+	private final Object[] args;
+
+	private final Method method;
+
+	/**
+	 * Creates a new instance.
+	 * 
+	 * @param target
+	 *            the target to call
+	 * @param method
+	 *            the method.
+	 * @param args
+	 *            the arguments of the method.
+	 */
+	public ObjectMethodCallImpl(final Object target, final Method method, final Object[] args) {
+		this.target = target;
+		this.method = method;
+		this.args = args;
+	}
 
 	@Override
-	public Object intercept(final Object object, final Method method, final Object[] args, final MethodProxy methodProxy) throws Throwable {
-		if (!method.isAccessible()) {
-			method.setAccessible(true);
+	public Object execute(final TObject objectToCall, final Object[] args) {
+		try {
+			return this.method.invoke(target, args != null ? args : this.args);
+		} catch (final Exception e) {
+			throw new RuntimeException(e);
 		}
-		final MethodCall methodCall = new MethodCallImpl(method, args);
-		MethodCallImpl.push(methodCall);
-		return null;
+	}
+
+	@Override
+	public Object[] getArguments() {
+		return this.args;
+	}
+
+	@Override
+	public String toString() {
+		return method.toGenericString();
 	}
 }

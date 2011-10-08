@@ -22,12 +22,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ch.bbv.fsm.HistoryType;
-import ch.bbv.fsm.StateMachineDefinition;
 import ch.bbv.fsm.impl.StatesAndEvents.Events;
 import ch.bbv.fsm.impl.StatesAndEvents.States;
 
 /**
- * Tests hierarchy building in the {@link StateMachineDefinition}.
+ * Tests hierarchy building in the {@link ch.bbv.fsm.StateMachineDefinition}.
  */
 public class StateMachineBuildHierarchyTest {
 	/**
@@ -36,7 +35,8 @@ public class StateMachineBuildHierarchyTest {
 	private SimpleStateMachineDefinition<States, Events> testee;
 
 	/**
-	 * If a state is specified as the inital sub state that is not in the list of sub states then an {@link IllegalArgumentException} is thrown.
+	 * If a state is specified as the inital sub state that is not in the list of sub states then an {@link IllegalArgumentException} is
+	 * thrown.
 	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void addHierarchicalStatesInitialStateIsNotASubState() {

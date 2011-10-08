@@ -35,8 +35,8 @@ import ch.bbv.fsm.impl.internal.action.ActionHolderNoParameter;
 import ch.bbv.fsm.impl.internal.action.ActionHolderParameter;
 import ch.bbv.fsm.impl.internal.action.MethodCallAction;
 import ch.bbv.fsm.impl.internal.action.MethodCallFunction;
+import ch.bbv.fsm.impl.internal.aop.CallInterceptorBuilder;
 import ch.bbv.fsm.impl.internal.aop.MethodCall;
-import ch.bbv.fsm.impl.internal.aop.MethodCallImpl;
 import ch.bbv.fsm.impl.internal.statemachine.state.State;
 import ch.bbv.fsm.impl.internal.statemachine.state.StateDictionary;
 import ch.bbv.fsm.impl.internal.statemachine.transition.Transition;
@@ -86,7 +86,7 @@ public class StateBuilder<TStateMachine extends StateMachine<TState, TEvent>, TS
 
 	@Override
 	public ExecuteSyntax<TStateMachine, TState, TEvent> execute(final Object methodCall) {
-		final MethodCall call = MethodCallImpl.pop();
+		final MethodCall<TStateMachine> call = CallInterceptorBuilder.pop();
 		LOG.debug(currentTransition.toString() + " use action " + call);
 		this.currentTransition.getActions().add(new MethodCallAction<TStateMachine, TState, TEvent>(call));
 		return this;
@@ -107,7 +107,8 @@ public class StateBuilder<TStateMachine extends StateMachine<TState, TEvent>, TS
 
 	@Override
 	public ExitActionSyntax<TStateMachine, TState, TEvent> executeOnEntry(final Void action) {
-		this.state.setEntryAction(new ActionHolderMethodCall<TStateMachine, TState, TEvent>(MethodCallImpl.pop()));
+		MethodCall<TStateMachine> call = CallInterceptorBuilder.pop();
+		this.state.setEntryAction(new ActionHolderMethodCall<TStateMachine, TState, TEvent>(call));
 		return this;
 	}
 
@@ -126,7 +127,8 @@ public class StateBuilder<TStateMachine extends StateMachine<TState, TEvent>, TS
 
 	@Override
 	public ExitActionSyntax<TStateMachine, TState, TEvent> executeOnExit(final Object action) {
-		this.state.setExitAction(new ActionHolderMethodCall<TStateMachine, TState, TEvent>(MethodCallImpl.pop()));
+		MethodCall<TStateMachine> call = CallInterceptorBuilder.pop();
+		this.state.setExitAction(new ActionHolderMethodCall<TStateMachine, TState, TEvent>(call));
 		return this;
 	}
 
@@ -145,7 +147,7 @@ public class StateBuilder<TStateMachine extends StateMachine<TState, TEvent>, TS
 
 	@Override
 	public EventSyntax<TStateMachine, TState, TEvent> onlyIf(final boolean guard) {
-		final MethodCall call = MethodCallImpl.pop();
+		final MethodCall<TStateMachine> call = CallInterceptorBuilder.pop();
 		LOG.debug(currentTransition.toString() + " use guard " + call);
 		this.currentTransition.setGuard(new MethodCallFunction<TStateMachine, TState, TEvent>(call));
 		return this;

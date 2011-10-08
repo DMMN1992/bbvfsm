@@ -26,7 +26,6 @@ import org.junit.Test;
 
 import ch.bbv.fsm.HistoryType;
 import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.StateMachineDefinition;
 import ch.bbv.fsm.action.Action;
 import ch.bbv.fsm.impl.StatesAndEvents.Events;
 import ch.bbv.fsm.impl.StatesAndEvents.States;
@@ -86,7 +85,7 @@ public class StateMachineTest {
 		}
 	}
 
-	private final class RecordEntryAction implements Action<States, Events> {
+	private final class RecordEntryAction implements Action<SimpleStateMachine<States, Events>, States, Events> {
 
 		private final States state;
 
@@ -95,7 +94,7 @@ public class StateMachineTest {
 		}
 
 		@Override
-		public void execute(final StateMachine<States, Events> stateMachine, final Object... arguments) {
+		public void execute(final SimpleStateMachine<States, Events> stateMachine, final Object... arguments) {
 			final EntryRecord record = new EntryRecord();
 			record.setState(this.state);
 			StateMachineTest.this.records.add(record);
@@ -104,7 +103,7 @@ public class StateMachineTest {
 
 	}
 
-	private final class RecordExitAction implements Action<States, Events> {
+	private final class RecordExitAction implements Action<SimpleStateMachine<States, Events>, States, Events> {
 
 		private final States state;
 
@@ -113,7 +112,7 @@ public class StateMachineTest {
 		}
 
 		@Override
-		public void execute(final StateMachine<States, Events> stateMachine, final Object... arguments) {
+		public void execute(final SimpleStateMachine<States, Events> stateMachine, final Object... arguments) {
 			final ExitRecord record = new ExitRecord();
 			record.setState(this.state);
 			StateMachineTest.this.records.add(record);
@@ -129,7 +128,7 @@ public class StateMachineTest {
 	 */
 	private List<Record> records;
 
-	private StateMachineDefinition<States, Events> stateMachineDefinition;
+	private SimpleStateMachineDefinition<States, Events> stateMachineDefinition;
 
 	/**
 	 * Checks that no remaining records are present.
@@ -446,7 +445,7 @@ public class StateMachineTest {
 	public void setUp() {
 		this.records = Lists.newArrayList();
 
-		stateMachineDefinition = new AbstractStateMachineDefinition<States, Events>();
+		stateMachineDefinition = new SimpleStateMachineDefinition<States, Events>("StateMachineTest", States.A);
 
 		stateMachineDefinition.defineHierarchyOn(States.B, States.B1, HistoryType.NONE, States.B1, States.B2);
 		stateMachineDefinition.defineHierarchyOn(States.C, States.C2, HistoryType.SHALLOW, States.C1, States.C2);

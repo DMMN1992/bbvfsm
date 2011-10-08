@@ -18,6 +18,8 @@
  *******************************************************************************/
 package ch.bbv.fsm;
 
+import ch.bbv.fsm.impl.SimpleStateMachine;
+import ch.bbv.fsm.impl.SimpleStateMachineDefinition;
 import ch.bbv.fsm.impl.StatesAndEvents.Events;
 import ch.bbv.fsm.impl.StatesAndEvents.States;
 
@@ -27,7 +29,8 @@ import ch.bbv.fsm.impl.StatesAndEvents.States;
 public class ActiveStateMachineDriverTest extends BaseStateMachineTest {
 
 	@Override
-	protected StateMachine<States, Events> createTestee(final StateMachineDefinition<States, Events> definition, final States states) {
+	protected SimpleStateMachine<States, Events> createTestee(final SimpleStateMachineDefinition<States, Events> definition,
+			final States states) {
 		return definition.createActiveStateMachine("Testee", states);
 	}
 }

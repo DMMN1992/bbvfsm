@@ -48,13 +48,13 @@ public class GuardTest {
 		final Function<SimpleStateMachine<States, Events>, States, Events, Object[], Boolean> f1 = new Function<SimpleStateMachine<States, Events>, States, Events, Object[], Boolean>() {
 
 			@Override
-			public Boolean execute(SimpleStateMachine<States, Events> stateMachine, Object[] parameter) {
+			public Boolean execute(final SimpleStateMachine<States, Events> stateMachine, final Object[] parameter) {
 				return false;
 			}
-
 		};
 
-		final SimpleStateMachineDefinition<States, Events> stateMachineDefinition = new SimpleStateMachineDefinition<States, Events>("allGuardsReturnFalse", States.A);
+		final SimpleStateMachineDefinition<States, Events> stateMachineDefinition = new SimpleStateMachineDefinition<States, Events>(
+				"allGuardsReturnFalse", States.A);
 
 		stateMachineDefinition.addEventHandler(new Handler());
 
@@ -81,13 +81,14 @@ public class GuardTest {
 		final Function<SimpleStateMachine<States, Events>, States, Events, Object[], Boolean> f1 = new Function<SimpleStateMachine<States, Events>, States, Events, Object[], Boolean>() {
 
 			@Override
-			public Boolean execute(SimpleStateMachine<States, Events> stateMachine, Object[] parameter) {
+			public Boolean execute(final SimpleStateMachine<States, Events> stateMachine, final Object[] parameter) {
 				eventArguments[0] = parameter;
 				return true;
 			}
 
 		};
-		final SimpleStateMachineDefinition<States, Events> stateMachineDefinition = new SimpleStateMachineDefinition<States, Events>("eventArgumentsArePassedToTheGuard", States.A);
+		final SimpleStateMachineDefinition<States, Events> stateMachineDefinition = new SimpleStateMachineDefinition<States, Events>(
+				"eventArgumentsArePassedToTheGuard", States.A);
 
 		stateMachineDefinition.in(States.A).on(Events.A).goTo(States.B).onlyIf(f1);
 
@@ -107,7 +108,7 @@ public class GuardTest {
 		final Function<SimpleStateMachine<States, Events>, States, Events, Object[], Boolean> f1 = new Function<SimpleStateMachine<States, Events>, States, Events, Object[], Boolean>() {
 
 			@Override
-			public Boolean execute(SimpleStateMachine<States, Events> stateMachine, Object[] parameter) {
+			public Boolean execute(final SimpleStateMachine<States, Events> stateMachine, final Object[] parameter) {
 				return false;
 			}
 
@@ -116,14 +117,14 @@ public class GuardTest {
 		final Function<SimpleStateMachine<States, Events>, States, Events, Object[], Boolean> f2 = new Function<SimpleStateMachine<States, Events>, States, Events, Object[], Boolean>() {
 
 			@Override
-			public Boolean execute(SimpleStateMachine<States, Events> stateMachine, Object[] parameter) {
+			public Boolean execute(final SimpleStateMachine<States, Events> stateMachine, final Object[] parameter) {
 				return true;
 			}
 
 		};
 
-		final SimpleStateMachineDefinition<States, Events> stateMachineDefinition = new SimpleStateMachineDefinition<States, Events>("transitionWithGuardReturningTrueIsExecuted",
-				States.A);
+		final SimpleStateMachineDefinition<States, Events> stateMachineDefinition = new SimpleStateMachineDefinition<States, Events>(
+				"transitionWithGuardReturningTrueIsExecuted", States.A);
 
 		stateMachineDefinition.in(States.A).on(Events.A).goTo(States.B).onlyIf(f1).on(Events.A).goTo(States.C).onlyIf(f2);
 

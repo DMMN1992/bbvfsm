@@ -18,22 +18,25 @@
  *******************************************************************************/
 package ch.bbv.fsm.impl.internal.aop;
 
-import java.lang.reflect.Method;
-
 /**
  * MethodCall Interface.
  * 
+ * @param <TObject>
+ *            the type of the object to call
+ * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
  */
-public interface MethodCall {
+public interface MethodCall<TObject> {
 
 	/**
 	 * Executes the method in the owner with the arguments. A RuntimeException is thrown if an error occurs.
 	 * 
-	 * @param target
-	 *            the object on that the method call is executed
+	 * @param objectToCall
+	 *            the state machine that triggers this call
+	 * @param arguments
+	 *            the arguments used for the call
 	 */
-	void execute(Object target);
+	Object execute(TObject objectToCall, Object[] arguments);
 
 	/**
 	 * Returns an array of arguments of the method.
@@ -41,12 +44,4 @@ public interface MethodCall {
 	 * @return an array of arguments.
 	 */
 	Object[] getArguments();
-
-	/**
-	 * Returns the method definition.
-	 * 
-	 * @return the method definition.
-	 */
-	Method getMethod();
-
 }

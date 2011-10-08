@@ -19,62 +19,40 @@
 package ch.bbv.fsm.impl.internal.aop;
 
 import java.lang.reflect.Method;
-import java.util.Stack;
 
 /**
  * Implementation of a Method Call.
  * 
+ * @param <TObject>
+ *            the type of the object to call
+ * 
  * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
  */
-public class MethodCallImpl implements MethodCall {
+public class ClassMethodCallImpl<TObject> implements MethodCall<TObject> {
 
 	private final Object[] args;
 
 	private final Method method;
 
-	private static ThreadLocal<Stack<MethodCall>> methodCalls = new ThreadLocal<Stack<MethodCall>>() {
-		@Override
-		protected Stack<MethodCall> initialValue() {
-			return new Stack<MethodCall>();
-		}
-	};
-
-	/**
-	 * Pops a method call from the stack.
-	 * 
-	 * @return the method call on the top of the stack.
-	 */
-	public static MethodCall pop() {
-		return methodCalls.get().pop();
-	}
-
-	/**
-	 * Pushes a method call instance to the stack.
-	 * 
-	 * @param methodCall
-	 *            the method call.
-	 */
-	public static void push(final MethodCall methodCall) {
-		methodCalls.get().push(methodCall);
-	}
-
 	/**
 	 * Creates a new instance.
 	 * 
+	 * @param target
+	 *            the target to call
 	 * @param method
 	 *            the method.
 	 * @param args
 	 *            the arguments of the method.
 	 */
-	public MethodCallImpl(final Method method, final Object[] args) {
+	public ClassMethodCallImpl(final Method method, final Object[] args) {
 		this.method = method;
 		this.args = args;
 	}
 
 	@Override
-	public void execute(final Object owner) {
+	public Object execute(final TObject objectToCall, final Object[] args) {
 		try {
-			this.method.invoke(owner, this.args);
+			return this.method.invoke(objectToCall, args != null ? args : this.args);
 		} catch (final Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -83,11 +61,6 @@ public class MethodCallImpl implements MethodCall {
 	@Override
 	public Object[] getArguments() {
 		return this.args;
-	}
-
-	@Override
-	public Method getMethod() {
-		return this.method;
 	}
 
 	@Override

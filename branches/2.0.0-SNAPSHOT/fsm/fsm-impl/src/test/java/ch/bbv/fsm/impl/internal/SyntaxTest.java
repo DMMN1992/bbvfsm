@@ -26,8 +26,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.StateMachineDefinition;
-import ch.bbv.fsm.impl.AbstractStateMachineDefinition;
+import ch.bbv.fsm.impl.SimpleStateMachineDefinition;
 
 /**
  * Sample showing usage of state machine.
@@ -48,7 +47,7 @@ public class SyntaxTest {
 
 	private static final String ENTRY_B = "EntryB";
 
-	private StateMachineDefinition<States, Events> definition;
+	private SimpleStateMachineDefinition<States, Events> definition;
 	private String fooEntryValue;
 	private String fooExitValue;
 	private boolean barValue;
@@ -70,7 +69,7 @@ public class SyntaxTest {
 
 	@Before
 	public void setup() {
-		this.definition = new AbstractStateMachineDefinition<States, Events>("SimpleExample");
+		this.definition = new SimpleStateMachineDefinition<States, Events>("SimpleExample", States.A);
 
 		this.definition.in(States.A).executeOnEntry(from(this).fooEntry(ENTRY_A)).executeOnExit(from(this).fooExit(EXIT_A)).on(Events.toB)
 				.goTo(States.B).onlyIf(from(this).bar(any(Boolean.class)));
@@ -86,7 +85,7 @@ public class SyntaxTest {
 	 * Test Enter & Exit of state A.
 	 */
 	@Test
-	public void t1() {
+	public void enterAndExitStateMustCallObject() {
 		final StateMachine<States, Events> testee = this.definition.createPassiveStateMachine("testee", States.A);
 		testee.start();
 		final String enterA = this.fooEntryValue;

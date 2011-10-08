@@ -37,7 +37,7 @@ import ch.bbv.fsm.impl.internal.aop.MethodCall;
 public class MethodCallFunction<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
 		implements Function<TStateMachine, TState, TEvent, Object[], Boolean> {
 
-	private final MethodCall methodCall;
+	private final MethodCall<TStateMachine> methodCall;
 
 	/**
 	 * Creates a new instance.
@@ -45,21 +45,14 @@ public class MethodCallFunction<TStateMachine extends StateMachine<TState, TEven
 	 * @param methodCall
 	 *            the methodCall instance
 	 */
-	public MethodCallFunction(final MethodCall methodCall) {
+	public MethodCallFunction(final MethodCall<TStateMachine> methodCall) {
 		this.methodCall = methodCall;
 	}
 
 	@Override
 	public Boolean execute(final TStateMachine stateMachine, final Object[] args) {
 		try {
-			Object[] arguments;
-			if (args.length == this.methodCall.getArguments().length) {
-				arguments = args;
-			} else {
-				arguments = this.methodCall.getArguments();
-			}
-
-			return (Boolean) this.methodCall.getMethod().invoke(stateMachine, arguments);
+			return (Boolean) this.methodCall.execute(stateMachine, args);
 		} catch (final Exception e) {
 			throw new RuntimeException(e);
 		}

@@ -22,7 +22,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import ch.bbv.fsm.StateMachine;
-import ch.bbv.fsm.StateMachineDefinition;
 import ch.bbv.fsm.action.Action;
 import ch.bbv.fsm.events.StateMachineEventAdapter;
 import ch.bbv.fsm.events.TransitionEventArgs;
@@ -30,10 +29,10 @@ import ch.bbv.fsm.impl.StatesAndEvents.Events;
 import ch.bbv.fsm.impl.StatesAndEvents.States;
 
 public class TransitionsTest {
-	private class Handler extends StateMachineEventAdapter<States, Events> {
+	private class Handler extends StateMachineEventAdapter<SimpleStateMachine<States, Events>, States, Events> {
 
 		@Override
-		public void onTransitionDeclined(final TransitionEventArgs<States, Events> arg) {
+		public void onTransitionDeclined(final TransitionEventArgs<SimpleStateMachine<States, Events>, States, Events> arg) {
 			TransitionsTest.this.declined = true;
 
 		}
@@ -51,25 +50,26 @@ public class TransitionsTest {
 	@Test
 	public void executeActions() {
 
-		final Action<States, Events> action1 = new Action<States, Events>() {
+		final Action<SimpleStateMachine<States, Events>, States, Events> action1 = new Action<SimpleStateMachine<States, Events>, States, Events>() {
 
 			@Override
-			public void execute(final StateMachine<States, Events> stateMachine, final Object... arguments) {
+			public void execute(final SimpleStateMachine<States, Events> stateMachine, final Object... arguments) {
 				TransitionsTest.this.action1Arguments = arguments;
 
 			}
 		};
 
-		final Action<States, Events> action2 = new Action<States, Events>() {
+		final Action<SimpleStateMachine<States, Events>, States, Events> action2 = new Action<SimpleStateMachine<States, Events>, States, Events>() {
 
 			@Override
-			public void execute(final StateMachine<States, Events> stateMachine, final Object... arguments) {
+			public void execute(final SimpleStateMachine<States, Events> stateMachine, final Object... arguments) {
 				TransitionsTest.this.action2Arguments = arguments;
 
 			}
 		};
 
-		final StateMachineDefinition<States, Events> stateMachineDefinition = new AbstractStateMachineDefinition<States, Events>();
+		final SimpleStateMachineDefinition<States, Events> stateMachineDefinition = new SimpleStateMachineDefinition<States, Events>(
+				"executeActions", States.A);
 
 		stateMachineDefinition.in(States.A).on(Events.B).goTo(States.B).execute(action1).execute(action2);
 
@@ -90,16 +90,17 @@ public class TransitionsTest {
 	@Test
 	public void internalTransition() {
 
-		final Action<States, Events> action2 = new Action<States, Events>() {
+		final Action<SimpleStateMachine<States, Events>, States, Events> action2 = new Action<SimpleStateMachine<States, Events>, States, Events>() {
 
 			@Override
-			public void execute(final StateMachine<States, Events> stateMachine, final Object... arguments) {
+			public void execute(final SimpleStateMachine<States, Events> stateMachine, final Object... arguments) {
 				TransitionsTest.this.executed = true;
 
 			}
 		};
 
-		final StateMachineDefinition<States, Events> stateMachineDefinition = new AbstractStateMachineDefinition<States, Events>();
+		final SimpleStateMachineDefinition<States, Events> stateMachineDefinition = new SimpleStateMachineDefinition<States, Events>(
+				"internalTransition", States.A);
 		stateMachineDefinition.in(States.A).on(Events.A).execute(action2);
 		final StateMachine<States, Events> fsm = stateMachineDefinition.createPassiveStateMachine("transitionTest", States.A);
 		fsm.start();
@@ -114,7 +115,8 @@ public class TransitionsTest {
 	 */
 	@Test
 	public void missingTransition() {
-		final StateMachineDefinition<States, Events> stateMachineDefinition = new AbstractStateMachineDefinition<States, Events>();
+		final SimpleStateMachineDefinition<States, Events> stateMachineDefinition = new SimpleStateMachineDefinition<States, Events>(
+				"missingTransition", States.A);
 		stateMachineDefinition.in(States.A).on(Events.B).goTo(States.B);
 
 		stateMachineDefinition.addEventHandler(new Handler());

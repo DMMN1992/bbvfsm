@@ -36,7 +36,7 @@ import ch.bbv.fsm.impl.internal.statemachine.state.StateContext;
 public class ActionHolderMethodCall<TStateMachine extends StateMachine<TState, TEvent>, TState extends Enum<?>, TEvent extends Enum<?>>
 		implements ActionHolder<TStateMachine, TState, TEvent> {
 
-	private final MethodCall methodCall;
+	private final MethodCall<TStateMachine> methodCall;
 
 	/**
 	 * Creates a new instance.
@@ -44,12 +44,12 @@ public class ActionHolderMethodCall<TStateMachine extends StateMachine<TState, T
 	 * @param methodCall
 	 *            the method call instance.
 	 */
-	public ActionHolderMethodCall(final MethodCall methodCall) {
+	public ActionHolderMethodCall(final MethodCall<TStateMachine> methodCall) {
 		this.methodCall = methodCall;
 	}
 
 	@Override
 	public void execute(final StateContext<TStateMachine, TState, TEvent> stateContext) {
-		this.methodCall.execute(stateContext.getStateMachine());
+		this.methodCall.execute(stateContext.getStateMachine(), null);
 	}
 }
