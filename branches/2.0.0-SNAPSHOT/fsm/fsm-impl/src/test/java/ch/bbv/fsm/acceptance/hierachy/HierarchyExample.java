@@ -16,7 +16,7 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.example;
+package ch.bbv.fsm.acceptance.hierachy;
 
 import junit.framework.Assert;
 

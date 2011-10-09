@@ -16,32 +16,38 @@
  * Contributors:
  *     bbv Software Services AG (http://www.bbv.ch), Ueli Kurmann
  *******************************************************************************/
-package ch.bbv.fsm.example;
+package ch.bbv.fsm.acceptance.elevator;
+
+import org.junit.Test;
+
+import ch.bbv.fsm.acceptance.elevator.ElevatorStateMachineDefinition.Event;
+import ch.bbv.fsm.acceptance.elevator.ElevatorStateMachineDefinition.State;
 
 /**
- * Elevator Events.
- * 
- * @author Ueli Kurmann (bbv Software Services AG) (bbv Software Services AG)
+ * Sample showing usage of state machine.
  */
-enum Events {
-	// / <summary>An error occurred.</summary>
-	ErrorOccured,
+public class ElevatorStateMachineAcceptanceTest {
 
-	// / <summary>Reset after error.</summary>
-	Reset,
+	private final ElevatorStateMachineDefinition elevatorStateMachineDefinition = new ElevatorStateMachineDefinition();
 
-	// / <summary>Open the door.</summary>
-	OpenDoor,
+	/**
+	 * Unit test showing a sample of the state machine usage.
+	 */
+	@Test
+	public void sample() {
+		final ElevatorStateMachine testee = elevatorStateMachineDefinition.createPassiveStateMachine("sample", State.OnFloor);
 
-	// / <summary>Close the door.</summary>
-	CloseDoor,
+		testee.fire(Event.ErrorOccured);
+		testee.fire(Event.Reset);
 
-	// / <summary>Move elevator up.</summary>
-	GoUp,
+		testee.start();
 
-	// / <summary>Move elevator down.</summary>
-	GoDown,
+		testee.fire(Event.OpenDoor);
+		testee.fire(Event.CloseDoor);
+		testee.fire(Event.GoUp);
+		testee.fire(Event.Stop);
+		testee.fire(Event.OpenDoor);
 
-	// / <summary>Stop the elevator.</summary>
-	Stop
+		testee.terminate();
+	}
 }
