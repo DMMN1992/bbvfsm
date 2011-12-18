@@ -28,7 +28,6 @@ public class RadioStateMachineDefinion extends
 		// 'AM' sub-states
 		Play, // Play the current frequency
 		AutoTune, // Search for station
-
 	}
 
 	public enum Event {
