@@ -16,7 +16,8 @@ We will explain the main features of the state machine by a tuner.
 <code lang="java">
 
 public class RadioStateMachineDefinion extends
-		AbstractStateMachineDefinition<RadioStateMachine, RadioStateMachineDefinion.State, RadioStateMachineDefinion.Event> {
+  AbstractStateMachineDefinition<RadioStateMachine, 
+      RadioStateMachineDefinion.State, RadioStateMachineDefinion.Event> {
 
 public enum State {
   Off, // Radio is turned off
