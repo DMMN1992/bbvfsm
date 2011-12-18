@@ -1,4 +1,5 @@
 #summary an example how to use the bbv finite state machine.
+#labels Featured
 
 = Example of a State Machine =
 
