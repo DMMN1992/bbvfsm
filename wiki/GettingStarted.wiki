@@ -13,6 +13,9 @@ We will explain the main features of the state machine by a tuner.
 [http://bbvfsm.googlecode.com/svn/wiki/tuner.png]
 
 ===Definition of the State-Machine===
+The snipped below shows the definition of the state-machine. This example uses a special syntax to describe the methods to be invoked on certain events. Java does not support function parameters. Therefore we did some magic in the background to provide an easy to use declaration of the state-statemachine. 
+
+If you don't like this syntax, you could use anonymous classes and implement the Action interface. We will provide an example in a few days.
 <code lang="java">
 
 public class RadioStateMachineDefinion extends
