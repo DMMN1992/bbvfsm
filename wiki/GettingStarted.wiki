@@ -86,27 +86,29 @@ private void define() {
 private void defineOn(final RadioStateMachine radioStateMachinePrototype) {
   defineHierarchyOn(State.On, State.FM, historyTypeForOn, State.FM, State.AM);
 
-		in(State.FM).on(Event.ToggleMode).goTo(State.AM).execute(radioStateMachinePrototype.logTransitionFromFMToAM());
-		in(State.FM).executeOnEntry(radioStateMachinePrototype.logFMEntry());
-		in(State.FM).executeOnExit(radioStateMachinePrototype.logFMExit());
+  in(State.FM).on(Event.ToggleMode).goTo(State.AM)
+     .execute(radioStateMachinePrototype.logTransitionFromFMToAM());
+  in(State.FM).executeOnEntry(radioStateMachinePrototype.logFMEntry());
+  in(State.FM).executeOnExit(radioStateMachinePrototype.logFMExit());
 
-		in(State.AM).on(Event.ToggleMode).goTo(State.FM).execute(radioStateMachinePrototype.logTransitionFromAMToFM());
-		in(State.AM).executeOnEntry(radioStateMachinePrototype.logAMEntry());
-		in(State.AM).executeOnExit(radioStateMachinePrototype.logAMExit());
+  in(State.AM).on(Event.ToggleMode).goTo(State.FM)
+     .execute(radioStateMachinePrototype.logTransitionFromAMToFM());
+  in(State.AM).executeOnEntry(radioStateMachinePrototype.logAMEntry());
+  in(State.AM).executeOnExit(radioStateMachinePrototype.logAMExit());
 
-		defineAM(radioStateMachinePrototype);
-	}
+  defineAM(radioStateMachinePrototype);
+}
 
-	private void defineAM(final RadioStateMachine radioStateMachinePrototype) {
-		defineHierarchyOn(State.AM, State.Play, historyTypeForAM, State.Play, State.AutoTune);
-
-		in(State.Play).on(Event.StationLost).goTo(State.AutoTune).execute(radioStateMachinePrototype.logTransitionFromPlayToAutoTune());
-		in(State.Play).executeOnEntry(radioStateMachinePrototype.logPlayEntry());
-		in(State.Play).executeOnExit(radioStateMachinePrototype.logPlayExit());
-
-		in(State.AutoTune).on(Event.StationFound).goTo(State.Play).execute(radioStateMachinePrototype.logTransitionFromAutoTuneToPlay());
-		in(State.AutoTune).executeOnEntry(radioStateMachinePrototype.logAutoTuneEntry());
-		in(State.AutoTune).executeOnExit(radioStateMachinePrototype.logAutoTuneExit());
-	}
+private void defineAM(final RadioStateMachine radioStateMachinePrototype) {
+  defineHierarchyOn(State.AM, State.Play, historyTypeForAM, State.Play, State.AutoTune);
+  in(State.Play).on(Event.StationLost).goTo(State.AutoTune)
+     .execute(radioStateMachinePrototype.logTransitionFromPlayToAutoTune());
+  in(State.Play).executeOnEntry(radioStateMachinePrototype.logPlayEntry());
+  in(State.Play).executeOnExit(radioStateMachinePrototype.logPlayExit());
+  in(State.AutoTune).on(Event.StationFound).goTo(State.Play)
+     .execute(radioStateMachinePrototype.logTransitionFromAutoTuneToPlay());
+  in(State.AutoTune).executeOnEntry(radioStateMachinePrototype.logAutoTuneEntry());
+  in(State.AutoTune).executeOnExit(radioStateMachinePrototype.logAutoTuneExit());
+}
 }
 </code>
