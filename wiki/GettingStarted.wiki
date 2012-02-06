@@ -18,7 +18,7 @@ The snipped below shows the definition of the state-machine. This example uses a
 If you don't like this syntax, you can:
 
  * use anonymous classes and implement the Action interface (version 1.x). 
- * Reference an "action class" that implements Action  (since version 2.0). [http://code.google.com/p/bbvfsm/wiki/ActionDefinitionExample example]
+ * Reference an "action class" that implements Action  (since version 2.0). [http://code.google.com/p/bbvfsm/wiki/ActionDefinition example]
 
 <code lang="java">
 
