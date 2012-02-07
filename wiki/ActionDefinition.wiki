@@ -2,7 +2,7 @@
 #labels Featured
 
 ==Example==
-We will show this feature using a simplified version of the Radio tuner. * [http://code.google.com/p/bbvfsm/wiki/GettingStarted tuner example]
+We show now an alternative way for defining actions, using a simplified version of the Radio tuner. * [http://code.google.com/p/bbvfsm/wiki/GettingStarted tuner example]
 
 ==When should I prefer this Action definition method?==
 Hi Lukas, kannst du hier bitte etwas dazu schreiben?
