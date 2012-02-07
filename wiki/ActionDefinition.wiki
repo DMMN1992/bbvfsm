@@ -1,10 +1,11 @@
-#Example of an alternative way for defining actions in bbvfsm.
+#summary Example of an alternative way for defining actions in bbvfsm.
 #labels Featured
 
 ==Example==
-We will show this feature with a simplified version of the Radio tuner.
- * [http://code.google.com/p/bbvfsm/wiki/GettingStarted tuner example]
+We will show this feature using a simplified version of the Radio tuner. * [http://code.google.com/p/bbvfsm/wiki/GettingStarted tuner example]
 
+==When should I prefer this Action definition method?==
+Hi Lukas, kannst du hier bitte etwas dazu schreiben?
 
 ==State Machine definition==
 
