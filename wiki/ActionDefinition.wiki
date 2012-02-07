@@ -18,13 +18,10 @@ public class RadioStateMachineDefinion
 	public enum State {
 		Off, // Radio is turned off
 		On, // Radio is turned on
-		FM, // Playing on FM
-
 	}
 
 	public enum Event {
 		TogglePower, // Switch on an off
-		ToggleMode, // Switch between AM and FM
 	}
 
 	public RadioStateMachineDefinion() {
