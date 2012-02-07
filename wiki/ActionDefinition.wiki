@@ -4,8 +4,10 @@
 ==Example==
 We show now an alternative way for defining actions, using a simplified version of the Radio tuner. * [http://code.google.com/p/bbvfsm/wiki/GettingStarted tuner example]
 
-==When should I prefer this Action definition method?==
-Hi Lukas, kannst du hier bitte etwas dazu schreiben?
+==When should I use this action definition approach?==
+
+This approach is less transparent for the user that the preferred method (via AbstractStateMachineDefinition.getPrototype(), which uses net.sf.cglib).
+We offer this alternative approach in case for example that net.sf.cglib can't be used.
 
 ==State Machine definition==
 
