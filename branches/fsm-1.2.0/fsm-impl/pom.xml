@@ -2,8 +2,8 @@
 	<description>Statemachine Implementation</description>
 	<parent>
 		<artifactId>fsm</artifactId>
-		<groupId>ch.bbv</groupId>
-		<version>1.1.0</version>
+		<groupId>ch.bbv.fsm</groupId>
+		<version>1.2.0</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>fsm-impl</artifactId>
@@ -15,7 +15,7 @@
 	<dependencies>
 		<!-- Internal -->
 		<dependency>
-			<groupId>ch.bbv</groupId>
+			<groupId>ch.bbv.fsm</groupId>
 			<artifactId>fsm-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -72,7 +72,30 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				  <groupId>org.apache.maven.plugins</groupId>
+				  <artifactId>maven-source-plugin</artifactId>
+				  <executions>
+				    <execution>
+				      <id>attach-sources</id>
+				      <goals>
+				        <goal>jar</goal>
+				      </goals>
+				    </execution>
+				  </executions>
+			</plugin>			
+			<plugin>
+				  <groupId>org.apache.maven.plugins</groupId>
+				  <artifactId>maven-javadoc-plugin</artifactId>
+				  <executions>
+				    <execution>
+				      <id>attach-javadocs</id>
+				      <goals>
+				        <goal>jar</goal>
+				      </goals>
+				    </execution>
+				  </executions>
+			</plugin>			
 		</plugins>
 	</build>
-
 </project>
