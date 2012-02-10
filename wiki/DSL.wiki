@@ -1,0 +1,166 @@
+#summary Explains the DSL created for BBVFSM.
+#labels Featured
+
+==Introduction==
+<TODO>
+
+==Byte Code Manipulation==
+
+One important aspect related to the implementation of the DSL, is that it makes use of bytecode manipulation (using cglib).
+This makes possible to define behavior for the FSM this way:
+
+<code lang="java">
+		final RadioStateMachine radioStateMachinePrototype = getPrototype();
+
+		in(State.Off).on(Event.TogglePower).goTo(State.On).execute(radioStateMachinePrototype.logTransitionFromOffToOn());
+		in(State.Off).executeOnEntry(radioStateMachinePrototype.logOffEntry());
+</code>
+
+We create a Proxy for the State Machine using getPrototype()
+
+
+<code lang="java">
+
+	protected TStateMachine getPrototype() {
+		return (TStateMachine) CallInterceptorBuilder.build(createStateMachine(null).getClass());
+	}
+
+	public static <T> T build(final Class<T> type) {
+		final MethodInterceptor interceptor = new ClassMethodCallInterceptor<T>();
+		final Enhancer enhancer = new Enhancer();
+		enhancer.setSuperclass(type);
+		enhancer.setCallback(interceptor);
+		final T proxy = (T) enhancer.create();
+		return proxy;
+	}
+
+</code>	
+
+Now this proxy intercepts every function call and pushes it in a Stack:
+
+<code lang="java">
+	@Override
+	public Object intercept(final Object object, final Method method, final Object[] args, final MethodProxy methodProxy) throws Throwable {
+		if (!method.isAccessible()) {
+			method.setAccessible(true);
+		}
+		final MethodCall<TObject> methodCall = new ClassMethodCallImpl<TObject>(method, args);
+		CallInterceptorBuilder.push(methodCall);
+		return null;
+	}
+</code>
+
+And we pop it from the Stack:
+
+<code lang="java">
+	@Override
+	public ExecuteSyntax<TStateMachine, TState, TEvent> execute(
+			final Object methodCall) {
+		final MethodCall<TStateMachine> call = CallInterceptorBuilder.pop();
+		LOG.debug(currentTransition.toString() + " use action " + call);
+		this.currentTransition.getActions().add(
+				new MethodCallAction<TStateMachine, TState, TEvent>(call));
+		return this;
+	}
+</code>
+
+
+
+So look what happens when we execute:
+
+<code lang="java">
+	in(State.Off).on(Event.TogglePower).goTo(State.On).execute(radioStateMachinePrototype.logTransitionFromOffToOn());
+
+
+	/** This happens:
+	
+	radioStateMachinePrototype.logTransitionFromOffToOn() => Stack.push(MethodCall);
+	execute() => actionToBeExecuted = Stack.pop();
+	
+	**/
+
+</code>
+
+==Limitations==
+
+So, now let's see the implications for the DSL of using bytecode manipulation in this way.
+
+We define this easy behavior:
+
+<code lang="java">
+	in(State.first).executeOnExit(stateMachinePrototype.log("1:exiting..."));
+	in(State.first).executeOnEntry(stateMachinePrototype.log("2:entering..."));
+</code>
+
+so the output of the FSM at runtime, when State.first is first entered and then exited looks like
+ 
+<code lang="java">
+	"2:entering..."
+	"1:exiting..."
+</code>
+
+which is completely normal and expected.
+
+But now we model the same behavior in a different way:
+
+<code lang="java">
+	Void exit = stateMachinePrototype.log("1:exiting...");
+	Void enter = stateMachinePrototype.log("2:entering...");
+	in(State.first).executeOnExit(exit);
+	in(State.first).executeOnEntry(enter);
+</code>
+
+We  expect to have the same output as before, but instead we get 
+
+<code lang="java">
+	"1:exiting..."
+	"2:entering..."
+</code>
+
+which is annoying and not a "correct behavior". Why:
+
+In the first case what happens is:
+<code lang="java">
+	//in(State.first).executeOnExit(stateMachinePrototype.log("1:exiting..."));
+	//in(State.first).executeOnEntry(stateMachinePrototype.log("2:entering..."));
+	
+	stateMachinePrototype.log("1:exiting...") => push() 
+	executeOnExit() => pop()
+	stateMachinePrototype.log("2:entering...") => push() 
+	executeOnEntry() => pop()
+	
+	And the Stack sequence looks like
+	
+	push(stateMachinePrototype.log("1:exiting..."))
+	exitAction = pop() 
+	push(stateMachinePrototype.log("2:entering..."))
+	entryAction = pop() 
+</code>
+
+
+In the second case what happens is:
+
+<code lang="java">
+        //Void exit = stateMachinePrototype.log("1:exiting...");
+		//Void enter = stateMachinePrototype.log("2:entering...");
+		//in(State.first).executeOnExit(exit);
+		//in(State.first).executeOnEntry(enter);
+
+        stateMachinePrototype.log("1:exiting...") => push() 
+        stateMachinePrototype.log("2:entering...") => push() 
+        executeOnExit() => pop()        
+        executeOnEntry() => pop()
+        
+        And the Stack sequence looks like
+        
+        push(stateMachinePrototype.log("1:exiting..."))
+        push(stateMachinePrototype.log("2:entering..."))
+        exitAction = pop() -> stateMachinePrototype.log("2:entering...") !!!!!!!!!
+        entryAction = pop() -> stateMachinePrototype.log("1:exiting...") !!!!!!!!!
+ </code>
+
+
+
+So keep it in mind when using the DSL.
+
+
