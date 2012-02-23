@@ -5,7 +5,15 @@
 bbvfsm is a hierarchical, enum-based state machine. This mini tutorial explains some of the features of the state machine. 
 
 ==Download==
-Download the current release and add the jar file to the classpath. A maven repository will be available in a few days. 
+Download the current release and add the jar file to the classpath.
+
+Or using maven:
+
+*Parent group-id:* ch.bbv.fsm
+           * Artifact Id: fsm
+           * Artifact Id: fsm-api
+           * Artifact Id: fsm-impl
+
 
 ==Example==
 We will explain the main features of the state machine by a tuner.
