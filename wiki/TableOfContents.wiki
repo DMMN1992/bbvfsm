@@ -1,4 +1,4 @@
   * [http://code.google.com/p/bbvfsm/wiki/GettingStarted Getting Started]
   * [http://code.google.com/p/bbvfsm/wiki/DSL DSL]
   * Features
-    * [http://code.google.com/p/bbvfsm/wiki/ActivatePassivate Store and Load]
+    * [http://code.google.com/p/bbvfsm/wiki/ActivatingPassivating Store and Load]
