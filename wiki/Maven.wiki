@@ -1,6 +1,6 @@
 Insert the following dependencies:
 
-<code lang="xml">
+<code>
 <dependency>
 	<groupId>ch.bbv.fsm</groupId>
 	<artifactId>fsm-api</artifactId>
