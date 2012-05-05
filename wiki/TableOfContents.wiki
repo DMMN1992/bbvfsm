@@ -1,4 +1,5 @@
   * [http://code.google.com/p/bbvfsm/wiki/GettingStarted Getting Started]
+  * [http://code.google.com/p/bbvfsm/wiki/Maven Using in Maven]
   * [http://code.google.com/p/bbvfsm/wiki/DSL DSL]
   * Features
     * [http://code.google.com/p/bbvfsm/wiki/ActivatingPassivating Store and Load]
