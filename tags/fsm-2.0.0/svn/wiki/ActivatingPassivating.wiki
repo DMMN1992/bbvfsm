@@ -1,0 +1,26 @@
+#summary A mechanism for storing and reloading the state of a state machine including all history states.
+
+The bbvfsm provides a mechanism for storing and reloading the internal state of a state machine. With this mechanism the state machine can be passivated and later on activated again. 
+
+The following sample shows how the state machine is passivated. 
+
+<code lang="java">
+final StateMachineMemento<State, Event> memento = new RadioStateMachineMemento();
+radioStateMachine.passivate(memento);
+saveToStore(memento);
+</code>
+
+The following memento class is used:
+
+<code lang="java">
+public class RadioStateMachineMemento extends StateMachineMemento<RadioStateMachineDefinion.State, RadioStateMachineDefinion.Event> {}
+</code>
+
+Implementors may add additional fields to this class if the want store other state.
+
+The following sample shows how the state machine is reactivated.
+
+<code lang="java">
+final StateMachineMemento<State, Event> memento = loadFromStorage();
+radioStateMachine.activate(memento);
+</code>
